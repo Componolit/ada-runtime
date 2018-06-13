@@ -1,3 +1,4 @@
 [submodule "contrib/gcc"]
 	path = contrib/gcc
 	url = https://github.com/gcc-mirror/gcc.git
+	shallow = true
