@@ -1,3 +1,5 @@
+with External;
+
 package body Ada.Exceptions is
 
    ----------------------------
@@ -19,7 +21,7 @@ package body Ada.Exceptions is
           External_Name => "raise_ada_exception";
       C_Msg : String := Message & Character'Val (0);
    begin
-      Warn_Not_Implemented ("Raise_Exception_Always");
+      External.Warn_Not_Implemented ("Raise_Exception_Always");
       Raise_Ada_Exception (E.Full_Name, C_Msg'Address);
    end Raise_Exception_Always;
 
@@ -38,7 +40,7 @@ package body Ada.Exceptions is
    is
       pragma Unreferenced (X);
    begin
-      Warn_Not_Implemented ("Reraise_Occurrence_No_Defer");
+      External.Warn_Not_Implemented ("Reraise_Occurrence_No_Defer");
    end Reraise_Occurrence_No_Defer;
 
    procedure Save_Occurrence (
@@ -47,24 +49,8 @@ package body Ada.Exceptions is
                              )
    is
    begin
-      Warn_Not_Implemented ("Save_Occurrence");
+      External.Warn_Not_Implemented ("Save_Occurrence");
       Target := Source;
    end Save_Occurrence;
-
-   procedure Warn_Not_Implemented (
-                                   Name : String
-                                  )
-   is
-      procedure C_Warn_Unimplemented_Function (
-                                               Func : System.Address
-                                              )
-        with
-          Import,
-          Convention => C,
-          External_Name => "warn_unimplemented_function";
-      C_Name : String := Name & Character'Val (0);
-   begin
-      C_Warn_Unimplemented_Function (C_Name'Address);
-   end Warn_Not_Implemented;
 
 end Ada.Exceptions;

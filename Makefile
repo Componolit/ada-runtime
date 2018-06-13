@@ -1,7 +1,7 @@
 COMPONENT = rts
 OBJ_DIR = obj
 
-SRC = a-except.adb a-unccon.ads ada.ads i-c.adb i-cexten.ads i-cstrin.adb lib/ss_utils.adb s-secsta.adb s-stoele.adb system.ads
+SRC = a-except.adb a-unccon.ads ada.ads i-c.adb i-cexten.ads i-cstrin.adb lib/external.adb lib/ss_utils.adb s-secsta.adb s-stoele.adb system.ads
 SRC := $(sort $(SRC) $(patsubst %.adb, %.ads, $(filter %.adb, $(SRC))))
 
 dummy := $(shell mkdir -p $(OBJ_DIR)/adainclude/lib $(OBJ_DIR)/adalib)

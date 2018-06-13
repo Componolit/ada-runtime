@@ -53,8 +53,4 @@ private
       null;
    end record;
 
-   procedure Warn_Not_Implemented (
-                                   Name : String
-                                  );
-
 end Ada.Exceptions;
