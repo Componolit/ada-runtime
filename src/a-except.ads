@@ -1,6 +1,12 @@
 with System;
+with System.Standard_Library;
 
 package Ada.Exceptions is
+   pragma Preelaborate;
+   --  We make this preelaborable. If we did not do this, then run time units
+   --  used by the compiler (e.g. s-soflin.ads) would run into trouble.
+   --  Conformance with Ada 95 is not an issue, since this version is used
+   --  only by the compiler.
 
    type Exception_Id is private;
    type Exception_Occurrence is limited private;
@@ -31,24 +37,7 @@ package Ada.Exceptions is
 
 private
 
-   --  the following declarations belong to s-stalib.ads
-   --  begin s-stalib.ads
-   type Exception_Data;
-   type Exception_Data_Ptr is access all Exception_Data;
-   type Raise_Action is access procedure;
-
-   type Exception_Data is record
-      Not_Handled_By_Others : Boolean;
-      Lang                  : Character;
-      Name_Length           : Natural;
-      Full_Name             : System.Address;
-      HTable_Ptr            : Exception_Data_Ptr;
-      Foreign_Data          : System.Address;
-      Raise_Hook            : Raise_Action;
-   end record;
-   --  end s-stalib.ads
-
-   type Exception_Id is new Exception_Data_Ptr;
+   type Exception_Id is new System.Standard_Library.Exception_Data_Ptr;
    type Exception_Occurrence is record
       null;
    end record;
