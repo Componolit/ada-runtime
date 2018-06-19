@@ -1,10 +1,14 @@
+with System.Parameters;
 with System.Storage_Elements;
 with Ss_Utils;
 use all type Ss_Utils.Thread;
 
 package System.Secondary_Stack is
 
+   package SP renames System.Parameters;
    package SSE renames System.Storage_Elements;
+
+   type SS_Stack (Size : SP.Size_Type) is private;
 
    type Mark_Id is private;
 
@@ -22,6 +26,17 @@ package System.Secondary_Stack is
 private
 
    SS_Pool : Integer;
+
+   subtype SS_Ptr is SP.Size_Type;
+
+   type Memory is array (SS_Ptr range <>) of SSE.Storage_Element;
+   for Memory'Alignment use Standard'Maximum_Alignment;
+
+   type SS_Stack (Size : SP.Size_Type) is record
+      Top : SS_Ptr;
+      Max : SS_Ptr;
+      Internal_Chunk : Memory (1 .. Size);
+   end record;
 
    type Mark_Id is record
       Sstk : System.Address;
