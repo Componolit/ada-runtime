@@ -3,7 +3,6 @@
 ## directory structure
 
  - `src/`: ada runtime sources
- - `src/lib`: implementations of required functionality, e.g. a range allocator for the secondary stack
 
 ## required environment
 
