@@ -17,4 +17,11 @@ package System.Standard_Library is
       Raise_Hook            : Raise_Action;
    end record;
 
+   --  Workaround for GNATBIND 8.1 / Pro 18.1:
+   --  Enforce usage of secondary stack as GNATBIND generates binder
+   --  output files which refer to System.Parameters for declaring
+   --  Default_Secondary_Stack_Size even if no secondary stack is used,
+   --  but only adds necessary withs when secondary stack is used
+   function Dummy (S : String) return String is (S);
+
 end System.Standard_Library;
