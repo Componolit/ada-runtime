@@ -24,7 +24,7 @@ TEST_BINS = $(addsuffix /test,$(TEST_DIRS))
 
 $(TEST_DIR)/%/test:
 	@echo "TEST $(dir $@)"
-	@cd $(dir $@) && gprbuild --RTS=../../obj/ && ./test || true
+	@cd $(dir $@) && gprbuild --RTS=../../obj && ./test
 
 test: clean_test $(TEST_BINS)
 
