@@ -2,4 +2,8 @@ project Test is
 
     for Main use ("test.adb");
 
+   package Binder is
+      for Switches ("Ada") use ("-static");
+   end Binder;
+
 end Test;
