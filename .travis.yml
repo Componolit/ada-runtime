@@ -1,0 +1,20 @@
+sudo: required
+
+language: c
+
+services:
+  - docker
+
+env:
+  - TEST_SUITE=6.3
+  - TEST_SUITE=8.1
+
+git:
+  submodules: false
+
+before_install:
+  - git submodule update --init --recursive --depth=1
+
+script:
+  - if [ "$TEST_SUITE" = "6.3" ]; then docker run -v $PWD:/app debian:stretch /bin/sh -c "apt-get update && apt-get install -y --no-install-recommends gcc gnat gprbuild make && cd /app && make && make test"; fi
+  - if [ "$TEST_SUITE" = "8.1" ]; then docker run -v $PWD:/app debian:experimental /bin/sh -c "apt-get update && apt-get install -y --no-install-recommends gcc gnat gprbuild make && cd /app && make && make test"; fi
