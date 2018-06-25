@@ -3,6 +3,7 @@
 ## directory structure
 
  - `src/`: ada runtime sources
+ - `platform/`: sources of platform-specific part of ada runtime (contains POSIX implementation used for tests)
 
 ## required environment
 
