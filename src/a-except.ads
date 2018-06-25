@@ -1,3 +1,5 @@
+pragma Compiler_Unit_Warning;
+
 with System;
 with System.Standard_Library;
 
@@ -12,28 +14,26 @@ package Ada.Exceptions is
    type Exception_Occurrence is limited private;
    type Exception_Occurrence_Access is access all Exception_Occurrence;
 
-   procedure Raise_Exception_Always (
-                                     E : Exception_Id;
-                                     Message : String := ""
-                                    )
-     with
-       Export,
-       Convention => Ada,
-       External_Name => "__gnat_raise_exception";
+   Null_Exception_Id : constant Exception_Id;
 
-   procedure Raise_Exception (
-                              E : Exception_Id;
-                              Message : String := ""
-                             );
+   procedure Raise_Exception_Always (E : Exception_Id;
+                                     Message : String := "")
+      with Export,
+           Convention => Ada,
+           External_Name => "__gnat_raise_exception";
 
-   procedure Reraise_Occurrence_No_Defer (
-                                          X : Exception_Occurrence
-                                         );
+   procedure Raise_Exception (E : Exception_Id;
+                              Message : String := "");
 
-   procedure Save_Occurrence (
-                              Target : out Exception_Occurrence;
-                              Source : Exception_Occurrence
-                             );
+   procedure Reraise_Occurrence_No_Defer (X : Exception_Occurrence);
+
+   procedure Save_Occurrence (Target : out Exception_Occurrence;
+                              Source : Exception_Occurrence);
+
+   procedure Last_Chance_Handler (Except : Exception_Occurrence)
+      with Export,
+           Convention => Ada,
+           External_Name => "__gnat_last_chance_handler";
 
 private
 
@@ -41,5 +41,7 @@ private
    type Exception_Occurrence is record
       null;
    end record;
+
+   Null_Exception_Id : constant Exception_Id := null;
 
 end Ada.Exceptions;
