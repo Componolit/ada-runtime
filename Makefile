@@ -8,7 +8,7 @@ SRC := $(sort $(SRC) $(patsubst %.adb, %.ads, $(filter %.adb, $(SRC))))
 dummy := $(shell mkdir -p $(OBJ_DIR)/adainclude $(OBJ_DIR)/adalib $(OBJ_DIR)/lib)
 
 $(OBJ_DIR)/adalib/libgnat.a: $(addprefix $(OBJ_DIR)/adainclude/,$(SRC))
-	gprbuild -P$(COMPONENT)
+	gprbuild --RTS=./obj -P$(COMPONENT) -p
 
 $(OBJ_DIR)/adainclude/%: src/%
 	cp -a $< $@
@@ -32,7 +32,7 @@ TEST_BINS = $(addsuffix /test,$(TEST_DIRS))
 
 $(TEST_DIR)/%/test:
 	@echo "TEST $(dir $@)"
-	@cd $(dir $@) && gprbuild && ./test
+	@cd $(dir $@) && gprbuild --RTS=../../obj -p && ./test
 
 test: platform clean_test $(TEST_BINS)
 

@@ -1,8 +1,6 @@
 library project rts is
 
    for Languages use ("Ada", "C");
-   for Runtime ("Ada") use "./obj";
-
    for Source_Dirs use ("obj/adainclude/**");
    for Object_Dir use "obj";
 
@@ -12,10 +10,10 @@ library project rts is
    end Builder;
 
    package Compiler is
-      for Default_Switches ("Ada") use ("-gnatg");
+      for Default_Switches ("Ada") use ("-gnatg", "-fPIC");
    end Compiler;
 
-   for Library_Kind use "static-pic";
+   for Library_Kind use "static";
    for Library_Name use "gnat";
    for Library_Dir use "obj/adalib";
 end rts;

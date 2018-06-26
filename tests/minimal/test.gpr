@@ -1,7 +1,6 @@
 project Test is
 
    for Main use ("test.adb");
-   for Runtime ("Ada") use "../../obj";
 
    package Binder is
       for Switches ("Ada") use ("-static");
