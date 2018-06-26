@@ -5,6 +5,7 @@ library project SAL is
    for Library_Kind use "static-pic";
    for Library_Interface use ("test_interface");
    for Library_Standalone use "encapsulated";
+   for Runtime ("Ada") use "../../../obj";
    for Create_Missing_Dirs use "True";
 
    package Binder is

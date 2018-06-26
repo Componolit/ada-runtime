@@ -4,6 +4,7 @@ project Test is
 
    for Main use ("test.c");
    for Languages use ("C");
+   for Runtime ("Ada") use "../../obj";
    for Create_Missing_Dirs use "True";
 
    package Binder is

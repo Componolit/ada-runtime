@@ -1,6 +1,8 @@
 library project rts is
 
    for Languages use ("Ada", "C");
+   for Runtime ("Ada") use "./obj";
+
    for Source_Dirs use ("obj/adainclude/**");
    for Object_Dir use "obj";
 
