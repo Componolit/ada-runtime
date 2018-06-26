@@ -13,7 +13,7 @@ library project rts is
       for Default_Switches ("Ada") use ("-gnatg");
    end Compiler;
 
-   for Library_Kind use "static";
+   for Library_Kind use "static-pic";
    for Library_Name use "gnat";
    for Library_Dir use "obj/adalib";
 end rts;
