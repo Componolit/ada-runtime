@@ -37,4 +37,4 @@ $(TEST_DIR)/%/test:
 test: platform clean_test $(TEST_BINS)
 
 clean_test:
-	$(foreach DIR,$(TEST_DIRS),cd $(DIR) && gprclean -Ptest; cd -;)
+	$(foreach DIR,$(TEST_DIRS),cd $(DIR) && gprclean -Ptest -r; cd -;)

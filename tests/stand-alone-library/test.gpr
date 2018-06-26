@@ -1,0 +1,17 @@
+with "sal/sal.gpr";
+
+project Test is
+
+   for Main use ("test.c");
+   for Languages use ("C");
+   for Create_Missing_Dirs use "True";
+
+   package Binder is
+      for Switches ("C") use ("-static");
+   end Binder;
+
+   package Linker is
+      for Required_Switches use ("-L../../obj/adalib", "-lgnat", "-L../../obj/lib", "-lposix_rts", "-lpthread");
+   end Linker;
+
+end Test;

@@ -1,0 +1,14 @@
+library project SAL is
+
+   for Library_Dir use "lib";
+   for Library_Name use "test";
+   for Library_Kind use "static-pic";
+   for Library_Interface use ("test_interface");
+   for Library_Standalone use "encapsulated";
+   for Create_Missing_Dirs use "True";
+
+   package Binder is
+      for Switches ("Ada") use ("-static");
+   end Binder;
+
+end SAL;
