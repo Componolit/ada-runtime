@@ -16,13 +16,14 @@ package Ada.Exceptions is
 
    Null_Exception_Id : constant Exception_Id;
 
-   procedure Raise_Exception_Always (E : Exception_Id;
+   procedure Raise_Exception_Always (E       : Exception_Id;
                                      Message : String := "")
-      with Export,
-           Convention => Ada,
-           External_Name => "__gnat_raise_exception";
+     with
+       Export,
+       Convention => Ada,
+       External_Name => "__gnat_raise_exception";
 
-   procedure Raise_Exception (E : Exception_Id;
+   procedure Raise_Exception (E       : Exception_Id;
                               Message : String := "");
 
    procedure Reraise_Occurrence_No_Defer (X : Exception_Occurrence);
@@ -31,9 +32,10 @@ package Ada.Exceptions is
                               Source : Exception_Occurrence);
 
    procedure Last_Chance_Handler (Except : Exception_Occurrence)
-      with Export,
-           Convention => Ada,
-           External_Name => "__gnat_last_chance_handler";
+     with
+       Export,
+       Convention => Ada,
+       External_Name => "__gnat_last_chance_handler";
 
 private
 

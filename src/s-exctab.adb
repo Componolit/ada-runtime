@@ -1,4 +1,4 @@
-with External;
+with Platform;
 
 package body System.Exception_Table is
 
@@ -7,7 +7,7 @@ package body System.Exception_Table is
    procedure Register_Exception (X : Exception_Data_Ptr) is
       pragma Unreferenced (X);
    begin
-      External.Warn_Not_Implemented ("Register_Exception");
+      Platform.Log_Warning ("Register_Exception not implemented");
    end Register_Exception;
 
 end System.Exception_Table;

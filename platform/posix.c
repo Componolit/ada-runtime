@@ -40,10 +40,14 @@ void *get_thread() {
     return (void *)pthread_self();
 }
 
-void raise_ada_exception(char *name, char *message) {
-    printf("%s: %s", name, message);
+void raise_ada_exception(int exception, char *name, char *message) {
+    printf("Exception raised (%d): %s: %s\n", exception, name, message);
 }
 
-void warn_unimplemented_function(char *message) {
-    printf("warning: using unimplemented function '%s'\n", message);
+#define LOG(type) void log_##type(char *message) { \
+    printf( #type ": %s\n", message); \
 }
+
+LOG(debug)
+LOG(warning)
+LOG(error)
