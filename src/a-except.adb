@@ -75,10 +75,11 @@ package body Ada.Exceptions is
    procedure Last_Chance_Handler (Except : Exception_Occurrence) is
       pragma Unreferenced (Except);
       procedure Unhandled_Terminate
-        with Import,
-        Convention => C,
-        External_Name => "__gnat_unhandled_terminate",
-        No_Return;
+        with
+          Import,
+          Convention => C,
+          External_Name => "__gnat_unhandled_terminate",
+          No_Return;
       --  Perform system dependent shutdown code
    begin
       Unhandled_Terminate;
@@ -160,9 +161,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_CE_Access_Check (File : System.Address;
                                      Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_CE_Access_Check";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_CE_Access_Check";
 
    procedure Rcheck_CE_Access_Check (File : System.Address;
                                      Line : Integer) is
@@ -175,9 +177,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_CE_Null_Access_Parameter (File : System.Address;
                                               Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_CE_Null_Access_Parameter";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_CE_Null_Access_Parameter";
 
    procedure Rcheck_CE_Null_Access_Parameter (File : System.Address;
                                               Line : Integer) is
@@ -190,9 +193,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_CE_Discriminant_Check (File : System.Address;
                                            Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_CE_Discriminant_Check";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_CE_Discriminant_Check";
 
    procedure Rcheck_CE_Discriminant_Check (File : System.Address;
                                            Line : Integer) is
@@ -205,9 +209,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_CE_Divide_By_Zero (File : System.Address;
                                        Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_CE_Divide_By_Zero";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_CE_Divide_By_Zero";
 
    procedure Rcheck_CE_Divide_By_Zero (File : System.Address;
                                        Line : Integer) is
@@ -220,9 +225,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_CE_Explicit_Raise (File : System.Address;
                                        Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_CE_Explicit_Raise";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_CE_Explicit_Raise";
 
    procedure Rcheck_CE_Explicit_Raise (File : System.Address;
                                        Line : Integer) is
@@ -235,9 +241,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_CE_Index_Check (File : System.Address;
                                     Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_CE_Index_Check";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_CE_Index_Check";
 
    procedure Rcheck_CE_Index_Check (File : System.Address;
                                     Line : Integer) is
@@ -250,9 +257,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_CE_Invalid_Data (File : System.Address;
                                      Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_CE_Invalid_Data";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_CE_Invalid_Data";
 
    procedure Rcheck_CE_Invalid_Data (File : System.Address;
                                      Line : Integer) is
@@ -265,9 +273,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_CE_Length_Check (File : System.Address;
                                      Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_CE_Length_Check";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_CE_Length_Check";
 
    procedure Rcheck_CE_Length_Check (File : System.Address;
                                      Line : Integer) is
@@ -280,9 +289,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_CE_Null_Exception_Id (File : System.Address;
                                           Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_CE_Null_Exception_Id";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_CE_Null_Exception_Id";
 
    procedure Rcheck_CE_Null_Exception_Id (File : System.Address;
                                           Line : Integer) is
@@ -295,9 +305,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_CE_Null_Not_Allowed (File : System.Address;
                                          Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_CE_Null_Not_Allowed";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_CE_Null_Not_Allowed";
 
    procedure Rcheck_CE_Null_Not_Allowed (File : System.Address;
                                          Line : Integer) is
@@ -310,9 +321,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_CE_Overflow_Check (File : System.Address;
                                        Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_CE_Overflow_Check";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_CE_Overflow_Check";
 
    procedure Rcheck_CE_Overflow_Check (File : System.Address;
                                        Line : Integer) is
@@ -325,9 +337,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_CE_Partition_Check (File : System.Address;
                                         Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_CE_Partition_Check";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_CE_Partition_Check";
 
    procedure Rcheck_CE_Partition_Check (File : System.Address;
                                         Line : Integer) is
@@ -340,9 +353,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_CE_Range_Check (File : System.Address;
                                     Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_CE_Range_Check";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_CE_Range_Check";
 
    procedure Rcheck_CE_Range_Check (File : System.Address;
                                     Line : Integer) is
@@ -355,9 +369,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_CE_Tag_Check (File : System.Address;
                                   Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_CE_Tag_Check";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_CE_Tag_Check";
 
    procedure Rcheck_CE_Tag_Check (File : System.Address;
                                   Line : Integer) is
@@ -370,9 +385,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_PE_Access_Before_Elaboration (File : System.Address;
                                                   Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_PE_Access_Before_Elaboration";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_PE_Access_Before_Elaboration";
 
    procedure Rcheck_PE_Access_Before_Elaboration (File : System.Address;
                                                   Line : Integer) is
@@ -385,9 +401,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_PE_Accessibility_Check (File : System.Address;
                                             Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_PE_Accessibility_Check";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_PE_Accessibility_Check";
 
    procedure Rcheck_PE_Accessibility_Check (File : System.Address;
                                             Line : Integer) is
@@ -400,9 +417,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_PE_Address_Of_Intrinsic (File : System.Address;
                                              Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_PE_Address_Of_Intrinsic";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_PE_Address_Of_Intrinsic";
 
    procedure Rcheck_PE_Address_Of_Intrinsic (File : System.Address;
                                              Line : Integer) is
@@ -415,9 +433,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_PE_Aliased_Parameters (File : System.Address;
                                            Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_PE_Aliased_Parameters";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_PE_Aliased_Parameters";
 
    procedure Rcheck_PE_Aliased_Parameters (File : System.Address;
                                            Line : Integer) is
@@ -430,9 +449,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_PE_All_Guards_Closed (File : System.Address;
                                           Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_PE_All_Guards_Closed";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_PE_All_Guards_Closed";
 
    procedure Rcheck_PE_All_Guards_Closed (File : System.Address;
                                           Line : Integer) is
@@ -445,9 +465,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_PE_Bad_Predicated_Generic_Type (File : System.Address;
                                                     Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_PE_Bad_Predicated_Generic_Type";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_PE_Bad_Predicated_Generic_Type";
 
    procedure Rcheck_PE_Bad_Predicated_Generic_Type (File : System.Address;
                                                     Line : Integer) is
@@ -460,9 +481,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_PE_Current_Task_In_Entry_Body (File : System.Address;
                                                    Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_PE_Current_Task_In_Entry_Body";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_PE_Current_Task_In_Entry_Body";
 
    procedure Rcheck_PE_Current_Task_In_Entry_Body (File : System.Address;
                                                    Line : Integer) is
@@ -475,9 +497,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_PE_Duplicated_Entry_Address (File : System.Address;
                                                  Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_PE_Duplicated_Entry_Address";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_PE_Duplicated_Entry_Address";
 
    procedure Rcheck_PE_Duplicated_Entry_Address (File : System.Address;
                                                  Line : Integer) is
@@ -490,9 +513,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_PE_Explicit_Raise (File : System.Address;
                                        Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_PE_Explicit_Raise";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_PE_Explicit_Raise";
 
    procedure Rcheck_PE_Explicit_Raise (File : System.Address;
                                        Line : Integer) is
@@ -505,9 +529,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_PE_Implicit_Return (File : System.Address;
                                         Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_PE_Implicit_Return";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_PE_Implicit_Return";
 
    procedure Rcheck_PE_Implicit_Return (File : System.Address;
                                         Line : Integer) is
@@ -520,9 +545,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_PE_Misaligned_Address_Value (File : System.Address;
                                                  Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_PE_Misaligned_Address_Value";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_PE_Misaligned_Address_Value";
 
    procedure Rcheck_PE_Misaligned_Address_Value (File : System.Address;
                                                  Line : Integer) is
@@ -535,9 +561,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_PE_Missing_Return (File : System.Address;
                                        Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_PE_Missing_Return";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_PE_Missing_Return";
 
    procedure Rcheck_PE_Missing_Return (File : System.Address;
                                        Line : Integer) is
@@ -550,9 +577,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_PE_Overlaid_Controlled_Object (File : System.Address;
                                                    Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_PE_Overlaid_Controlled_Object";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_PE_Overlaid_Controlled_Object";
 
    procedure Rcheck_PE_Overlaid_Controlled_Object (File : System.Address;
                                                    Line : Integer) is
@@ -565,9 +593,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_PE_Non_Transportable_Actual (File : System.Address;
                                                  Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_PE_Non_Transportable_Actual";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_PE_Non_Transportable_Actual";
 
    procedure Rcheck_PE_Non_Transportable_Actual (File : System.Address;
                                                  Line : Integer) is
@@ -580,9 +609,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_PE_Potentially_Blocking_Operation (File : System.Address;
                                                        Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_PE_Potentially_Blocking_Operation";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_PE_Potentially_Blocking_Operation";
 
    procedure Rcheck_PE_Potentially_Blocking_Operation (File : System.Address;
                                                        Line : Integer) is
@@ -595,9 +625,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_PE_Stream_Operation_Not_Allowed (File : System.Address;
                                                      Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_PE_Stream_Operation_Not_Allowed";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_PE_Stream_Operation_Not_Allowed";
 
    procedure Rcheck_PE_Stream_Operation_Not_Allowed (File : System.Address;
                                                      Line : Integer) is
@@ -610,9 +641,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_PE_Stubbed_Subprogram_Called (File : System.Address;
                                                   Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_PE_Stubbed_Subprogram_Called";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_PE_Stubbed_Subprogram_Called";
 
    procedure Rcheck_PE_Stubbed_Subprogram_Called (File : System.Address;
                                                   Line : Integer) is
@@ -625,9 +657,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_PE_Unchecked_Union_Restriction (File : System.Address;
                                                     Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_PE_Unchecked_Union_Restriction";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_PE_Unchecked_Union_Restriction";
 
    procedure Rcheck_PE_Unchecked_Union_Restriction (File : System.Address;
                                                     Line : Integer) is
@@ -640,9 +673,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_PE_Finalize_Raised_Exception (File : System.Address;
                                                   Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_PE_Finalize_Raised_Exception";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_PE_Finalize_Raised_Exception";
 
    procedure Rcheck_PE_Finalize_Raised_Exception (File : System.Address;
                                                   Line : Integer) is
@@ -655,9 +689,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_SE_Empty_Storage_Pool (File : System.Address;
                                            Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_SE_Empty_Storage_Pool";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_SE_Empty_Storage_Pool";
 
    procedure Rcheck_SE_Empty_Storage_Pool (File : System.Address;
                                            Line : Integer) is
@@ -670,9 +705,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_SE_Explicit_Raise (File : System.Address;
                                        Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_SE_Explicit_Raise";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_SE_Explicit_Raise";
 
    procedure Rcheck_SE_Explicit_Raise (File : System.Address;
                                        Line : Integer) is
@@ -685,9 +721,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_SE_Infinite_Recursion (File : System.Address;
                                            Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_SE_Infinite_Recursion";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_SE_Infinite_Recursion";
 
    procedure Rcheck_SE_Infinite_Recursion (File : System.Address;
                                            Line : Integer) is
@@ -700,9 +737,10 @@ package body Ada.Exceptions is
 
    procedure Rcheck_SE_Object_Too_Large (File : System.Address;
                                          Line : Integer)
-     with Export,
-     Convention => C,
-     External_Name => "__gnat_rcheck_SE_Object_Too_Large";
+     with
+       Export,
+       Convention => C,
+       External_Name => "__gnat_rcheck_SE_Object_Too_Large";
 
    procedure Rcheck_SE_Object_Too_Large (File : System.Address;
                                          Line : Integer) is
