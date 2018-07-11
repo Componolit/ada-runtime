@@ -16,12 +16,12 @@ package body Platform is
    procedure Log_Error_Private is new Log (C_Error);
    procedure Log_Error (Msg : String) renames Log_Error_Private;
 
-   procedure Raise_Ada_Exception (T : Ada_Exceptions.Exception_Type;
+   procedure Raise_Ada_Exception (T    : Ada_Exceptions.Exception_Type;
                                   Name : String;
-                                  Msg : String)
+                                  Msg  : String)
    is
       C_Name : String := Name & Character'Val (0);
-      C_Msg : String := Msg & Character'Val (0);
+      C_Msg  : String := Msg & Character'Val (0);
    begin
       C_Raise_Exception (T, C_Name'Address, C_Msg'Address);
    end Raise_Ada_Exception;
