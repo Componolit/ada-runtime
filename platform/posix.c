@@ -29,7 +29,7 @@ void *allocate_secondary_stack(void *thread, size_t size) {
 
     (void) pthread_once(&key_once, make_key);
     if ((ptr = pthread_getspecific(key)) == NULL) {
-        ptr = malloc(size);
+        ptr = malloc(size) + size;
         (void) pthread_setspecific(key, ptr);
     }
 
@@ -42,6 +42,7 @@ void *get_thread() {
 
 void raise_ada_exception(int exception, char *name, char *message) {
     printf("Exception raised (%d): %s: %s\n", exception, name, message);
+    exit(0);
 }
 
 #define LOG(type) void log_##type(char *message) { \
