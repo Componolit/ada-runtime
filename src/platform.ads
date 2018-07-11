@@ -26,10 +26,8 @@ package Platform is
        Convention => C,
        External_Name => "__gnat_unhandled_terminate";
 
-   function Allocate_Secondary_Stack (
-                                      Thread : System.Address;
-                                      Size   : Natural
-                                     ) return System.Address
+   function Allocate_Secondary_Stack (Thread : System.Address;
+                                      Size   : Natural) return System.Address
      with
        Import,
        Convention => C,
