@@ -89,8 +89,6 @@ package body Ada.Exceptions is
    -- Reason Strings for Run-Time Check Calls --
    ---------------------------------------------
 
-   use ASCII;
-
    Rmsg_00 : constant String := "access check failed";
    Rmsg_01 : constant String := "access parameter is null";
    Rmsg_02 : constant String := "discriminant check failed";
@@ -142,20 +140,29 @@ package body Ada.Exceptions is
 
    function Create_File_Line_String (File : System.Address;
                                      Line : Integer) return String is
-      File_Name        : String (1 .. 128);
-      File_Name_Length : Positive := 1;
+      Name_Length : Integer := 0;
    begin
-      while To_Ptr (File) (File_Name_Length + 1) /= ASCII.NUL
-        and then File_Name_Length < 128
-      loop
-         File_Name_Length := File_Name_Length + 1;
-         File_Name (File_Name_Length) := To_Ptr (File) (File_Name_Length);
+      while To_Ptr (File) (Name_Length + 1) /= ASCII.NUL loop
+         Name_Length := Name_Length + 1;
       end loop;
 
+      if Name_Length = 0 then
+         return "unknown file" & ASCII.NUL;
+      end if;
+
       declare
-         Msg : constant String := File_Name & ":" & Integer'Image (Line) & NUL;
+         Name : String (1 .. Name_Length);
       begin
-         return Msg;
+         for I in Integer range 1 .. Name_Length loop
+            Name (I) := To_Ptr (File) (I);
+         end loop;
+
+         declare
+            Msg : constant String := Name & ":" & Integer'Image (Line)
+                                        & ASCII.NUL;
+         begin
+            return Msg;
+         end;
       end;
    end Create_File_Line_String;
 
