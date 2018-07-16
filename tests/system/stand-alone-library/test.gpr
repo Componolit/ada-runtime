@@ -10,7 +10,7 @@ project Test is
    end Binder;
 
    package Linker is
-      for Required_Switches use ("-L../../obj/adalib", "-lgnat", "-L../../obj/lib", "-lposix_rts", "-lpthread");
+      for Required_Switches use ("-L../../../obj/adalib", "-lgnat", "-L../../../obj/lib", "-lposix_rts", "-lpthread");
    end Linker;
 
 end Test;
