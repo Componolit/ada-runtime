@@ -1,6 +1,7 @@
 COMPONENT = rts
 OBJ_DIR = obj
-TEST_DIR = tests
+TEST_DIR = tests/system
+UNIT_DIR = tests/unit
 
 SRC = a-except.adb \
       a-unccon.ads \
@@ -31,6 +32,8 @@ SRC := $(sort $(SRC) $(patsubst %.adb, %.ads, $(filter %.adb, $(SRC))))
 
 dummy := $(shell mkdir -p $(OBJ_DIR)/adainclude $(OBJ_DIR)/adalib $(OBJ_DIR)/lib)
 
+runtime: $(OBJ_DIR)/adalib/libgnat.a
+
 $(OBJ_DIR)/adalib/libgnat.a: $(addprefix $(OBJ_DIR)/adainclude/,$(SRC))
 	gprbuild --RTS=./obj -P$(COMPONENT) -p
 
@@ -54,14 +57,18 @@ $(OBJ_DIR)/%.o: platform/%.c
 clean: clean_test
 	@rm -rf $(OBJ_DIR)
 
-TEST_DIRS = $(addprefix $(TEST_DIR)/,$(shell ls tests))
+TEST_DIRS = $(addprefix $(TEST_DIR)/,$(shell ls tests/system))
 TEST_BINS = $(addsuffix /test,$(TEST_DIRS))
 
 $(TEST_DIR)/%/test:
 	@echo "TEST $(dir $@)"
-	@cd $(dir $@) && gprbuild --RTS=../../obj -p && ./test
+	@cd $(dir $@) && gprbuild --RTS=../../../obj -p && ./test
 
-test: platform clean_test $(TEST_BINS)
+$(UNIT_DIR)/test:
+	@echo "UNITTEST $(dir $@)"
+	@cd $(dir $@) && gprbuild -P test && ./test
+
+test: runtime platform clean_test $(TEST_BINS) $(UNIT_DIR)/test
 
 clean_test:
-	$(foreach DIR,$(TEST_DIRS),cd $(DIR) && gprclean -Ptest -r; cd -;)
+	$(foreach DIR,$(TEST_DIRS) $(UNIT_DIR),cd $(DIR) && gprclean -Ptest -r; cd -;)
