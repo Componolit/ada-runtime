@@ -33,20 +33,16 @@ is
 
    Secondary_Stack_Size : constant SSE.Storage_Count := 768 * 1024;
 
-   procedure Get_Mark (
-                       T               : Thread;
+   procedure Get_Mark (T               : Thread;
                        Thread_Registry : in out Registry;
-                       E               : out Mark
-                      )
+                       E               : out Mark)
      with
        Pre => T /= Invalid_Thread,
        Post => (E.Base /= System.Null_Address);
 
-   procedure Set_Mark (
-                       T               : Thread;
+   procedure Set_Mark (T               : Thread;
                        M               : Mark;
-                       Thread_Registry : in out Registry
-                      )
+                       Thread_Registry : in out Registry)
      with
        Pre => (M.Base /= System.Null_Address and
                  T /= Invalid_Thread);
@@ -59,37 +55,29 @@ is
        Pre => T /= Invalid_Thread,
        Post => Allocate_Stack'Result /= System.Null_Address;
 
-   procedure S_Allocate (
-                         Address      : out System.Address;
+   procedure S_Allocate (Address      : out System.Address;
                          Storage_Size : SSE.Storage_Count;
                          Reg          : in out Registry;
-                         T            : Thread
-                        )
+                         T            : Thread)
      with
        Pre => T /= Invalid_Thread;
 
-   procedure S_Mark (
-                     Stack_Base : out System.Address;
+   procedure S_Mark (Stack_Base : out System.Address;
                      Stack_Ptr  : out SSE.Storage_Count;
                      Reg        : in out Registry;
-                     T          : Thread
-                    )
+                     T          : Thread)
      with
        Pre => T /= Invalid_Thread;
 
-   procedure S_Release (
-                        Stack_Base : System.Address;
+   procedure S_Release (Stack_Base : System.Address;
                         Stack_Ptr  : SSE.Storage_Count;
                         Reg        : in out Registry;
-                        T          : Thread
-                       )
+                        T          : Thread)
      with
        Pre => T /= Invalid_Thread;
 
-   function C_Alloc (
-                     T    : Thread;
-                     Size : SSE.Storage_Count
-                    ) return System.Address
+   function C_Alloc (T    : Thread;
+                     Size : SSE.Storage_Count) return System.Address
      with
        Import,
        Convention => C,

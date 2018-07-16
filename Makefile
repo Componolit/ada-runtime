@@ -21,6 +21,7 @@ SRC = a-except.adb \
       s-soflin.adb \
       s-stalib.ads \
       s-stoele.adb \
+      string_utils.adb \
       system.ads \
       argv.c \
       exit.c \

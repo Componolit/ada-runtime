@@ -1,7 +1,9 @@
 with System;
 with Ada_Exceptions;
 
-package Platform is
+package Platform
+  with SPARK_Mode
+is
    pragma Preelaborate;
 
    procedure Log_Debug (Msg : String);
