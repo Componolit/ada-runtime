@@ -1,4 +1,6 @@
-package body Platform is
+package body Platform
+  with SPARK_Mode => Off
+is
 
    procedure Log (Msg : String)
    is

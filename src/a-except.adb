@@ -33,6 +33,7 @@
 pragma Compiler_Unit_Warning;
 
 with Platform;
+with String_Utils;
 with Ada_Exceptions;
 with System.Standard_Library; use System.Standard_Library;
 
@@ -140,30 +141,11 @@ package body Ada.Exceptions is
 
    function Create_File_Line_String (File : System.Address;
                                      Line : Integer) return String is
-      Name_Length : Integer := 0;
+      Msg : constant String :=
+          String_Utils.Convert_To_Ada (File, "unknown file") &
+          ":" & Integer'Image (Line);
    begin
-      while To_Ptr (File) (Name_Length + 1) /= ASCII.NUL loop
-         Name_Length := Name_Length + 1;
-      end loop;
-
-      if Name_Length = 0 then
-         return "unknown file" & ASCII.NUL;
-      end if;
-
-      declare
-         Name : String (1 .. Name_Length);
-      begin
-         for I in Integer range 1 .. Name_Length loop
-            Name (I) := To_Ptr (File) (I);
-         end loop;
-
-         declare
-            Msg : constant String := Name & ":" & Integer'Image (Line)
-                                        & ASCII.NUL;
-         begin
-            return Msg;
-         end;
-      end;
+      return Msg;
    end Create_File_Line_String;
 
    procedure Rcheck_CE_Access_Check (File : System.Address;

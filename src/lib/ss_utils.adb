@@ -2,11 +2,9 @@ package body Ss_Utils
   with SPARK_Mode
 is
 
-   procedure Get_Mark (
-                       T               : Thread;
+   procedure Get_Mark (T               : Thread;
                        Thread_Registry : in out Registry;
-                       E               : out Mark
-                      )
+                       E               : out Mark)
    is
       Thread_Entry     : Long_Integer := -1;
       First_Free_Entry : Long_Integer := -1;
@@ -48,11 +46,9 @@ is
       E := Thread_Registry (Thread_Entry).Data;
    end Get_Mark;
 
-   procedure Set_Mark (
-                       T               : Thread;
+   procedure Set_Mark (T               : Thread;
                        M               : Mark;
-                       Thread_Registry : in out Registry
-                      )
+                       Thread_Registry : in out Registry)
    is
       Thread_Entry : Long_Integer := -1;
    begin
@@ -79,10 +75,8 @@ is
       Thread_Registry (Thread_Entry).Data := M;
    end Set_Mark;
 
-   function Allocate_Stack (
-                            T    : Thread;
-                            Size : SSE.Storage_Count
-                           ) return System.Address
+   function Allocate_Stack (T    : Thread;
+                            Size : SSE.Storage_Count) return System.Address
    is
       Stack : System.Address;
    begin
@@ -96,12 +90,10 @@ is
       return Stack;
    end Allocate_Stack;
 
-   procedure S_Allocate (
-                         Address      : out System.Address;
+   procedure S_Allocate (Address      : out System.Address;
                          Storage_Size : SSE.Storage_Count;
                          Reg          : in out Registry;
-                         T            : Thread
-                        )
+                         T            : Thread)
    is
       M         : Mark;
    begin
@@ -119,12 +111,10 @@ is
       Set_Mark (T, M, Reg);
    end S_Allocate;
 
-   procedure S_Mark (
-                     Stack_Base : out System.Address;
+   procedure S_Mark (Stack_Base : out System.Address;
                      Stack_Ptr  : out SSE.Storage_Count;
                      Reg        : in out Registry;
-                     T          : Thread
-                    )
+                     T          : Thread)
    is
       M : Mark;
    begin
@@ -134,12 +124,10 @@ is
       Stack_Ptr := M.Top;
    end S_Mark;
 
-   procedure S_Release (
-                        Stack_Base : System.Address;
+   procedure S_Release (Stack_Base : System.Address;
                         Stack_Ptr  : SSE.Storage_Count;
                         Reg        : in out Registry;
-                        T          : Thread
-                       )
+                        T          : Thread)
    is
       LM : Mark;
    begin
