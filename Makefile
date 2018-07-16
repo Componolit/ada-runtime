@@ -36,6 +36,9 @@ $(OBJ_DIR)/adalib/libgnat.a: $(addprefix $(OBJ_DIR)/adainclude/,$(SRC))
 $(OBJ_DIR)/adainclude/%: src/%
 	cp -a $< $@
 
+$(OBJ_DIR)/adainclude/%: src/lib/%
+	cp -a $< $@
+
 $(OBJ_DIR)/adainclude/%: contrib/gcc/gcc/ada/%
 	cp -a $< $@
 
