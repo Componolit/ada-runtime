@@ -12,13 +12,7 @@ is
    type Thread is new System.Address;
    Invalid_Thread : constant Thread := Thread (System.Null_Address);
 
-   type Mark is
-      record
-         Base  : System.Address;
-         Top   : SSE.Storage_Count;
-      end record;
-
-   Invalid_Mark : constant Mark := (Base => System.Null_Address, Top => 0);
+   type Mark is private;
 
    type Registry_Entry is private;
 
@@ -45,12 +39,16 @@ is
      with
        Ghost;
 
+   function Valid_Mark (M : Mark) return Boolean
+     with
+       Ghost;
+
    procedure Get_Mark (T               : Thread;
                        Thread_Registry : in out Registry;
                        M               : out Mark)
      with
        Pre => T /= Invalid_Thread and Slot_Available (Thread_Registry),
-       Post => (M.Base /= System.Null_Address) and
+       Post => Valid_Mark (M) and
      Thread_Exists (Thread_Registry, T);
 
    function Get_Mark (T : Thread;
@@ -59,13 +57,13 @@ is
        Ghost,
        Pre => T /= Invalid_Thread and Thread_Exists (Thread_Registry, T) and
      (for all E of Thread_Registry => Valid_Entry (E)),
-     Post => Get_Mark'Result.Base /= System.Null_Address;
+     Post => Valid_Mark (Get_Mark'Result);
 
    procedure Set_Mark (T               : Thread;
                        M               : Mark;
                        Thread_Registry : in out Registry)
      with
-       Pre => (M.Base /= System.Null_Address and
+       Pre => (Valid_Mark (M) and
                  T /= Invalid_Thread and Thread_Exists (Thread_Registry, T));
 
    function Allocate_Stack (
@@ -83,7 +81,8 @@ is
      with
        Pre => T /= Invalid_Thread and
        Thread_Exists (Reg, T) and
-     Slot_Available (Reg);
+     Slot_Available (Reg) and
+     Storage_Size < Secondary_Stack_Size;
 
    procedure S_Mark (Stack_Base : out System.Address;
                      Stack_Ptr  : out SSE.Storage_Count;
@@ -119,13 +118,24 @@ is
 
 private
 
+   type Mark is
+      record
+         Base  : System.Address := System.Null_Address;
+         Top   : SSE.Storage_Count := 0;
+      end record
+     with
+       Type_Invariant => Top < Secondary_Stack_Size;
+
+   Invalid_Mark : constant Mark := (Base => System.Null_Address, Top => 0);
+
    type Registry_Entry is
       record
          Id    : Thread := Invalid_Thread;
          Data  : Mark := Invalid_Mark;
       end record
      with
-       Type_Invariant => Valid_Entry (Registry_Entry);
+       Type_Invariant => (if Registry_Entry.Id /= Invalid_Thread then
+                            Registry_Entry.Data.Base /= System.Null_Address);
 
    Null_Registry : constant Registry  := (others =>
                                             (Id   => Invalid_Thread,
@@ -141,5 +151,8 @@ private
 
    function Valid_Entry (E : Registry_Entry) return Boolean is
      (if E.Id /= Invalid_Thread then E.Data.Base /= System.Null_Address);
+
+   function Valid_Mark (M : Mark) return Boolean is
+      (M.Base /= System.Null_Address);
 
 end Ss_Utils;

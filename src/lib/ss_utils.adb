@@ -127,6 +127,7 @@ is
       M         : Mark;
    begin
       Get_Mark (T, Reg, M);
+      pragma Assert (Storage_Size + M.Top < Secondary_Stack_Size);
       if M.Top < Secondary_Stack_Size and then
         Storage_Size < Secondary_Stack_Size and then
         Storage_Size + M.Top < Secondary_Stack_Size
