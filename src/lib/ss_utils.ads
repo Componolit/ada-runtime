@@ -24,7 +24,11 @@ is
          Data  : Mark;
       end record;
 
-   type Registry is array (Long_Integer range 0 .. 127) of Registry_Entry;
+   Registry_Size : constant := 128;
+
+   type Registry_Index is new Integer range -1 .. Registry_Size - 1;
+   type Registry is array (Registry_Index range 0 .. Registry_Index'Last) of Registry_Entry;
+   Invalid_Index : constant Registry_Index := -1;
 
    Null_Registry : constant Registry := (others =>
                                     (Id   => Invalid_Thread,
@@ -37,8 +41,9 @@ is
                        Thread_Registry : in out Registry;
                        E               : out Mark)
      with
-       Pre => T /= Invalid_Thread,
-       Post => (E.Base /= System.Null_Address);
+       Pre => T /= Invalid_Thread and
+       (for Some E of Thread_Registry => E.Id = Invalid_Thread),
+     Post => (E.Base /= System.Null_Address);
 
    procedure Set_Mark (T               : Thread;
                        M               : Mark;
