@@ -18,11 +18,9 @@ is
          Top   : SSE.Storage_Count;
       end record;
 
-   type Registry_Entry is
-      record
-         Id    : Thread;
-         Data  : Mark;
-      end record;
+   Invalid_Mark : constant Mark := (Base => System.Null_Address, Top => 0);
+
+   type Registry_Entry is private;
 
    Registry_Size : constant := 128;
 
@@ -30,27 +28,38 @@ is
    type Registry is array (Registry_Index range 0 .. Registry_Index'Last) of Registry_Entry;
    Invalid_Index : constant Registry_Index := -1;
 
-   Null_Registry : constant Registry := (others =>
-                                    (Id   => Invalid_Thread,
-                                     Data => (Base  => System.Null_Address,
-                                              Top   => 0)));
+   Null_Registry : constant Registry;
 
    Secondary_Stack_Size : constant SSE.Storage_Count := 768 * 1024;
 
    function Thread_Exists (Thread_Registry : Registry;
-                           T               : Thread) return Boolean is
-     (for Some E of Thread_Registry => E.Id = T) with Ghost;
+                           T               : Thread) return Boolean
+     with
+       Ghost;
 
-   function Slot_Available (Thread_Registry : Registry) return Boolean is
-     (for Some E of Thread_Registry => E.Id = Invalid_Thread) with Ghost;
+   function Slot_Available (Thread_Registry : Registry) return Boolean
+     with
+       Ghost;
+
+   function Valid_Entry (E : Registry_Entry) return Boolean
+     with
+       Ghost;
 
    procedure Get_Mark (T               : Thread;
                        Thread_Registry : in out Registry;
-                       E               : out Mark)
+                       M               : out Mark)
      with
        Pre => T /= Invalid_Thread and Slot_Available (Thread_Registry),
-       Post => (E.Base /= System.Null_Address) and
-         Thread_Exists (Thread_Registry, T);
+       Post => (M.Base /= System.Null_Address) and
+     Thread_Exists (Thread_Registry, T);
+
+   function Get_Mark (T : Thread;
+                      Thread_Registry : Registry) return Mark
+     with
+       Ghost,
+       Pre => T /= Invalid_Thread and Thread_Exists (Thread_Registry, T) and
+     (for all E of Thread_Registry => Valid_Entry (E)),
+     Post => Get_Mark'Result.Base /= System.Null_Address;
 
    procedure Set_Mark (T               : Thread;
                        M               : Mark;
@@ -74,7 +83,7 @@ is
      with
        Pre => T /= Invalid_Thread and
        Thread_Exists (Reg, T) and
-       Slot_Available (Reg);
+     Slot_Available (Reg);
 
    procedure S_Mark (Stack_Base : out System.Address;
                      Stack_Ptr  : out SSE.Storage_Count;
@@ -107,5 +116,30 @@ is
        Import,
        Convention => C,
        External_Name => "get_thread";
+
+private
+
+   type Registry_Entry is
+      record
+         Id    : Thread := Invalid_Thread;
+         Data  : Mark := Invalid_Mark;
+      end record
+     with
+       Type_Invariant => Valid_Entry (Registry_Entry);
+
+   Null_Registry : constant Registry  := (others =>
+                                            (Id   => Invalid_Thread,
+                                             Data => (Base  => System.Null_Address,
+                                                      Top   => 0)));
+
+   function Thread_Exists (Thread_Registry : Registry;
+                           T               : Thread) return Boolean is
+     (for Some E of Thread_Registry => E.Id = T);
+
+   function Slot_Available (Thread_Registry : Registry) return Boolean is
+     (for Some E of Thread_Registry => E.Id = Invalid_Thread);
+
+   function Valid_Entry (E : Registry_Entry) return Boolean is
+     (if E.Id /= Invalid_Thread then E.Data.Base /= System.Null_Address);
 
 end Ss_Utils;

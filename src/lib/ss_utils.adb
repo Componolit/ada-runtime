@@ -4,7 +4,7 @@ is
 
    procedure Get_Mark (T               : Thread;
                        Thread_Registry : in out Registry;
-                       E               : out Mark)
+                       M               : out Mark)
    is
       Thread_Entry     : Registry_Index := Invalid_Index;
       First_Free_Entry : Registry_Index := Invalid_Index;
@@ -37,9 +37,7 @@ is
       if Thread_Entry = Invalid_Index then
          if First_Free_Entry /= Invalid_Index then
             Thread_Registry (First_Free_Entry).Id := T;
-            Thread_Registry (First_Free_Entry).Data :=
-              (Base  => System.Null_Address,
-               Top   => 0);
+            Thread_Registry (First_Free_Entry).Data := Invalid_Mark;
             Thread_Entry := First_Free_Entry;
          else
             raise Constraint_Error;
@@ -52,7 +50,25 @@ is
             Top   => 0);
       end if;
 
-      E := Thread_Registry (Thread_Entry).Data;
+      M := Thread_Registry (Thread_Entry).Data;
+   end Get_Mark;
+
+   function Get_Mark (T               : Thread;
+                      Thread_Registry : Registry) return Mark
+   is
+      M : Mark := Invalid_Mark;
+   begin
+      Search:
+      for E in Thread_Registry'Range loop
+         pragma Loop_Invariant (for Some F of Thread_Registry
+                                (E .. Thread_Registry'Last) => F.Id = T);
+         if Thread_Registry (E).Id = T then
+            M := Thread_Registry (E).Data;
+            exit Search;
+         end if;
+      end loop Search;
+      pragma Assert (M.Base /= System.Null_Address);
+      return M;
    end Get_Mark;
 
    procedure Set_Mark (T               : Thread;
@@ -121,9 +137,6 @@ is
          raise Storage_Error;
       end if;
 
-      pragma Assert (T /= Invalid_Thread);
-      pragma Assert (M.Base /= System.Null_Address);
-      pragma Assert (Thread_Exists (Reg, T));
       Set_Mark (T, M, Reg);
    end S_Allocate;
 
