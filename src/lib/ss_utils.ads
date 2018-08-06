@@ -37,22 +37,27 @@ is
 
    Secondary_Stack_Size : constant SSE.Storage_Count := 768 * 1024;
 
+   function Thread_Exists (Thread_Registry : Registry;
+                           T               : Thread) return Boolean is
+     (for Some E of Thread_Registry => E.Id = T) with Ghost;
+
+   function Slot_Available (Thread_Registry : Registry) return Boolean is
+     (for Some E of Thread_Registry => E.Id = Invalid_Thread) with Ghost;
+
    procedure Get_Mark (T               : Thread;
                        Thread_Registry : in out Registry;
                        E               : out Mark)
      with
-       Pre => T /= Invalid_Thread and
-       (for Some E of Thread_Registry => E.Id = Invalid_Thread),
-     Post => (E.Base /= System.Null_Address);
+       Pre => T /= Invalid_Thread and Slot_Available (Thread_Registry),
+       Post => (E.Base /= System.Null_Address) and
+         Thread_Exists (Thread_Registry, T);
 
    procedure Set_Mark (T               : Thread;
                        M               : Mark;
                        Thread_Registry : in out Registry)
      with
        Pre => (M.Base /= System.Null_Address and
-                 T /= Invalid_Thread and
-                   (for Some E of Thread_Registry =>
-                          E.Id = T));
+                 T /= Invalid_Thread and Thread_Exists (Thread_Registry, T));
 
    function Allocate_Stack (
                             T    : Thread;
@@ -67,21 +72,25 @@ is
                          Reg          : in out Registry;
                          T            : Thread)
      with
-       Pre => T /= Invalid_Thread;
+       Pre => T /= Invalid_Thread and
+       Thread_Exists (Reg, T) and
+       Slot_Available (Reg);
 
    procedure S_Mark (Stack_Base : out System.Address;
                      Stack_Ptr  : out SSE.Storage_Count;
                      Reg        : in out Registry;
                      T          : Thread)
      with
-       Pre => T /= Invalid_Thread;
+       Pre => T /= Invalid_Thread and Slot_Available (Reg);
 
    procedure S_Release (Stack_Base : System.Address;
                         Stack_Ptr  : SSE.Storage_Count;
                         Reg        : in out Registry;
                         T          : Thread)
      with
-       Pre => T /= Invalid_Thread;
+       Pre => T /= Invalid_Thread and
+       Thread_Exists (Reg, T) and
+       Slot_Available (Reg);
 
    function C_Alloc (T    : Thread;
                      Size : SSE.Storage_Count) return System.Address

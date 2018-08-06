@@ -16,6 +16,7 @@ is
            ((if First_Free_Entry = Invalid_Index then
                 (for Some F of Thread_Registry (E .. Thread_Registry'Last) =>
                        F.Id = Invalid_Thread)));
+         pragma Loop_Invariant (Thread_Entry = Invalid_Index);
 
          if First_Free_Entry = Invalid_Index and then
            Thread_Registry (E).Id = Invalid_Thread
@@ -66,6 +67,8 @@ is
       if M.Base = System.Null_Address then
          raise Constraint_Error;
       end if;
+
+
 
       Search :
       for E in Thread_Registry'Range loop
@@ -118,6 +121,9 @@ is
          raise Storage_Error;
       end if;
 
+      pragma Assert (T /= Invalid_Thread);
+      pragma Assert (M.Base /= System.Null_Address);
+      pragma Assert (Thread_Exists (Reg, T));
       Set_Mark (T, M, Reg);
    end S_Allocate;
 
