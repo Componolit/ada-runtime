@@ -12,9 +12,10 @@ is
 
       Search :
       for E in Thread_Registry'Range loop
-           pragma Loop_Invariant ((if First_Free_Entry = Invalid_Index then
-                                     (for Some F of Thread_Registry (E .. Thread_Registry'Last) =>
-                                    F.Id = Invalid_Thread)));
+         pragma Loop_Invariant
+           ((if First_Free_Entry = Invalid_Index then
+                (for Some F of Thread_Registry (E .. Thread_Registry'Last) =>
+                       F.Id = Invalid_Thread)));
 
          if First_Free_Entry = Invalid_Index and then
            Thread_Registry (E).Id = Invalid_Thread
@@ -28,7 +29,9 @@ is
          end if;
       end loop Search;
 
-      pragma Assert (if Thread_Entry = Invalid_Index then First_Free_Entry /= Invalid_Index);
+      pragma Assert
+        (if Thread_Entry = Invalid_Index then
+            First_Free_Entry /= Invalid_Index);
 
       if Thread_Entry = Invalid_Index then
          if First_Free_Entry /= Invalid_Index then
@@ -66,6 +69,9 @@ is
 
       Search :
       for E in Thread_Registry'Range loop
+         pragma Loop_Invariant
+           (for Some F of Thread_Registry (E .. Thread_Registry'Last) =>
+                F.Id = T);
          if T = Thread_Registry (E).Id then
             Thread_Entry := E;
             exit Search;

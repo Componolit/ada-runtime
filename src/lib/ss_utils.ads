@@ -50,7 +50,9 @@ is
                        Thread_Registry : in out Registry)
      with
        Pre => (M.Base /= System.Null_Address and
-                 T /= Invalid_Thread);
+                 T /= Invalid_Thread and
+                   (for Some E of Thread_Registry =>
+                          E.Id = T));
 
    function Allocate_Stack (
                             T    : Thread;
