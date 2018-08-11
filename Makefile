@@ -43,8 +43,8 @@ $(OBJ_DIR)/adainclude/%: src/%
 $(OBJ_DIR)/adainclude/%: src/lib/%
 	cp -a $< $@
 
-$(OBJ_DIR)/adainclude/%: contrib/gcc/gcc/ada/%
-	cp -a $< $@
+$(OBJ_DIR)/adainclude/%: contrib/gcc-6.3.0/%
+	cp -v -a $< $@
 
 platform: $(OBJ_DIR)/lib/libposix_rts.a
 
