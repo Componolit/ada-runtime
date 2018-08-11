@@ -5,3 +5,9 @@
 *.stdout
 b__*.ad[bs]
 obj/
+tests/system
+tests/unit
+tests/exception
+tests/minimal
+tests/secondary-stack
+tests/stand-alone-library
