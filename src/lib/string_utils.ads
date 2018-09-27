@@ -13,8 +13,9 @@ use all type System.Address;
 use all type System.Storage_Elements.Integer_Address;
 
 package String_Utils
-   with SPARK_Mode
+with SPARK_Mode
 is
+
    pragma Preelaborate;
 
    function Length (C_Str      : System.Address;
@@ -24,11 +25,17 @@ is
        Contract_Cases =>
          (C_Str = System.Null_Address  => Length'Result <= 0,
           C_Str /= System.Null_Address => Length'Result >= 0);
+   pragma Annotate (GNATprove, Terminating, Length);
 
    function Convert_To_Ada (C_Str      : System.Address;
                             Default    : String;
                             Max_Length : Natural :=
-                              Natural'Last) return String;
+                              Natural'Last) return String
+       with
+         Contract_Cases =>
+           (C_Str = System.Null_Address => Convert_To_Ada'Result = Default,
+            C_Str /= System.Null_Address => True);
+   pragma Annotate (GNATprove, Terminating, Convert_To_Ada);
 
 private
 
@@ -41,22 +48,26 @@ private
    function Get_Char (Ptr : Pointer) return Character
      with
        Pre => Ptr /= Null_Pointer;
+   pragma Annotate (GNATprove, Terminating, Get_Char);
 
    function Incr (Ptr : Pointer) return Pointer
      with
-       Pre => Ptr /= Null_Pointer,
-       Post => Incr'Result /= Null_Pointer;
+       Pre => Ptr /= Null_Pointer and Ptr < Pointer'Last,
+     Post => Incr'Result /= Null_Pointer and Incr'Result = Ptr + 1;
+   pragma Annotate (GNATprove, Terminating, Incr);
 
    function To_Address (Value : Pointer) return System.Address
      with
        Contract_Cases =>
-         (Value = Null_Pointer => To_Address'Result = System.Null_Address,
+         (Value = Null_Pointer  => To_Address'Result = System.Null_Address,
           Value /= Null_Pointer => To_Address'Result /= System.Null_Address);
+   pragma Annotate (GNATprove, Terminating, To_Address);
 
    function To_Pointer (Addr : System.Address) return Pointer
      with
        Contract_Cases =>
-         (Addr = System.Null_Address => To_Pointer'Result = Null_Pointer,
+         (Addr = System.Null_Address  => To_Pointer'Result = Null_Pointer,
           Addr /= System.Null_Address => To_Pointer'Result /= Null_Pointer);
+   pragma Annotate (GNATprove, Terminating, To_Pointer);
 
 end String_Utils;
