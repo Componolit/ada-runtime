@@ -8,7 +8,7 @@
 --  version 3.1, as published by the Free Software Foundation.
 
 package body String_Utils
-  with SPARK_Mode
+with SPARK_Mode
 is
 
    ------------
@@ -18,21 +18,21 @@ is
    function Length (C_Str      : System.Address;
                     Max_Length : Natural := Natural'Last) return Integer
    is
-      L : Integer := 0;
-      Ptr : Pointer := To_Pointer (C_Str);
-      Old_Ptr : Pointer := Ptr;
+      L    : Integer := 0;
+      Ptr  : Pointer := To_Pointer (C_Str);
       Char : Character;
    begin
-      if Ptr /= Null_Pointer then
+      if Ptr /= Null_Pointer and Ptr < Pointer'Last then
          Char := Get_Char (Ptr);
-         while Char /= Character'Val (0) and L < Max_Length loop
+         while
+           Char /= Character'Val (0) and
+           L < Max_Length and
+           Ptr + 1 < Pointer'Last and
+           Ptr < Pointer'Last
+         loop
             pragma Loop_Invariant (Ptr /= Null_Pointer and L >= 0);
-            pragma Loop_Variant (Increases => Ptr);
-            pragma Assert (Ptr = Old_Ptr);
+            pragma Loop_Variant (Increases => L);
             Ptr := Incr (Ptr);
-            exit when Old_Ptr >= Ptr;
-            pragma Assert (Ptr > Old_Ptr);
-            Old_Ptr := Ptr;
             Char := Get_Char (Ptr);
             L := L + 1;
          end loop;
@@ -48,21 +48,16 @@ is
                             Default    : String;
                             Max_Length : Natural := Natural'Last) return String
    is
-      L : constant Integer := Length (C_Str, Max_Length);
+      L   : constant Integer := Length (C_Str, Max_Length);
       Str : String (1 .. L) := (others => ' ');
       Cursor : Pointer := To_Pointer (C_Str);
-      Old_Cursor : Pointer := Cursor;
    begin
       if L > 0 then
          for C in Str'Range loop
             pragma Loop_Invariant (Cursor /= Null_Pointer);
-            pragma Loop_Variant (Increases => Cursor);
-            pragma Assert (Cursor = Old_Cursor);
             Str (C) := Get_Char (Cursor);
+            exit when Cursor = Pointer'Last;
             Cursor := Incr (Cursor);
-            exit when Old_Cursor >= Cursor;
-            pragma Assert (Cursor > Old_Cursor);
-            Old_Cursor := Cursor;
          end loop;
          return Str;
       else
@@ -89,10 +84,10 @@ is
 
    function Incr (Ptr : Pointer) return Pointer
    is
-      Next : Pointer := Ptr + 1;
+      Next : constant Pointer := Ptr + 1;
    begin
       if Next = Null_Pointer then
-         Next := Ptr;
+         raise Constraint_Error;
       end if;
       return Next;
    end Incr;
