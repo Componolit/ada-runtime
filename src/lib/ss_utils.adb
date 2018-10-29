@@ -14,7 +14,7 @@ is
       for E in Thread_Registry'Range loop
          pragma Loop_Invariant
            ((if First_Free_Entry = Invalid_Index then
-                (for Some F of Thread_Registry (E .. Thread_Registry'Last) =>
+                (for some F of Thread_Registry (E .. Thread_Registry'Last) =>
                        F.Id = Invalid_Thread)));
          pragma Loop_Invariant (Thread_Entry = Invalid_Index);
 
@@ -58,10 +58,12 @@ is
    is
       M : Mark := Invalid_Mark;
    begin
-      Search:
+      Search :
       for E in Thread_Registry'Range loop
-         pragma Loop_Invariant (for Some F of Thread_Registry
+         pragma Loop_Invariant (for some F of Thread_Registry
                                 (E .. Thread_Registry'Last) => F.Id = T);
+         pragma Loop_Invariant (Valid_Entry (Thread_Registry (E).Id,
+                                Thread_Registry (E).Data.Base));
          if Thread_Registry (E).Id = T then
             M := Thread_Registry (E).Data;
             exit Search;
@@ -84,12 +86,10 @@ is
          raise Constraint_Error;
       end if;
 
-
-
       Search :
       for E in Thread_Registry'Range loop
          pragma Loop_Invariant
-           (for Some F of Thread_Registry (E .. Thread_Registry'Last) =>
+           (for some F of Thread_Registry (E .. Thread_Registry'Last) =>
                 F.Id = T);
          if T = Thread_Registry (E).Id then
             Thread_Entry := E;
@@ -172,5 +172,14 @@ is
 
       Set_Mark (T, LM, Reg);
    end S_Release;
+
+   function Valid_Entry
+     (Id   : Thread;
+      Base : System.Address) return Boolean
+   is
+   begin
+      return (Id /= Invalid_Thread and Base /= System.Null_Address)
+        or else Id = Invalid_Thread;
+   end Valid_Entry;
 
 end Ss_Utils;
