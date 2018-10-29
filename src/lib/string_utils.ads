@@ -45,19 +45,22 @@ private
 
    Null_Pointer : constant Pointer := 0;
 
-   function Get_Char (Ptr : Pointer) return Character
+   subtype Valid_Pointer is Pointer
      with
-       Pre => Ptr /= Null_Pointer;
+       Static_Predicate => Valid_Pointer /= Null_Pointer;
+
+   function Get_Char (Ptr : Valid_Pointer) return Character;
    pragma Annotate (GNATprove, Terminating, Get_Char);
 
-   function Incr (Ptr : Pointer) return Pointer
+   function Incr (Ptr : Valid_Pointer) return Valid_Pointer
      with
-       Pre => Ptr /= Null_Pointer and Ptr < Pointer'Last,
-     Post => Incr'Result /= Null_Pointer and Incr'Result = Ptr + 1;
+       Pre => Ptr < Pointer'Last,
+       Post => Incr'Result = Ptr + 1;
    pragma Annotate (GNATprove, Terminating, Incr);
 
    function To_Address (Value : Pointer) return System.Address
      with
+       Inline,
        Contract_Cases =>
          (Value = Null_Pointer  => To_Address'Result = System.Null_Address,
           Value /= Null_Pointer => To_Address'Result /= System.Null_Address);
@@ -65,6 +68,7 @@ private
 
    function To_Pointer (Addr : System.Address) return Pointer
      with
+       Inline,
        Contract_Cases =>
          (Addr = System.Null_Address  => To_Pointer'Result = Null_Pointer,
           Addr /= System.Null_Address => To_Pointer'Result /= Null_Pointer);
