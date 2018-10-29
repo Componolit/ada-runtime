@@ -19,10 +19,13 @@ is
                     Max_Length : Natural := Natural'Last) return Integer
    is
       L    : Integer := 0;
-      Ptr  : Pointer := To_Pointer (C_Str);
+      Ptr  : Valid_Pointer;
       Char : Character;
    begin
-      if Ptr /= Null_Pointer and Ptr < Pointer'Last then
+      if To_Pointer (C_Str) /= Null_Pointer
+        and To_Pointer (C_Str) < Pointer'Last
+      then
+         Ptr := To_Pointer (C_Str);
          Char := Get_Char (Ptr);
          while
            Char /= Character'Val (0) and
@@ -30,7 +33,7 @@ is
            Ptr + 1 < Pointer'Last and
            Ptr < Pointer'Last
          loop
-            pragma Loop_Invariant (Ptr /= Null_Pointer and L >= 0);
+            pragma Loop_Invariant (L >= 0);
             pragma Loop_Variant (Increases => L);
             Ptr := Incr (Ptr);
             Char := Get_Char (Ptr);
@@ -50,11 +53,11 @@ is
    is
       L   : constant Integer := Length (C_Str, Max_Length);
       Str : String (1 .. L) := (others => ' ');
-      Cursor : Pointer := To_Pointer (C_Str);
+      Cursor : Valid_Pointer;
    begin
       if L > 0 then
+         Cursor := To_Pointer (C_Str);
          for C in Str'Range loop
-            pragma Loop_Invariant (Cursor /= Null_Pointer);
             Str (C) := Get_Char (Cursor);
             exit when Cursor = Pointer'Last;
             Cursor := Incr (Cursor);
@@ -69,7 +72,7 @@ is
    -- Get_Char --
    --------------
 
-   function Get_Char (Ptr : Pointer) return Character
+   function Get_Char (Ptr : Valid_Pointer) return Character
      with SPARK_Mode => Off
    is
       Char : Character
@@ -82,13 +85,10 @@ is
    -- Incr --
    ----------
 
-   function Incr (Ptr : Pointer) return Pointer
+   function Incr (Ptr : Valid_Pointer) return Valid_Pointer
    is
-      Next : constant Pointer := Ptr + 1;
+      Next : constant Valid_Pointer := Ptr + 1;
    begin
-      if Next = Null_Pointer then
-         raise Constraint_Error;
-      end if;
       return Next;
    end Incr;
 
