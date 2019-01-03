@@ -11,4 +11,4 @@ A downsized Ada runtime which can be adapted to different platforms.
 
 ## Platform-specific Symbols
 
-Some symbols are required to be provided by the platform. Please have a look into the [platform interface](https://github.com/Componolit/ada-runtime/wiki/Platform-interface) description.
+Some symbols are required to be provided by the platform. Please have a look into the [platform interface](doc/Platform-interface.md) description.
