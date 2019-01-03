@@ -63,3 +63,11 @@ void raise_ada_exception(int exception, char *name, char *message) {
 LOG(debug)
 LOG(warning)
 LOG(error)
+
+void put_char (const char c) {
+   putc(c, stdout);
+}
+
+void put_int (const int i) {
+   printf("%d", i);
+}
