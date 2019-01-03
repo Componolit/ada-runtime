@@ -12,14 +12,48 @@
 #include <base/exception.h>
 #include <base/log.h>
 #include <base/thread.h>
+#include <base/snprintf.h>
 #include <util/string.h>
+#include <terminal_session/connection.h>
 
 #include <ada/exception.h>
 #include <ada_exceptions.h>
 
 class Gnat_Exception : public Genode::Exception {};
 
+Terminal::Connection *__genode_terminal __attribute__((weak)) = nullptr;
+
 extern "C" {
+
+    void put_char(const char c)
+    {
+        if (__genode_terminal)
+        {
+            __genode_terminal->write(&c, 1);
+        }
+    }
+
+    void put_char_stderr(const char c)
+    {
+        /* FIXME: We should output stderr via LOG */
+        put_char(c);
+    }
+
+    void put_int(const int i)
+    {
+        if (__genode_terminal)
+        {
+            char buf[20];
+            int len = Genode::snprintf(buf, sizeof(buf), "%d", i);
+            __genode_terminal->write(buf, len);
+        }
+    }
+
+   void put_int_stderr(const int i)
+   {
+        /* FIXME: We should output stderr via LOG */
+        put_int(i);
+   }
 
     void log_debug(char *message)
     {

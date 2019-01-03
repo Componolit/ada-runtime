@@ -30,6 +30,10 @@ SRC = a-except.adb \
       exit.c \
       init.c
 
+ifneq ($(USE_GNATIO),)
+SRC += gnat.ads g-io.ads g-io.adb
+endif
+
 SRC := $(sort $(SRC) $(patsubst %.adb, %.ads, $(filter %.adb, $(SRC))))
 
 dummy := $(shell mkdir -p $(OBJ_DIR)/adainclude $(OBJ_DIR)/adalib $(OBJ_DIR)/lib)
