@@ -1,3 +1,5 @@
+VERBOSE ?= @
+
 COMPONENT = rts
 OBJ_DIR = obj
 TEST_DIR = tests/system
@@ -35,40 +37,40 @@ dummy := $(shell mkdir -p $(OBJ_DIR)/adainclude $(OBJ_DIR)/adalib $(OBJ_DIR)/lib
 runtime: $(OBJ_DIR)/adalib/libgnat.a
 
 $(OBJ_DIR)/adalib/libgnat.a: $(addprefix $(OBJ_DIR)/adainclude/,$(SRC))
-	gprbuild --RTS=./obj -P$(COMPONENT) -p
+	$(VERBOSE)gprbuild --RTS=./obj -P$(COMPONENT) -p
 
 $(OBJ_DIR)/adainclude/%: src/%
-	cp -a $< $@
+	$(VERBOSE)cp -a $< $@
 
 $(OBJ_DIR)/adainclude/%: src/lib/%
-	cp -a $< $@
+	$(VERBOSE)cp -a $< $@
 
 $(OBJ_DIR)/adainclude/%: contrib/gcc-6.3.0/%
-	cp -v -a $< $@
+	$(VERBOSE)cp -a $< $@
 
 platform: $(OBJ_DIR)/lib/libposix_rts.a
 
 $(OBJ_DIR)/lib/libposix_rts.a: $(OBJ_DIR)/posix.o
-	ar rcs $@ $^
+	$(VERBOSE)ar rcs $@ $^
 
 $(OBJ_DIR)/%.o: platform/%.c
-	gcc -c -o $@ $<
+	$(VERBOSE)gcc -c -o $@ $<
 
 clean: clean_test
-	@rm -rf $(OBJ_DIR)
+	$(VERBOSE)rm -rf $(OBJ_DIR)
 
 TEST_DIRS = $(addprefix $(TEST_DIR)/,$(shell ls tests/system))
 TEST_BINS = $(addsuffix /test,$(TEST_DIRS))
 
 $(TEST_DIR)/%/test:
 	@echo "TEST $(dir $@)"
-	@cd $(dir $@) && gprbuild --RTS=../../../obj -p && ./test
+	$(VERBOSE)cd $(dir $@) && gprbuild -q --RTS=../../../obj -p && ./test
 
 $(UNIT_DIR)/test:
 	@echo "UNITTEST $(dir $@)"
-	@cd $(dir $@) && gprbuild -P test && ./test
+	$(VERBOSE)cd $(dir $@) && gprbuild -q -P test && ./test
 
 test: runtime platform clean_test $(TEST_BINS) $(UNIT_DIR)/test
 
 clean_test:
-	$(foreach DIR,$(TEST_DIRS) $(UNIT_DIR),cd $(DIR) && gprclean -Ptest -r; cd -;)
+	$(VERBOSE)$(foreach DIR,$(TEST_DIRS) $(UNIT_DIR),cd $(DIR) && gprclean -q -Ptest -r; cd -;)
