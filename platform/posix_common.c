@@ -13,14 +13,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void *__gnat_malloc(size_t size) {
-    return malloc(size);
-}
-
-void __gnat_free(void *ptr) {
-    free(ptr);
-}
-
 void __gnat_unhandled_terminate() {
     printf("error: unhandled exception\n");
     exit(1);

@@ -16,7 +16,7 @@
 #include <util/string.h>
 #include <terminal_session/connection.h>
 
-#include <spark/exception.h>
+#include <ada/exception.h>
 #include <ada_exceptions.h>
 
 class Gnat_Exception : public Genode::Exception {};
