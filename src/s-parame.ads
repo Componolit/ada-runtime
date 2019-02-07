@@ -9,6 +9,7 @@
 
 package System.Parameters is
    pragma Pure;
+   pragma Elaborate_Body;
 
    ------------------------------
    -- Stack Allocation Control --
