@@ -12,6 +12,7 @@ with Ada.Unchecked_Conversion;
 
 package System.Standard_Library is
    pragma Preelaborate;
+   pragma Elaborate_Body;
 
    subtype Big_String is String (1 .. Positive'Last);
    pragma Suppress_Initialization (Big_String);
