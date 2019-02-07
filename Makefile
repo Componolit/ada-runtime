@@ -18,11 +18,11 @@ SRC = a-except.adb \
       s-exctab.adb \
       s-imgint.adb \
       s-init.adb \
-      s-parame.ads \
+      s-parame.adb \
       s-unstyp.ads \
       s-secsta.adb \
       s-soflin.adb \
-      s-stalib.ads \
+      s-stalib.adb \
       s-stoele.adb \
       string_utils.adb \
       system.ads \
@@ -54,7 +54,7 @@ $(OBJ_DIR)/adainclude/%: contrib/gcc-6.3.0/%
 
 platform: $(OBJ_DIR)/lib/libposix_rts.a
 
-$(OBJ_DIR)/lib/libposix_rts.a: $(OBJ_DIR)/posix.o
+$(OBJ_DIR)/lib/libposix_rts.a: $(OBJ_DIR)/posix_common.o $(OBJ_DIR)/posix_minimal.o
 	$(VERBOSE)ar rcs $@ $^
 
 $(OBJ_DIR)/%.o: platform/%.c
