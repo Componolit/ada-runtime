@@ -60,6 +60,14 @@ void put_char (const char c) {
    putc(c, stdout);
 }
 
+void put_char_stderr (const char c) {
+   putc(c, stderr);
+}
+
 void put_int (const int i) {
    printf("%d", i);
+}
+
+void put_int_stderr (const int i) {
+   fprintf(stderr, "%d", i);
 }
