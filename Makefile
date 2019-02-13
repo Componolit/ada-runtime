@@ -43,7 +43,10 @@ runtime: $(OBJ_DIR)/adalib/libgnat.a
 $(OBJ_DIR)/adalib/libgnat.a: $(addprefix $(OBJ_DIR)/adainclude/,$(SRC))
 	$(VERBOSE)gprbuild --RTS=./obj -P$(COMPONENT) -p
 
-$(OBJ_DIR)/adainclude/%: src/%
+$(OBJ_DIR)/adainclude/%: src/minimal/%
+	$(VERBOSE)cp -a $< $@
+
+$(OBJ_DIR)/adainclude/%: src/common/%
 	$(VERBOSE)cp -a $< $@
 
 $(OBJ_DIR)/adainclude/%: src/lib/%
