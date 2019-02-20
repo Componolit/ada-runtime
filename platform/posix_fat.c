@@ -10,7 +10,14 @@
  */
 
 #include <setjmp.h>
+#include <sys/time.h>
 
 void _gnat_builtin_longjmp(jmp_buf *env, int val) {
    longjmp(*env, val);
+}
+
+void __gnat_timeval_to_duration (struct timeval *tv, time_t *sec, suseconds_t *usec)
+{
+   *sec = tv->tv_sec;
+   *usec = tv->tv_usec;
 }
