@@ -11,7 +11,6 @@ SRC = a-except.adb \
       ada_exceptions.ads \
       i-c.adb \
       i-cexten.ads \
-      i-cstrin.adb \
       interfac.ads \
       platform.adb \
       ss_utils.adb \
