@@ -45,6 +45,17 @@ package System.Standard_Library is
       Raise_Hook            : Raise_Action;
    end record;
 
+   Constraint_Error_Name : constant String := "CONSTRAINT_ERROR" & ASCII.NUL;
+   Constraint_Error_Def : aliased Exception_Data :=
+     (Not_Handled_By_Others => False,
+      Lang                  => 'A',
+      Name_Length           => Constraint_Error_Name'Length,
+      Full_Name             => Constraint_Error_Name'Address,
+      HTable_Ptr            => null,
+      Foreign_Data          => Null_Address,
+      Raise_Hook            => null);
+   pragma Export (C, Constraint_Error_Def, "constraint_error");
+
    procedure Adafinal is null;
 
    --  Workaround for GNATBIND 8.1 / Pro 18.1:

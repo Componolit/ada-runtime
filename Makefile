@@ -23,6 +23,7 @@ SRC = a-except.adb \
       s-soflin.adb \
       s-stalib.adb \
       s-stoele.adb \
+      s-arit64.adb \
       string_utils.adb \
       system.ads \
       argv.c \
