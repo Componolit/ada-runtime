@@ -1,0 +1,15 @@
+project Test is
+
+   for Main use ("test.cpp");
+   for Languages use ("Ada", "C++");
+   for Source_Dirs use (".");
+
+   package Binder is
+      for Switches ("Ada") use ("-static");
+   end Binder;
+
+   package Linker is
+      for Required_Switches use ("-L../../../obj/lib", "-lposix_rts", "-lpthread");
+   end Linker;
+
+end Test;
