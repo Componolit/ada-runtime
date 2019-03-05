@@ -12,6 +12,8 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
+#include <time.h>
 
 void __gnat_unhandled_terminate() {
     printf("error: unhandled exception\n");
@@ -71,3 +73,25 @@ void put_int (const int i) {
 void put_int_stderr (const int i) {
    fprintf(stderr, "%d", i);
 }
+
+u_int64_t __ada_runtime_rt_resolution(void) {
+   int rv;
+   struct timespec res;
+
+   rv = clock_getres (CLOCK_MONOTONIC, &res);
+   assert(rv == 0);
+   return res.tv_sec * 1000000000UL + res.tv_nsec;
+}
+
+u_int64_t __ada_runtime_rt_monotonic_clock(void) {
+   int rv;
+   struct timespec res;
+
+   rv = clock_gettime (CLOCK_MONOTONIC, &res);
+   assert(rv == 0);
+   return res.tv_sec * 1000000000UL + res.tv_nsec;
+}
+
+void __ada_runtime_rt_initialize(void) {
+}
+   // empty
