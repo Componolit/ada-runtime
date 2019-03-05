@@ -62,6 +62,10 @@ void put_char (const char c) {
    putc(c, stdout);
 }
 
+char get_char (void) {
+   return (char)0;
+}
+
 void put_char_stderr (const char c) {
    putc(c, stderr);
 }
@@ -72,6 +76,10 @@ void put_int (const int i) {
 
 void put_int_stderr (const int i) {
    fprintf(stderr, "%d", i);
+}
+
+int get_int (void) {
+   return 0;
 }
 
 u_int64_t __ada_runtime_rt_resolution(void) {

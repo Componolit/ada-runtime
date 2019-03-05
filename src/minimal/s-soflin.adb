@@ -25,14 +25,13 @@ package body System.Soft_Links is
 
    function Get_Jmpbuf_Address_Soft return Address is
    begin
-      Platform.Log_Warning ("Get_Jmpbuf_Address_Soft not implemented");
       return Address (0);
    end Get_Jmpbuf_Address_Soft;
 
    procedure Set_Jmpbuf_Address_Soft (Addr : Address) is
       pragma Unreferenced (Addr);
    begin
-      Platform.Log_Warning ("Set_Jmpbuf_Address_Soft not implemented");
+      null;
    end Set_Jmpbuf_Address_Soft;
 
 end System.Soft_Links;
