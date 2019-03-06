@@ -29,7 +29,9 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
-package body GNAT.IO is
+package body GNAT.IO
+   with SPARK_Mode => Off
+is
 
    Current_Out : File_Type := Stdout;
    pragma Atomic (Current_Out);
