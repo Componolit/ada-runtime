@@ -38,7 +38,9 @@
 --  Note that Data_Error is not raised by these subprograms for bad data.
 --  If such checks are needed then the regular Text_IO package must be used.
 
-package GNAT.IO is
+package GNAT.IO
+   with SPARK_Mode
+is
    pragma Preelaborate;
 
    type File_Type is limited private;
