@@ -14,22 +14,38 @@
 #include <base/thread.h>
 #include <base/snprintf.h>
 #include <util/string.h>
+#include <util/reconstructible.h>
 #include <terminal_session/connection.h>
+#include <timer_session/connection.h>
 
 #include <ada/exception.h>
 #include <ada_exceptions.h>
 
 class Gnat_Exception : public Genode::Exception {};
 
-Terminal::Connection *__genode_terminal __attribute__((weak)) = nullptr;
+Genode::Constructible<Terminal::Connection> _terminal;
+static bool _terminal_available = false;
+
+Genode::Constructible<Timer::Connection> _timer;
+static bool _timer_available = false;
+static Genode::uint64_t _rt_resolution = 0;
+
+extern Genode::Env *__genode_env;
+
+void construct_terminal() {
+   if (!_terminal_available && !_terminal.constructed()) {
+      _terminal.construct(*__genode_env, "ada-runtime");
+      _terminal_available = _terminal.constructed();
+   }
+}
 
 extern "C" {
 
     void put_char(const char c)
     {
-        if (__genode_terminal)
-        {
-            __genode_terminal->write(&c, 1);
+        construct_terminal();
+        if (_terminal_available) {
+           _terminal->write(&c, 1);
         }
     }
 
@@ -41,11 +57,11 @@ extern "C" {
 
     void put_int(const int i)
     {
-        if (__genode_terminal)
-        {
+        construct_terminal();
+        if (_terminal_available) {
             char buf[20];
             int len = Genode::snprintf(buf, sizeof(buf), "%d", i);
-            __genode_terminal->write(buf, len);
+            _terminal->write(buf, len);
         }
     }
 
@@ -144,4 +160,31 @@ extern "C" {
                 throw Genode::Exception();
         }
     }
+
+   Genode::uint64_t __ada_runtime_rt_resolution(void) {
+      return _rt_resolution;
+   }
+
+   Genode::uint64_t __ada_runtime_rt_monotonic_clock(void) {
+      if (_timer_available) {
+         return _timer->elapsed_us() * 1000;
+      }
+      return 0;
+   }
+
+   void __ada_runtime_rt_initialize(void) {
+      if (!_timer.constructed()) {
+         _timer.construct(*__genode_env);
+      }
+      _timer_available = _timer.constructed();
+
+      enum Iter { CALIBRATE_ITERATIONS = 1000 };
+      for (int i = CALIBRATE_ITERATIONS; i > 0; i--)
+      {
+         Genode::uint64_t start = __ada_runtime_rt_monotonic_clock();
+         Genode::uint64_t stop  = __ada_runtime_rt_monotonic_clock();
+         _rt_resolution += stop - start;
+      }
+      _rt_resolution /= CALIBRATE_ITERATIONS;
+   }
 }
