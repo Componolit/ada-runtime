@@ -101,5 +101,5 @@ u_int64_t __ada_runtime_rt_monotonic_clock(void) {
 }
 
 void __ada_runtime_rt_initialize(void) {
-}
    // empty
+}
