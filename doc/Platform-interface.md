@@ -18,6 +18,7 @@
 | `__ada_runtime_rt_initialize`      | `void __ada_runtime_rt_initialize(void)`               | `procedure Initialize`                                                                              |
 | `__ada_runtime_rt_monotonic_clock` | `u_int64_t __ada_runtime_rt_monotonic_clock(void)`     | `function Monotonic_Clock return Time`                                                              |
 | `__ada_runtime_rt_resolution`      | `u_int64_t __ada_runtime_rt_resolution(void)`          | `function RT_Resolution return Duration`                                                            |
+| `__ada_runtime_exit_status`        | `int __ada_runtime_exit_status`                        | n/a                                                                                                 |
 
 
 # Symbol definitions
@@ -238,3 +239,14 @@ Return amount of time elapsed since epoch in Nanoseconds.
 
 Return the average time interval during which the clock interval obtained by
 calling `__ada_runtime_rt_monotonic_clock` remains constant in Nanoseconds.
+
+## `__ada_runtime_exit_status`
+
+### Signature
+
+ - C: `int __ada_runtime_exit_status`
+
+### Semantics
+
+Contains the applications exit status as set by
+`Ada.Command_Line.Set_Exit_Status`.
