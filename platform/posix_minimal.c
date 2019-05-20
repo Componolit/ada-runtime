@@ -10,6 +10,8 @@
  */
 
 #include <stdlib.h>
+#include <stdio.h>
+#include <unwind.h>
 
 void *__gnat_malloc(size_t size) {
     return malloc(size);
@@ -17,4 +19,14 @@ void *__gnat_malloc(size_t size) {
 
 void __gnat_free(void *ptr) {
     free(ptr);
+}
+
+_Unwind_Reason_Code __gnat_personality_v0(int version,
+                                          void *phases,
+                                          _Unwind_Exception_Class class,
+                                          void *exception,
+                                          void *context)
+{
+    fprintf(stderr, "%s not implemented\n", __func__);
+    exit(1);
 }
