@@ -102,14 +102,9 @@ extern "C" {
         throw Gnat_Exception();
     }
 
-    void *allocate_secondary_stack(void * thread, Genode::size_t size)
+    void *allocate_secondary_stack(Genode::size_t size)
     {
-        return static_cast<Genode::Thread *>(thread)->alloc_secondary_stack("ada thread", size);
-    }
-
-    void *get_thread()
-    {
-        return static_cast<void *>(Genode::Thread::myself());
+        return Genode::Thread::myself()->alloc_secondary_stack("ada thread", size);
     }
 
 #define exc_case(c, cpp) case c: throw Ada::Exception::cpp()

@@ -7,6 +7,8 @@
 --  additional permissions described in the GCC Runtime Library Exception,
 --  version 3.1, as published by the Free Software Foundation.
 
+with Ss_Utils;
+
 package body System.Secondary_Stack is
 
    procedure SS_Allocate (
@@ -14,31 +16,15 @@ package body System.Secondary_Stack is
                           Storage_Size : SSE.Storage_Count
                          )
    is
-      T : constant Ss_Utils.Thread := Ss_Utils.C_Get_Thread;
    begin
-      if T /= Ss_Utils.Invalid_Thread then
-         Ss_Utils.S_Allocate (Address,
-                              Storage_Size,
-                              Thread_Registry,
-                              T);
-      else
-         raise Program_Error;
-      end if;
+      Ss_Utils.S_Allocate (Address, Storage_Size);
    end SS_Allocate;
 
    function SS_Mark return Mark_Id
    is
       M : Mark_Id;
-      T : constant Ss_Utils.Thread := Ss_Utils.C_Get_Thread;
    begin
-      if T /= Ss_Utils.Invalid_Thread then
-         Ss_Utils.S_Mark (M.Sstk,
-                          SSE.Storage_Count (M.Sptr),
-                          Thread_Registry,
-                          T);
-      else
-         raise Program_Error;
-      end if;
+      Ss_Utils.S_Mark (M.Sstk, SSE.Storage_Count (M.Sptr));
       return M;
    end SS_Mark;
 
@@ -46,16 +32,8 @@ package body System.Secondary_Stack is
                          M : Mark_Id
                         )
    is
-      T : constant Ss_Utils.Thread := Ss_Utils.C_Get_Thread;
    begin
-      if T /= Ss_Utils.Invalid_Thread then
-         Ss_Utils.S_Release (M.Sstk,
-                             SSE.Storage_Count (M.Sptr),
-                             Thread_Registry,
-                             T);
-      else
-         raise Program_Error;
-      end if;
+      Ss_Utils.S_Release (M.Sstk, SSE.Storage_Count (M.Sptr));
    end SS_Release;
 
 end System.Secondary_Stack;
