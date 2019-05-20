@@ -7,92 +7,35 @@
 --  additional permissions described in the GCC Runtime Library Exception,
 --  version 3.1, as published by the Free Software Foundation.
 
-package body Ss_Utils
-  with SPARK_Mode
+package body Ss_Utils with
+   SPARK_Mode
 is
 
-   procedure Get_Mark (T               : Thread;
-                       Thread_Registry : in out Registry;
-                       E               : out Mark)
+   procedure Get_Mark (E : out Mark)
    is
-      Thread_Entry     : Long_Integer := -1;
-      First_Free_Entry : Long_Integer := -1;
    begin
-      Search :
-      for E in Thread_Registry'Range loop
-         pragma Loop_Invariant (First_Free_Entry < 128);
-         pragma Loop_Invariant (Thread_Entry < 128);
-         if First_Free_Entry = -1 and then
-           Thread_Registry (E).Id = Invalid_Thread
-         then
-            First_Free_Entry := E;
-         end if;
-
-         if T = Thread_Registry (E).Id then
-            Thread_Entry := E;
-            exit Search;
-         end if;
-      end loop Search;
-
-      if Thread_Entry < 0 then
-         if First_Free_Entry >= 0 then
-            Thread_Registry (First_Free_Entry).Id := T;
-            Thread_Registry (First_Free_Entry).Data :=
-              (Base  => System.Null_Address,
-               Top   => 0);
-            Thread_Entry := First_Free_Entry;
-         else
-            raise Constraint_Error;
-         end if;
+      if Secondary_Stack_Mark.Base = System.Null_Address then
+         Secondary_Stack_Mark :=
+            (Base => Allocate_Stack (Secondary_Stack_Size),
+             Top  => 0);
       end if;
-
-      if Thread_Registry (Thread_Entry).Data.Base = System.Null_Address then
-         Thread_Registry (Thread_Entry).Data :=
-           (Base  => Allocate_Stack (T, Secondary_Stack_Size),
-            Top   => 0);
-      end if;
-
-      E := Thread_Registry (Thread_Entry).Data;
+      E := Secondary_Stack_Mark;
    end Get_Mark;
 
-   procedure Set_Mark (T               : Thread;
-                       M               : Mark;
-                       Thread_Registry : in out Registry)
+   procedure Set_Mark (M : Mark)
    is
-      Thread_Entry : Long_Integer := -1;
    begin
-      if T = Invalid_Thread then
-         raise Constraint_Error;
-      end if;
       if M.Base = System.Null_Address then
          raise Constraint_Error;
       end if;
-
-      Search :
-      for E in Thread_Registry'Range loop
-         pragma Loop_Invariant (Thread_Entry < 128);
-         if T = Thread_Registry (E).Id then
-            Thread_Entry := E;
-            exit Search;
-         end if;
-      end loop Search;
-
-      if Thread_Entry < 0 then
-         raise Constraint_Error;
-      end if;
-
-      Thread_Registry (Thread_Entry).Data := M;
+      Secondary_Stack_Mark := M;
    end Set_Mark;
 
-   function Allocate_Stack (T    : Thread;
-                            Size : SSE.Storage_Count) return System.Address
+   function Allocate_Stack (Size : SSE.Storage_Count) return System.Address
    is
       Stack : System.Address;
    begin
-      if T = Invalid_Thread then
-         raise Constraint_Error;
-      end if;
-      Stack := C_Alloc (T, Size);
+      Stack := C_Alloc (Size);
       if Stack = System.Null_Address then
          raise Storage_Error;
       end if;
@@ -100,13 +43,11 @@ is
    end Allocate_Stack;
 
    procedure S_Allocate (Address      : out System.Address;
-                         Storage_Size : SSE.Storage_Count;
-                         Reg          : in out Registry;
-                         T            : Thread)
+                         Storage_Size : SSE.Storage_Count)
    is
       M         : Mark;
    begin
-      Get_Mark (T, Reg, M);
+      Get_Mark (M);
       if M.Top < Secondary_Stack_Size and then
         Storage_Size < Secondary_Stack_Size and then
         Storage_Size + M.Top < Secondary_Stack_Size
@@ -117,30 +58,26 @@ is
          raise Storage_Error;
       end if;
 
-      Set_Mark (T, M, Reg);
+      Set_Mark (M);
    end S_Allocate;
 
    procedure S_Mark (Stack_Base : out System.Address;
-                     Stack_Ptr  : out SSE.Storage_Count;
-                     Reg        : in out Registry;
-                     T          : Thread)
+                     Stack_Ptr  : out SSE.Storage_Count)
    is
       M : Mark;
    begin
-      Get_Mark (T, Reg, M);
+      Get_Mark (M);
 
       Stack_Base := M.Base;
       Stack_Ptr := M.Top;
    end S_Mark;
 
    procedure S_Release (Stack_Base : System.Address;
-                        Stack_Ptr  : SSE.Storage_Count;
-                        Reg        : in out Registry;
-                        T          : Thread)
+                        Stack_Ptr  : SSE.Storage_Count)
    is
       LM : Mark;
    begin
-      Get_Mark (T, Reg, LM);
+      Get_Mark (LM);
 
       if Stack_Ptr > LM.Top or Stack_Base /= LM.Base
       then
@@ -149,7 +86,7 @@ is
 
       LM.Top := Stack_Ptr;
 
-      Set_Mark (T, LM, Reg);
+      Set_Mark (LM);
    end S_Release;
 
 end Ss_Utils;

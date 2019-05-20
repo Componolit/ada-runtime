@@ -9,8 +9,6 @@
 
 with System.Parameters;
 with System.Storage_Elements;
-with Ss_Utils;
-use all type Ss_Utils.Thread;
 
 package System.Secondary_Stack is
 
@@ -51,7 +49,5 @@ private
       Sstk : System.Address;
       Sptr : SSE.Integer_Address;
    end record;
-
-   Thread_Registry : Ss_Utils.Registry := Ss_Utils.Null_Registry;
 
 end System.Secondary_Stack;
