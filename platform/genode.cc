@@ -13,6 +13,7 @@
 #include <base/log.h>
 #include <base/thread.h>
 #include <base/snprintf.h>
+#include <base/buffered_output.h>
 #include <util/string.h>
 #include <util/reconstructible.h>
 #include <terminal_session/connection.h>
@@ -24,45 +25,11 @@
 
 class Gnat_Exception : public Genode::Exception {};
 
-class Buffered_Print
-{
-    private:
-        enum {BUFFER_SIZE = 1024};
-        char _buffer[BUFFER_SIZE];
-        int _cursor;
-        bool _err;
-    public:
-        Buffered_Print(bool err) :
-            _buffer(),
-            _cursor(0),
-            _err(err)
-        {
-            Genode::memset(_buffer, 0, BUFFER_SIZE);
-        }
+struct Write_log { void operator () (char const *s) { Genode::log(Genode::Cstring(s)); }} write_log;
+struct Write_error { void operator () (char const *s) { Genode::error(Genode::Cstring(s)); }} write_error;
 
-        void put_char(const char c)
-        {
-            if(_cursor == BUFFER_SIZE - 1 || c == '\n'){
-                if(_err){
-                    Genode::error(*this);
-                }else{
-                    Genode::log(*this);
-                }
-                Genode::memset(_buffer, 0, BUFFER_SIZE);
-                _cursor = 0;
-            }
-            _buffer[_cursor] = c;
-            _cursor++;
-        }
-
-        void print(Genode::Output &out) const
-        {
-            Genode::print(out, Genode::Cstring(_buffer));
-        }
-};
-
-static Buffered_Print print_stdout = {false};
-static Buffered_Print print_stderr = {true};
+static Genode::Buffered_output<512, Write_log> print_stdout = {write_log};
+static Genode::Buffered_output<512, Write_error> print_stderr = {write_error};
 
 extern "C" {
 
@@ -78,12 +45,12 @@ extern "C" {
 
     void put_char(const char c)
     {
-        print_stdout.put_char(c);
+        print_stdout.out_char(c);
     }
 
     void put_char_stderr(const char c)
     {
-        print_stderr.put_char(c);
+        print_stderr.out_char(c);
     }
 
     void put_int(const int i)
