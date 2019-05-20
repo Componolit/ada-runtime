@@ -31,7 +31,6 @@ SRC = a-except.adb \
       init.c \
       gnat.ads \
       g-io.adb \
-      a-reatim.adb \
 
 ifneq ($(USE_GNATIO),)
 SRC += gnat.ads g-io.ads g-io.adb

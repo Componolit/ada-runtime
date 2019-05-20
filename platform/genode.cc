@@ -24,21 +24,45 @@
 
 class Gnat_Exception : public Genode::Exception {};
 
-Genode::Constructible<Terminal::Connection> _terminal;
-static bool _terminal_available = false;
+class Buffered_Print
+{
+    private:
+        enum {BUFFER_SIZE = 1024};
+        char _buffer[BUFFER_SIZE];
+        int _cursor;
+        bool _err;
+    public:
+        Buffered_Print(bool err) :
+            _buffer(),
+            _cursor(0),
+            _err(err)
+        {
+            Genode::memset(_buffer, 0, BUFFER_SIZE);
+        }
 
-Genode::Constructible<Timer::Connection> _timer;
-static bool _timer_available = false;
-static Genode::uint64_t _rt_resolution = 0;
+        void put_char(const char c)
+        {
+            if(_cursor == BUFFER_SIZE - 1 || c == '\n'){
+                if(_err){
+                    Genode::error(*this);
+                }else{
+                    Genode::log(*this);
+                }
+                Genode::memset(_buffer, 0, BUFFER_SIZE);
+                _cursor = 0;
+            }
+            _buffer[_cursor] = c;
+            _cursor++;
+        }
 
-extern Genode::Env *__genode_env;
+        void print(Genode::Output &out) const
+        {
+            Genode::print(out, Genode::Cstring(_buffer));
+        }
+};
 
-void construct_terminal() {
-   if (!_terminal_available && !_terminal.constructed()) {
-      _terminal.construct(*__genode_env, "ada-runtime");
-      _terminal_available = _terminal.constructed();
-   }
-}
+static Buffered_Print print_stdout = {false};
+static Buffered_Print print_stderr = {true};
 
 extern "C" {
 
@@ -49,38 +73,35 @@ extern "C" {
             void *,                     //exception
             void *)                     //context
     {
-        Genode::error(__func__);
         return _URC_FOREIGN_EXCEPTION_CAUGHT;
     }
 
     void put_char(const char c)
     {
-        construct_terminal();
-        if (_terminal_available) {
-           _terminal->write(&c, 1);
-        }
+        print_stdout.put_char(c);
     }
 
     void put_char_stderr(const char c)
     {
-        /* FIXME: We should output stderr via LOG */
-        put_char(c);
+        print_stderr.put_char(c);
     }
 
     void put_int(const int i)
     {
-        construct_terminal();
-        if (_terminal_available) {
-            char buf[20];
-            int len = Genode::snprintf(buf, sizeof(buf), "%d", i);
-            _terminal->write(buf, len);
+        char buf[20];
+        int len = Genode::snprintf(buf, sizeof(buf), "%d", i);
+        for(int j = 0; j < len; j++){
+            put_char(buf[j]);
         }
     }
 
    void put_int_stderr(const int i)
    {
-        /* FIXME: We should output stderr via LOG */
-        put_int(i);
+        char buf[20];
+        int len = Genode::snprintf(buf, sizeof(buf), "%d", i);
+        for(int j = 0; j < len; j++){
+            put_char_stderr(buf[j]);
+        }
    }
 
     void log_debug(char *message)
@@ -172,31 +193,4 @@ extern "C" {
                 throw Genode::Exception();
         }
     }
-
-   Genode::uint64_t __ada_runtime_rt_resolution(void) {
-      return _rt_resolution;
-   }
-
-   Genode::uint64_t __ada_runtime_rt_monotonic_clock(void) {
-      if (_timer_available) {
-         return _timer->elapsed_us() * 1000;
-      }
-      return 0;
-   }
-
-   void __ada_runtime_rt_initialize(void) {
-      if (!_timer.constructed()) {
-         _timer.construct(*__genode_env);
-      }
-      _timer_available = _timer.constructed();
-
-      enum Iter { CALIBRATE_ITERATIONS = 1000 };
-      for (int i = CALIBRATE_ITERATIONS; i > 0; i--)
-      {
-         Genode::uint64_t start = __ada_runtime_rt_monotonic_clock();
-         Genode::uint64_t stop  = __ada_runtime_rt_monotonic_clock();
-         _rt_resolution += stop - start;
-      }
-      _rt_resolution /= CALIBRATE_ITERATIONS;
-   }
 }
