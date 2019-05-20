@@ -55,7 +55,7 @@ $(OBJ_DIR)/adainclude/%: src/common/%
 $(OBJ_DIR)/adainclude/%: src/lib/%
 	$(VERBOSE)cp -a $< $@
 
-$(OBJ_DIR)/adainclude/%: contrib/gcc-6.3.0/%
+$(OBJ_DIR)/adainclude/%: contrib/gcc-8.3.0/%
 	$(VERBOSE)cp -a $< $@
 
 platform: $(OBJ_DIR)/lib/libposix_rts.a

@@ -20,6 +20,7 @@
 
 #include <ada/exception.h>
 #include <ada_exceptions.h>
+#include <unwind.h>
 
 class Gnat_Exception : public Genode::Exception {};
 
@@ -40,6 +41,17 @@ void construct_terminal() {
 }
 
 extern "C" {
+
+    _Unwind_Reason_Code __gnat_personality_v0(
+            int,                        //version
+            void *,                     //phases
+            _Unwind_Exception_Class,    //exception class
+            void *,                     //exception
+            void *)                     //context
+    {
+        Genode::error(__func__);
+        return _URC_FOREIGN_EXCEPTION_CAUGHT;
+    }
 
     void put_char(const char c)
     {
