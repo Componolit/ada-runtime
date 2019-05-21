@@ -9,6 +9,7 @@
 
 with System.Parameters;
 with System.Storage_Elements;
+with Ss_Utils;
 
 package System.Secondary_Stack is
 
@@ -19,16 +20,12 @@ package System.Secondary_Stack is
 
    type Mark_Id is private;
 
-   procedure SS_Allocate (
-                          Address      : out System.Address;
-                          Storage_Size : SSE.Storage_Count
-                         );
+   procedure SS_Allocate (Address      : out System.Address;
+                          Storage_Size :     SSE.Storage_Count);
 
    function SS_Mark return Mark_Id;
 
-   procedure SS_Release (
-                         M : Mark_Id
-                        );
+   procedure SS_Release (M : Mark_Id);
 
 private
 
@@ -49,5 +46,7 @@ private
       Sstk : System.Address;
       Sptr : SSE.Integer_Address;
    end record;
+
+   Stack_Mark : Ss_Utils.Mark := Ss_Utils.Null_Mark;
 
 end System.Secondary_Stack;

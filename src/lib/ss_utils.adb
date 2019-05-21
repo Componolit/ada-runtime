@@ -11,82 +11,56 @@ package body Ss_Utils with
    SPARK_Mode
 is
 
-   procedure Get_Mark (E : out Mark)
+   procedure Check_Mark (E : in out Mark)
    is
    begin
-      if Secondary_Stack_Mark.Base = System.Null_Address then
-         Secondary_Stack_Mark :=
-            (Base => Allocate_Stack (Secondary_Stack_Size),
-             Top  => 0);
+      if E.Base = System.Null_Address then
+         E.Top := 0;
+         C_Alloc (Secondary_Stack_Size, E.Base);
       end if;
-      E := Secondary_Stack_Mark;
-   end Get_Mark;
-
-   procedure Set_Mark (M : Mark)
-   is
-   begin
-      if M.Base = System.Null_Address then
-         raise Constraint_Error;
-      end if;
-      Secondary_Stack_Mark := M;
-   end Set_Mark;
-
-   function Allocate_Stack (Size : SSE.Storage_Count) return System.Address
-   is
-      Stack : System.Address;
-   begin
-      Stack := C_Alloc (Size);
-      if Stack = System.Null_Address then
+      if E.Base = System.Null_Address then
          raise Storage_Error;
       end if;
-      return Stack;
-   end Allocate_Stack;
+   end Check_Mark;
 
-   procedure S_Allocate (Address      : out System.Address;
-                         Storage_Size : SSE.Storage_Count)
+   procedure S_Allocate (Stack_Mark   : in out Mark;
+                         Address      :    out System.Address;
+                         Storage_Size :        SSE.Storage_Count)
    is
-      M         : Mark;
    begin
-      Get_Mark (M);
-      if M.Top < Secondary_Stack_Size and then
+      Check_Mark (Stack_Mark);
+      if Stack_Mark.Top < Secondary_Stack_Size and then
         Storage_Size < Secondary_Stack_Size and then
-        Storage_Size + M.Top < Secondary_Stack_Size
+        Storage_Size + Stack_Mark.Top < Secondary_Stack_Size
       then
-         M.Top := M.Top + Storage_Size;
-         Address := M.Base - M.Top;
+         Stack_Mark.Top := Stack_Mark.Top + Storage_Size;
+         Address        := Stack_Mark.Base - Stack_Mark.Top;
       else
          raise Storage_Error;
       end if;
-
-      Set_Mark (M);
    end S_Allocate;
 
-   procedure S_Mark (Stack_Base : out System.Address;
-                     Stack_Ptr  : out SSE.Storage_Count)
+   procedure S_Mark (Stack_Mark : in out Mark;
+                     Stack_Base :    out System.Address;
+                     Stack_Ptr  :    out SSE.Storage_Count)
    is
-      M : Mark;
    begin
-      Get_Mark (M);
-
-      Stack_Base := M.Base;
-      Stack_Ptr := M.Top;
+      Check_Mark (Stack_Mark);
+      Stack_Base := Stack_Mark.Base;
+      Stack_Ptr  := Stack_Mark.Top;
    end S_Mark;
 
-   procedure S_Release (Stack_Base : System.Address;
-                        Stack_Ptr  : SSE.Storage_Count)
+   procedure S_Release (Stack_Mark : in out Mark;
+                        Stack_Base :        System.Address;
+                        Stack_Ptr  :        SSE.Storage_Count)
    is
-      LM : Mark;
    begin
-      Get_Mark (LM);
-
-      if Stack_Ptr > LM.Top or Stack_Base /= LM.Base
+      Check_Mark (Stack_Mark);
+      if Stack_Ptr > Stack_Mark.Top or Stack_Base /= Stack_Mark.Base
       then
          raise Program_Error;
       end if;
-
-      LM.Top := Stack_Ptr;
-
-      Set_Mark (LM);
+      Stack_Mark.Top := Stack_Ptr;
    end S_Release;
 
 end Ss_Utils;
