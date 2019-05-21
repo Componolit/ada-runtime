@@ -4,7 +4,7 @@ A downsized Ada runtime which can be adapted to different platforms.
 
 ## Directory Structure
 
-- `contrib/`: external sources (GCC 6.3)
+- `contrib/`: external sources (GCC 8.3)
 - `platform/`: platform-specific sources of Ada runtime (POSIX implementation used for tests)
 - `src/`: Ada runtime sources
 - `tests/`: test sources
