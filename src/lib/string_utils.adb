@@ -88,9 +88,8 @@ is
 
    function Incr (Ptr : Valid_Pointer) return Valid_Pointer
    is
-      Next : constant Valid_Pointer := Ptr + 1;
    begin
-      return Next;
+      return Ptr + 1;
    end Incr;
 
    ----------------
