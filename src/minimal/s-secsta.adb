@@ -9,7 +9,7 @@
 
 package body System.Secondary_Stack is
 
-   procedure SS_Allocate (Address      : out System.Address;
+   procedure SS_Allocate (Address      : out SSE.Integer_Address;
                           Storage_Size :     SSE.Storage_Count)
    is
    begin

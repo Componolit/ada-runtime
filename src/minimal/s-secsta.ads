@@ -20,7 +20,7 @@ package System.Secondary_Stack is
 
    type Mark_Id is private;
 
-   procedure SS_Allocate (Address      : out System.Address;
+   procedure SS_Allocate (Address      : out SSE.Integer_Address;
                           Storage_Size :     SSE.Storage_Count);
 
    function SS_Mark return Mark_Id;
@@ -43,7 +43,7 @@ private
    end record;
 
    type Mark_Id is record
-      Sstk : System.Address;
+      Sstk : SSE.Integer_Address;
       Sptr : SSE.Integer_Address;
    end record;
 

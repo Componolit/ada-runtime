@@ -5,33 +5,33 @@ package body Ss_Utils.Tests is
 
    package SSE renames System.Storage_Elements;
    Alloc_Success : Boolean := False;
-   Valid_Stack : System.Address := SSE.To_Address (16#ffffffff#);
+   Valid_Stack : SSE.Integer_Address := 16#ffffffff#;
 
    ---------------------------
    -- Test helper functions --
    ---------------------------
 
    procedure C_Alloc (Size    :     SSE.Storage_Count;
-                      Address : out System.Address)
+                      Address : out SSE.Integer_Address)
      with
        Export,
        Convention => C,
        External_Name => "allocate_secondary_stack";
 
    procedure C_Alloc (Size    :     SSE.Storage_Count;
-                      Address : out System.Address)
+                      Address : out SSE.Integer_Address)
    is
    begin
       if Alloc_Success then
          Address := Valid_Stack;
       else
-         Address := System.Null_Address;
+         Address := Null_Address;
       end if;
    end C_Alloc;
 
    procedure Alloc_Stack_With_Null_Ptr
    is
-      Ptr : System.Address;
+      Ptr : SSE.Integer_Address;
    begin
       Alloc_Success := False;
       C_Alloc (0, Ptr);
@@ -40,7 +40,7 @@ package body Ss_Utils.Tests is
    procedure S_Allocate_Stack_Overflow_1
    is
       M : Mark := Null_Mark;
-      Stack_Ptr : System.Address;
+      Stack_Ptr : SSE.Integer_Address;
    begin
       S_Allocate (M, Stack_Ptr, Secondary_Stack_Size * 2);
    end S_Allocate_Stack_Overflow_1;
@@ -48,7 +48,7 @@ package body Ss_Utils.Tests is
    procedure S_Allocate_Stack_Overflow_2
    is
       M : Mark := Null_Mark;
-      Stack_Ptr : System.Address;
+      Stack_Ptr : SSE.Integer_Address;
    begin
       for I in 0 .. 1024 loop
          S_Allocate (M, Stack_Ptr, SSE.Storage_Offset (1024));
@@ -59,8 +59,8 @@ package body Ss_Utils.Tests is
    is
       M : Mark := Null_Mark;
       Mark_Id : SSE.Storage_Count;
-      Mark_Base : System.Address;
-      Stack_Ptr : System.Address;
+      Mark_Base : SSE.Integer_Address;
+      Stack_Ptr : SSE.Integer_Address;
    begin
       S_Allocate (M, Stack_Ptr, 8);
       S_Mark (M, Mark_Base, Mark_Id);
@@ -74,13 +74,13 @@ package body Ss_Utils.Tests is
    procedure Test_Check_Mark (T : in out Aunit.Test_Cases.Test_Case'Class)
    is
       pragma Unreferenced (T);
-      Test_Mark : Mark := (Base => System.Null_Address,
+      Test_Mark : Mark := (Base => Null_Address,
                            Top  => 0);
       T1_Mark : Mark;
    begin
       Alloc_Success := True;
       Check_Mark (Test_Mark);
-      AUnit.Assertions.Assert (Test_Mark.Base /= System.Null_Address,
+      AUnit.Assertions.Assert (Test_Mark.Base /= Null_Address,
                                "Stack not initialized");
       AUnit.Assertions.Assert (Test_Mark.Top = 0,
                                "Top not null after initialization");
@@ -94,13 +94,13 @@ package body Ss_Utils.Tests is
    is
       pragma Unreferenced (T);
       M : Mark := Null_Mark;
-      Stack_Base : System.Address;
-      Stack_Ptr  : System.Address;
+      Stack_Base : SSE.Integer_Address;
+      Stack_Ptr  : SSE.Integer_Address;
    begin
       Alloc_Success := True;
 
       Check_Mark (M);
-      AUnit.Assertions.Assert (M.Base /= System.Null_Address,
+      AUnit.Assertions.Assert (M.Base /= Null_Address,
                                "Base allocation failed");
       AUnit.Assertions.Assert (M.Top = 0,
                                "Top not initialized with 0");
@@ -128,9 +128,9 @@ package body Ss_Utils.Tests is
    is
       pragma Unreferenced (T);
       M : Mark := Null_Mark;
-      S_Addr : System.Address;
+      S_Addr : SSE.Integer_Address;
       S_Pos : SSE.Storage_Count;
-      Stack_Ptr : System.Address;
+      Stack_Ptr : SSE.Integer_Address;
    begin
       S_Allocate (M, Stack_Ptr, 8);
       S_Mark (M, S_Addr, S_Pos);
@@ -142,8 +142,8 @@ package body Ss_Utils.Tests is
    is
       pragma Unreferenced (T);
       M : Mark := Null_Mark;
-      Stack_Ptr : System.Address;
-      Mark_Id : System.Address;
+      Stack_Ptr : SSE.Integer_Address;
+      Mark_Id : SSE.Integer_Address;
       Mark_Pos : SSE.Storage_Count;
    begin
       AUnit.Assertions.Assert_Exception (S_Release_High_Mark'Access,
@@ -156,7 +156,7 @@ package body Ss_Utils.Tests is
 
       AUnit.Assertions.Assert (M.Top = 16,
                                "Top not initialized correctly");
-      AUnit.Assertions.Assert (Stack_Ptr /= Mark_Id - Mark_Pos,
+      AUnit.Assertions.Assert (Stack_Ptr /= Mark_Id - SSE.Integer_Address (Mark_Pos),
                                "Mark not set correctly");
       S_Release (M, Mark_Id, Mark_Pos);
       AUnit.Assertions.Assert (M.Top = 8,
@@ -164,22 +164,22 @@ package body Ss_Utils.Tests is
       AUnit.Assertions.Assert (M.Top = Mark_Pos,
                                "Invalid mark id");
       S_Allocate (M, Stack_Ptr, 8);
-      AUnit.Assertions.Assert (Mark_Id - Mark_Pos = Stack_Ptr + 8,
+      AUnit.Assertions.Assert (Mark_Id - SSE.Integer_Address (Mark_Pos) = Stack_Ptr + 8,
                                "Invalid stack ptr location");
    end Test_S_Release;
 
    procedure Test_C_Alloc (T : in out Aunit.Test_Cases.Test_Case'Class)
    is
       pragma Unreferenced (T);
-      Address : System.Address;
+      Address : SSE.Integer_Address;
    begin
       Alloc_Success := True;
       C_Alloc (0, Address);
-      AUnit.Assertions.Assert (Address /= System.Null_Address,
+      AUnit.Assertions.Assert (Address /= Null_Address,
                                "Alloc test failed");
       Alloc_Success := False;
       C_Alloc (0, Address);
-      AUnit.Assertions.Assert (Address = System.Null_Address,
+      AUnit.Assertions.Assert (Address = Null_Address,
                                "Null Address test failed");
    end Test_C_Alloc;
 
