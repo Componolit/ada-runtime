@@ -28,7 +28,7 @@ static void make_key()
     (void) pthread_key_create(&key, NULL);
 }
 
-void *allocate_secondary_stack(size_t size) {
+void allocate_secondary_stack(size_t size, void **address) {
     void *ptr;
 
     (void) pthread_once(&key_once, make_key);
@@ -37,7 +37,7 @@ void *allocate_secondary_stack(size_t size) {
         (void) pthread_setspecific(key, ptr);
     }
 
-    return pthread_getspecific(key);
+    *address = pthread_getspecific(key);
 }
 
 void raise_ada_exception(int exception, char *name, char *message) {
