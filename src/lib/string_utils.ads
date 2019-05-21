@@ -32,7 +32,9 @@ is
                             return String with
       Contract_Cases =>
          (C_Str = System.Null_Address => Convert_To_Ada'Result = Default,
-          C_Str /= System.Null_Address => True);
+          C_Str /= System.Null_Address =>
+             Convert_To_Ada'Result'Length <= Max_Length
+             or Convert_To_Ada'Result = Default);
    pragma Annotate (GNATprove, Terminating, Convert_To_Ada);
 
 private
