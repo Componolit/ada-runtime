@@ -14,34 +14,38 @@ is
    procedure Check_Mark (E : in out Mark)
    is
    begin
-      if E.Base = System.Null_Address then
+      if E.Base = Null_Address then
          E.Top := 0;
          C_Alloc (Secondary_Stack_Size, E.Base);
       end if;
-      if E.Base = System.Null_Address then
+      if E.Base = Null_Address then
          raise Storage_Error;
       end if;
    end Check_Mark;
 
    procedure S_Allocate (Stack_Mark   : in out Mark;
-                         Address      :    out System.Address;
+                         Address      :    out SSE.Integer_Address;
                          Storage_Size :        SSE.Storage_Count)
    is
    begin
       Check_Mark (Stack_Mark);
-      if Stack_Mark.Top < Secondary_Stack_Size and then
-        Storage_Size < Secondary_Stack_Size and then
-        Storage_Size + Stack_Mark.Top < Secondary_Stack_Size
+
+      if
+         Stack_Mark.Top < Secondary_Stack_Size
+         and then Storage_Size < Secondary_Stack_Size
+         and then Storage_Size + Stack_Mark.Top < Secondary_Stack_Size
+         and then SSE.Integer_Address (Storage_Size + Stack_Mark.Top)
+                  < Stack_Mark.Base
       then
          Stack_Mark.Top := Stack_Mark.Top + Storage_Size;
-         Address        := Stack_Mark.Base - Stack_Mark.Top;
+         Address := Stack_Mark.Base - SSE.Integer_Address (Stack_Mark.Top);
       else
          raise Storage_Error;
       end if;
    end S_Allocate;
 
    procedure S_Mark (Stack_Mark : in out Mark;
-                     Stack_Base :    out System.Address;
+                     Stack_Base :    out SSE.Integer_Address;
                      Stack_Ptr  :    out SSE.Storage_Count)
    is
    begin
@@ -51,11 +55,10 @@ is
    end S_Mark;
 
    procedure S_Release (Stack_Mark : in out Mark;
-                        Stack_Base :        System.Address;
+                        Stack_Base :        SSE.Integer_Address;
                         Stack_Ptr  :        SSE.Storage_Count)
    is
    begin
-      Check_Mark (Stack_Mark);
       if Stack_Ptr > Stack_Mark.Top or Stack_Base /= Stack_Mark.Base
       then
          raise Program_Error;
