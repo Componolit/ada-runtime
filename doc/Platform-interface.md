@@ -6,8 +6,8 @@
 | `__gnat_malloc`                    | `void *__gnat_malloc(size_t)`                          | `function Malloc (Size : Natural) return System.Address`                                            |
 | `__gnat_free`                      | `void __gnat_free(void *)`                             | `procedure Free (Ptr : System.Address)`                                                             |
 | `__gnat_unhandled_terminate`       | `void __gnat_unhandled_terminate()`                    | `procedure Unhandled_Terminate`                                                                     |
-| `allocate_secondary_stack`         | `void *allocate_secondary_stack(void *, size_t)`       | `function Allocate_Secondary_Stack (Thread : System.Address; Size : Natural) return System.Address` |
-| `get_thread`                       | `void *get_thread()`                                   | `function Get_Thread return System.Address`                                                         |
+| `__gnat_personality_v0`            | `int __gnat_personality_v0(int, void *, unsigned, void *, void *)` | n/a |
+| `allocate_secondary_stack`         | `void allocate_secondary_stack(size_t, void **)`       | `procedure Allocate_Secondary_Stack (Size : Natural; Address : out System.Address)` |
 | `raise_ada_exception`              | `void raise_ada_exception(exception_t, char *, char*)` | `procedure Raise_Ada_Exception (T : Exception_Type; Name : String; Msg : String)`                   |
 | `put_char`                         | `void put_char(const char)`                            | `procedure Put_Char (C : Character)`                                                                |
 | `put_char_stderr`                  | `void put_char_stderr(const char)`                     | `procedure Put_Char_Stderr (C : Character)`                                                         |
@@ -15,9 +15,6 @@
 | `put_int`                          | `void put_int(const int)`                              | `procedure Put_Int (X : Integer)`                                                                   |
 | `put_int_stderr`                   | `void put_int_stderr(const int)`                       | `procedure Put_Int_Stderr (X : Integer)`                                                            |
 | `get_int`                          | `int get_int(void)`                                    | `function Get_Int return Integer`                                                                   |
-| `__ada_runtime_rt_initialize`      | `void __ada_runtime_rt_initialize(void)`               | `procedure Initialize`                                                                              |
-| `__ada_runtime_rt_monotonic_clock` | `u_int64_t __ada_runtime_rt_monotonic_clock(void)`     | `function Monotonic_Clock return Time`                                                              |
-| `__ada_runtime_rt_resolution`      | `u_int64_t __ada_runtime_rt_resolution(void)`          | `function RT_Resolution return Duration`                                                            |
 | `__ada_runtime_exit_status`        | `int __ada_runtime_exit_status`                        | n/a                                                                                                 |
 
 
@@ -99,30 +96,30 @@ Frees (only) memory allocated by `__gnat_malloc`. Should do nothing if Ptr is a 
 
 Called if an exception has been raised and no exception handler is able to catch it. Should terminate the program.
 
+## `__gnat_personality_v0`
+
+### Signature
+
+ - C: `int __gnat_personality_v0(int, void *, unsigned, void *, void *)`
+ 
+### Semantics
+
+Called if an exception is thrown, used to unwind the stack frame. Since exceptions are not supported in this runtime other than raising this function should either pass the exception to the platform or exit the program.
+The return value depicts the exception unwind reason. For a simple implementation a foreign exception is assumed that is handled by the platform which can be indicated by returning `1`.
+
 ## `allocate_secondary_stack`
 
 ### Signature
 
- - C: `void *allocate_secondary_stack(void *, size_t)`
- - Ada: `function Allocate_Secondary_Stack(Thread : System.Address; Size : Natural) return System.Address`
+ - C: `void allocate_secondary_stack(size_t, void **)`
+ - Ada: `procedure Allocate_Secondary_Stack(Size : Natural; Address : out System.Address)`
 
- * Thread: thread ID of the current thread
  * Size: size of the stack frame to be allocated
+ * Address: base address of the stack
 
 ### Semantics
 
-Allocates a secondary stack frame in this thread. As the thread grows downwards the returned address must be the upper address of the stack frame. While the thread ID is a pointer type it can be of any value and must not be a valid address (at least not inside the runtime). The only condition is that it is not `0` as this is the reserved invalid thread ID.
-
-## `get_thread`
-
-### Signature
-
- - C: `void *get_thread()`
- - Ada `function Get_Thread return System.Address`
-
-### Semantics
-
-Returns the ID of the current thread. This ID is used in `allocate_secondary_stack` and can be anything except `0` which is the reserved invalid thread ID.
+Allocates a secondary stack frame. As the stack grows downwards the address must be the upper address of the stack frame. In C the function gets a pointer to an uninitialized void pointer that needs to be initialized with the stack base pointer.
 
 ## `raise_ada_exception`
 
@@ -204,41 +201,6 @@ Called to read a single integer from standard input.
 ### Semantics
 
 Called to output a single integer to standard error.
-
-## `__ada_runtime_rt_initialize`
-
-### Signature
-
- - C: `void __ada_runtime_rt_initialize(void)`
- - Ada: `procedure Initialize`
-
-### Semantics
-
-Perform initialization required to use `__ada_runtime_rt_monotonic_clock`  and
-`__ada_runtime_rt_resolution`.
-
-## `__ada_runtime_rt_monotonic_clock`
-
-### Signature
-
- - C: `u_int64_t __ada_runtime_rt_monotonic_clock(void)`
- - Ada: `function Monotonic_Clock return Time`
-
-### Semantics
-
-Return amount of time elapsed since epoch in Nanoseconds.
-
-## `__ada_runtime_rt_resolution`
-
-### Signature
-
- - C: `u_int64_t __ada_runtime_rt_resolution(void)`
- - Ada: `function RT_Resolution return Duration`
-
-### Semantics
-
-Return the average time interval during which the clock interval obtained by
-calling `__ada_runtime_rt_monotonic_clock` remains constant in Nanoseconds.
 
 ## `__ada_runtime_exit_status`
 
