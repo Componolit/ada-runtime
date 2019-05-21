@@ -7,8 +7,8 @@
 --  additional permissions described in the GCC Runtime Library Exception,
 --  version 3.1, as published by the Free Software Foundation.
 
-package body String_Utils
-with SPARK_Mode
+package body String_Utils with
+   SPARK_Mode
 is
 
    ------------
@@ -22,8 +22,9 @@ is
       Ptr  : Valid_Pointer;
       Char : Character;
    begin
-      if To_Pointer (C_Str) /= Null_Pointer
-        and To_Pointer (C_Str) < Pointer'Last
+      if
+         To_Pointer (C_Str) /= Null_Pointer
+         and To_Pointer (C_Str) < Pointer'Last
       then
          Ptr := To_Pointer (C_Str);
          Char := Get_Char (Ptr);
@@ -51,8 +52,8 @@ is
                             Default    : String;
                             Max_Length : Natural := Natural'Last) return String
    is
-      L   : constant Integer := Length (C_Str, Max_Length);
-      Str : String (1 .. L) := (others => ' ');
+      L      : constant Integer := Length (C_Str, Max_Length);
+      Str    : String (1 .. L)  := (others => ' ');
       Cursor : Valid_Pointer;
    begin
       if L > 0 then
