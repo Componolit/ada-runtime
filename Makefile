@@ -15,7 +15,6 @@ SRC = a-except.adb \
       platform.adb \
       ss_utils.adb \
       s-exctab.adb \
-      s-imgint.adb \
       s-init.adb \
       s-parame.adb \
       s-unstyp.ads \
