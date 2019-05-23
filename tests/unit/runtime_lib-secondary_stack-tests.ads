@@ -1,7 +1,7 @@
 with Aunit;
 with Aunit.Test_Cases;
 
-package Ss_Utils.Tests is
+package Runtime_Lib.Secondary_Stack.Tests is
 
    type Test_Case is new Aunit.Test_Cases.Test_Case with null record;
 
@@ -9,4 +9,4 @@ package Ss_Utils.Tests is
 
    function Name (T : Test_Case) return Aunit.Message_String;
 
-end Ss_Utils.Tests;
+end Runtime_Lib.Secondary_Stack.Tests;

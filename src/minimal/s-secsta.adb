@@ -13,21 +13,24 @@ package body System.Secondary_Stack is
                           Storage_Size :     SSE.Storage_Count)
    is
    begin
-      Ss_Utils.S_Allocate (Stack_Mark, Address, Storage_Size);
+      Runtime_Lib.Secondary_Stack.S_Allocate
+         (Stack_Mark, Address, Storage_Size);
    end SS_Allocate;
 
    function SS_Mark return Mark_Id
    is
       M : Mark_Id;
    begin
-      Ss_Utils.S_Mark (Stack_Mark, M.Sstk, SSE.Storage_Count (M.Sptr));
+      Runtime_Lib.Secondary_Stack.S_Mark
+         (Stack_Mark, M.Sstk, SSE.Storage_Count (M.Sptr));
       return M;
    end SS_Mark;
 
    procedure SS_Release (M : Mark_Id)
    is
    begin
-      Ss_Utils.S_Release (Stack_Mark, M.Sstk, SSE.Storage_Count (M.Sptr));
+      Runtime_Lib.Secondary_Stack.S_Release
+         (Stack_Mark, M.Sstk, SSE.Storage_Count (M.Sptr));
    end SS_Release;
 
 end System.Secondary_Stack;
