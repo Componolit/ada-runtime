@@ -39,6 +39,24 @@ package body Runtime_Lib.Strings.Tests is
                                "String conversion with null pointer test failed");
    end Test_Convert_To_Ada;
 
+   procedure Test_Image (T : in out Aunit.Test_Cases.Test_Case'Class)
+   is
+      pragma Unreferenced (T);
+      S_Null  : constant String := "0";
+      S_Minus : constant String := "-1";
+      S_First : constant String := "-2147483648";
+      S_Last  : constant String := "2147483647";
+      I_Null  : constant String := Image (0);
+      I_Minus : constant String := Image (-1);
+      I_First : constant String := Image (Integer'First);
+      I_Last  : constant String := Image (Integer'Last);
+   begin
+      Aunit.Assertions.Assert (I_Null, S_Null, "Image S_Null failed");
+      Aunit.Assertions.Assert (I_Minus, S_Minus, "Image S_Minus failed");
+      Aunit.Assertions.Assert (I_First, S_First, "Image S_First failed");
+      Aunit.Assertions.Assert (I_Last, S_Last, "Image S_Last failed");
+   end Test_Image;
+
    --------------------
    -- Register_Tests --
    --------------------
@@ -49,6 +67,7 @@ package body Runtime_Lib.Strings.Tests is
       Register_Routine (T, Test_Length'Access, "Test Length");
       Register_Routine (T, Test_Convert_To_Ada'Access,
                         "Test Convert_To_Ada");
+      Register_Routine (T, Test_Image'Access, "Test Image");
    end Register_Tests;
 
    ----------
@@ -57,7 +76,7 @@ package body Runtime_Lib.Strings.Tests is
 
    function Name (T : Test_Case) return Aunit.Message_String is
    begin
-      return Aunit.Format ("Runtime_Lib-Strings");
+      return Aunit.Format ("Runtime_Lib.Strings");
    end Name;
 
 end Runtime_Lib.Strings.Tests;
