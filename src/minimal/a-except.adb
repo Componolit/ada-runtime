@@ -10,9 +10,10 @@
 
 pragma Compiler_Unit_Warning;
 
-with Platform;
-with String_Utils;
-with Ada_Exceptions;
+with Runtime_Lib.Platform;
+with Runtime_Lib.Debug;
+with Runtime_Lib.Strings;
+with Runtime_Lib.Exceptions;
 with System.Standard_Library; use System.Standard_Library;
 
 package body Ada.Exceptions is
@@ -25,8 +26,9 @@ package body Ada.Exceptions is
                                      Message : String := "") is
       pragma Unreferenced (E);
    begin
-      Platform.Log_Warning  ("Raise_Exception_Alwaysis not implemented");
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Debug.Log_Warning
+         ("Raise_Exception_Alwaysis not implemented");
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       Undefined_Exception,
                                     "Undefined_Exception",
                                     Message);
@@ -41,13 +43,15 @@ package body Ada.Exceptions is
    procedure Reraise_Occurrence_No_Defer (X : Exception_Occurrence) is
       pragma Unreferenced (X);
    begin
-      Platform.Log_Warning  ("Reraise_Occurrence_No_Deferis not implemented");
+      Runtime_Lib.Debug.Log_Warning
+         ("Reraise_Occurrence_No_Deferis not implemented");
    end Reraise_Occurrence_No_Defer;
 
    procedure Save_Occurrence (Target : out Exception_Occurrence;
                               Source : Exception_Occurrence) is
    begin
-      Platform.Log_Warning  ("Save_Occurrenceis not implemented");
+      Runtime_Lib.Debug.Log_Warning
+         ("Save_Occurrenceis not implemented");
       Target := Source;
    end Save_Occurrence;
 
@@ -141,7 +145,7 @@ package body Ada.Exceptions is
       end Image;
 
       Msg : constant String :=
-          String_Utils.Convert_To_Ada (File, "unknown file") &
+          Runtime_Lib.Strings.Convert_To_Ada (File, "unknown file") &
           ":" & Image (Line);
    begin
       return Msg;
@@ -158,7 +162,7 @@ package body Ada.Exceptions is
                                      Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       CE_Access_Check,
                                     Rmsg_00, Msg);
    end Rcheck_CE_Access_Check;
@@ -174,7 +178,7 @@ package body Ada.Exceptions is
                                               Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       CE_Null_Access_Parameter,
                                     Rmsg_01, Msg);
    end Rcheck_CE_Null_Access_Parameter;
@@ -190,7 +194,7 @@ package body Ada.Exceptions is
                                            Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       CE_Discriminant_Check,
                                     Rmsg_02, Msg);
    end Rcheck_CE_Discriminant_Check;
@@ -206,7 +210,7 @@ package body Ada.Exceptions is
                                        Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       CE_Divide_By_Zero,
                                     Rmsg_03, Msg);
    end Rcheck_CE_Divide_By_Zero;
@@ -222,7 +226,7 @@ package body Ada.Exceptions is
                                        Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       CE_Explicit_Raise,
                                     Rmsg_04, Msg);
    end Rcheck_CE_Explicit_Raise;
@@ -238,7 +242,7 @@ package body Ada.Exceptions is
                                     Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       CE_Index_Check,
                                     Rmsg_05, Msg);
    end Rcheck_CE_Index_Check;
@@ -254,7 +258,7 @@ package body Ada.Exceptions is
                                      Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       CE_Invalid_Data,
                                     Rmsg_06, Msg);
    end Rcheck_CE_Invalid_Data;
@@ -270,7 +274,7 @@ package body Ada.Exceptions is
                                      Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       CE_Length_Check,
                                     Rmsg_07, Msg);
    end Rcheck_CE_Length_Check;
@@ -286,7 +290,7 @@ package body Ada.Exceptions is
                                           Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       CE_Null_Exception_Id,
                                     Rmsg_08, Msg);
    end Rcheck_CE_Null_Exception_Id;
@@ -302,7 +306,7 @@ package body Ada.Exceptions is
                                          Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       CE_Null_Not_Allowed,
                                     Rmsg_09, Msg);
    end Rcheck_CE_Null_Not_Allowed;
@@ -318,7 +322,7 @@ package body Ada.Exceptions is
                                        Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       CE_Overflow_Check,
                                     Rmsg_10, Msg);
    end Rcheck_CE_Overflow_Check;
@@ -334,7 +338,7 @@ package body Ada.Exceptions is
                                         Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       CE_Partition_Check,
                                     Rmsg_11, Msg);
    end Rcheck_CE_Partition_Check;
@@ -350,7 +354,7 @@ package body Ada.Exceptions is
                                     Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       CE_Range_Check,
                                     Rmsg_12, Msg);
    end Rcheck_CE_Range_Check;
@@ -366,7 +370,7 @@ package body Ada.Exceptions is
                                   Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       CE_Tag_Check,
                                     Rmsg_13, Msg);
    end Rcheck_CE_Tag_Check;
@@ -382,7 +386,7 @@ package body Ada.Exceptions is
                                                   Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       PE_Access_Before_Elaboration,
                                     Rmsg_14, Msg);
    end Rcheck_PE_Access_Before_Elaboration;
@@ -398,7 +402,7 @@ package body Ada.Exceptions is
                                             Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       PE_Accessibility_Check,
                                     Rmsg_15, Msg);
    end Rcheck_PE_Accessibility_Check;
@@ -414,7 +418,7 @@ package body Ada.Exceptions is
                                              Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       PE_Address_Of_Intrinsic,
                                     Rmsg_16, Msg);
    end Rcheck_PE_Address_Of_Intrinsic;
@@ -430,7 +434,7 @@ package body Ada.Exceptions is
                                            Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       PE_Aliased_Parameters,
                                     Rmsg_17, Msg);
    end Rcheck_PE_Aliased_Parameters;
@@ -446,7 +450,7 @@ package body Ada.Exceptions is
                                           Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       PE_All_Guards_Closed,
                                     Rmsg_18, Msg);
    end Rcheck_PE_All_Guards_Closed;
@@ -462,7 +466,7 @@ package body Ada.Exceptions is
                                                     Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       PE_Bad_Predicated_Generic_Type,
                                     Rmsg_19, Msg);
    end Rcheck_PE_Bad_Predicated_Generic_Type;
@@ -478,7 +482,7 @@ package body Ada.Exceptions is
                                                    Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       PE_Current_Task_In_Entry_Body,
                                     Rmsg_20, Msg);
    end Rcheck_PE_Current_Task_In_Entry_Body;
@@ -494,7 +498,7 @@ package body Ada.Exceptions is
                                                  Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       PE_Duplicated_Entry_Address,
                                     Rmsg_21, Msg);
    end Rcheck_PE_Duplicated_Entry_Address;
@@ -510,7 +514,7 @@ package body Ada.Exceptions is
                                        Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       PE_Explicit_Raise,
                                     Rmsg_22, Msg);
    end Rcheck_PE_Explicit_Raise;
@@ -526,7 +530,7 @@ package body Ada.Exceptions is
                                         Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       PE_Implicit_Return,
                                     Rmsg_23, Msg);
    end Rcheck_PE_Implicit_Return;
@@ -542,7 +546,7 @@ package body Ada.Exceptions is
                                                  Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       PE_Misaligned_Address_Value,
                                     Rmsg_24, Msg);
    end Rcheck_PE_Misaligned_Address_Value;
@@ -558,7 +562,7 @@ package body Ada.Exceptions is
                                        Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       PE_Missing_Return,
                                     Rmsg_25, Msg);
    end Rcheck_PE_Missing_Return;
@@ -574,7 +578,7 @@ package body Ada.Exceptions is
                                                    Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       PE_Overlaid_Controlled_Object,
                                     Rmsg_26, Msg);
    end Rcheck_PE_Overlaid_Controlled_Object;
@@ -590,7 +594,7 @@ package body Ada.Exceptions is
                                                  Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       PE_Non_Transportable_Actual,
                                     Rmsg_27, Msg);
    end Rcheck_PE_Non_Transportable_Actual;
@@ -606,7 +610,7 @@ package body Ada.Exceptions is
                                                        Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       PE_Potentially_Blocking_Operation,
                                     Rmsg_28, Msg);
    end Rcheck_PE_Potentially_Blocking_Operation;
@@ -622,7 +626,7 @@ package body Ada.Exceptions is
                                                      Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       PE_Stream_Operation_Not_Allowed,
                                     Rmsg_29, Msg);
    end Rcheck_PE_Stream_Operation_Not_Allowed;
@@ -638,7 +642,7 @@ package body Ada.Exceptions is
                                                   Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       PE_Stubbed_Subprogram_Called,
                                     Rmsg_30, Msg);
    end Rcheck_PE_Stubbed_Subprogram_Called;
@@ -654,7 +658,7 @@ package body Ada.Exceptions is
                                                     Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       PE_Unchecked_Union_Restriction,
                                     Rmsg_31, Msg);
    end Rcheck_PE_Unchecked_Union_Restriction;
@@ -670,7 +674,7 @@ package body Ada.Exceptions is
                                                   Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       PE_Finalize_Raised_Exception,
                                     Rmsg_32, Msg);
    end Rcheck_PE_Finalize_Raised_Exception;
@@ -686,7 +690,7 @@ package body Ada.Exceptions is
                                            Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       SE_Empty_Storage_Pool,
                                     Rmsg_33, Msg);
    end Rcheck_SE_Empty_Storage_Pool;
@@ -702,7 +706,7 @@ package body Ada.Exceptions is
                                        Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       SE_Explicit_Raise,
                                     Rmsg_34, Msg);
    end Rcheck_SE_Explicit_Raise;
@@ -718,7 +722,7 @@ package body Ada.Exceptions is
                                            Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       SE_Infinite_Recursion,
                                     Rmsg_35, Msg);
    end Rcheck_SE_Infinite_Recursion;
@@ -734,7 +738,7 @@ package body Ada.Exceptions is
                                          Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Platform.Raise_Ada_Exception (Ada_Exceptions.
+      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
                                       SE_Object_Too_Large,
                                     Rmsg_36, Msg);
    end Rcheck_SE_Object_Too_Large;

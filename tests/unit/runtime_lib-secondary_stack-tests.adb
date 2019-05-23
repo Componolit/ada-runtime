@@ -1,7 +1,7 @@
 with Aunit.Assertions;
 with System.Storage_Elements;
 
-package body Ss_Utils.Tests is
+package body Runtime_Lib.Secondary_Stack.Tests is
 
    package SSE renames System.Storage_Elements;
    Alloc_Success : Boolean := False;
@@ -203,7 +203,7 @@ package body Ss_Utils.Tests is
 
    function Name (T : Test_Case) return Aunit.Message_String is
    begin
-      return Aunit.Format ("Ss_Utils");
+      return Aunit.Format ("Runtime_Lib.Secondary_Stack");
    end Name;
 
-end Ss_Utils.Tests;
+end Runtime_Lib.Secondary_Stack.Tests;

@@ -7,7 +7,7 @@
 --  additional permissions described in the GCC Runtime Library Exception,
 --  version 3.1, as published by the Free Software Foundation.
 
-package body String_Utils with
+package body Runtime_Lib.Strings with
    SPARK_Mode
 is
 
@@ -114,4 +114,4 @@ is
       return SSE.To_Integer (Addr);
    end To_Pointer;
 
-end String_Utils;
+end Runtime_Lib.Strings;
