@@ -7,7 +7,7 @@
 --  additional permissions described in the GCC Runtime Library Exception,
 --  version 3.1, as published by the Free Software Foundation.
 
-with Platform;
+with Runtime_Lib.Debug;
 
 package body System.Exception_Table is
 
@@ -16,7 +16,7 @@ package body System.Exception_Table is
    procedure Register_Exception (X : Exception_Data_Ptr) is
       pragma Unreferenced (X);
    begin
-      Platform.Log_Warning ("Register_Exception not implemented");
+      Runtime_Lib.Debug.Log_Warning ("Register_Exception not implemented");
    end Register_Exception;
 
 end System.Exception_Table;
