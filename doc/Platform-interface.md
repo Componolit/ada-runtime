@@ -9,12 +9,6 @@
 | `__gnat_personality_v0`            | `int __gnat_personality_v0(int, void *, unsigned, void *, void *)` | n/a |
 | `allocate_secondary_stack`         | `void allocate_secondary_stack(size_t, void **)`       | `procedure Allocate_Secondary_Stack (Size : Natural; Address : out System.Address)` |
 | `raise_ada_exception`              | `void raise_ada_exception(exception_t, char *, char*)` | `procedure Raise_Ada_Exception (T : Exception_Type; Name : String; Msg : String)`                   |
-| `put_char`                         | `void put_char(const char)`                            | `procedure Put_Char (C : Character)`                                                                |
-| `put_char_stderr`                  | `void put_char_stderr(const char)`                     | `procedure Put_Char_Stderr (C : Character)`                                                         |
-| `get_char`                         | `char get_char(void)`                                  | `function Get_Char (C : Character) return Character`                                                |
-| `put_int`                          | `void put_int(const int)`                              | `procedure Put_Int (X : Integer)`                                                                   |
-| `put_int_stderr`                   | `void put_int_stderr(const int)`                       | `procedure Put_Int_Stderr (X : Integer)`                                                            |
-| `get_int`                          | `int get_int(void)`                                    | `function Get_Int return Integer`                                                                   |
 | `__ada_runtime_exit_status`        | `int __ada_runtime_exit_status`                        | n/a                                                                                                 |
 
 
@@ -135,72 +129,6 @@ Allocates a secondary stack frame. As the stack grows downwards the address must
 ### Semantics
 
 Called when any exception is raised. The Name is usually the name of the Ada exception or a short description of it. In this runtime Msg consists of the file name and line number of the exception occurrence.
-
-## `put_char`
-
-### Signature
-
- - C: `void put_char(const char)`
- - Ada: `procedure Put_Char(C : Character)`
-
-### Semantics
-
-Called to output a single character to standard output.
-
-## `get_char`
-
-### Signature
-
- - C: `char get_char(voi)`
- - Ada: `function Get_Char return Character`
-
-### Semantics
-
-Called to read a single character from standard output.
-
-## `put_char_stderr`
-
-### Signature
-
- - C: `void put_char_stderr(const char)`
- - Ada: `procedure Put_Char_Stderr(C : Character)`
-
-### Semantics
-
-Called to output a single character to standard error.
-
-## `put_int`
-
-### Signature
-
- - C: `void put_int(const int)`
- - Ada: `procedure Put_Int(X : Integer)`
-
-### Semantics
-
-Called to output a single integer to standard output.
-
-## `get_int`
-
-### Signature
-
- - C: `int get_int(voi)`
- - Ada: `function Get_Int return Integer`
-
-### Semantics
-
-Called to read a single integer from standard input.
-
-## `put_int_stderr`
-
-### Signature
-
- - C: `void put_int_stderr(const int)`
- - Ada: `procedure Put_Int_Stderr(X : Integer)`
-
-### Semantics
-
-Called to output a single integer to standard error.
 
 ## `__ada_runtime_exit_status`
 

@@ -30,8 +30,6 @@ SRC = a-except.adb \
       argv.c \
       exit.c \
       init.c \
-      gnat.ads \
-      g-io.adb \
 
 ifneq ($(USE_GNATIO),)
 SRC += gnat.ads g-io.ads g-io.adb
