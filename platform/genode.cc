@@ -12,7 +12,6 @@
 #include <base/exception.h>
 #include <base/log.h>
 #include <base/thread.h>
-#include <base/snprintf.h>
 #include <base/buffered_output.h>
 #include <util/string.h>
 #include <util/reconstructible.h>
@@ -25,12 +24,6 @@
 
 class Gnat_Exception : public Genode::Exception {};
 
-struct Write_log { void operator () (char const *s) { Genode::log(Genode::Cstring(s)); }} write_log;
-struct Write_error { void operator () (char const *s) { Genode::error(Genode::Cstring(s)); }} write_error;
-
-static Genode::Buffered_output<512, Write_log> print_stdout = {write_log};
-static Genode::Buffered_output<512, Write_error> print_stderr = {write_error};
-
 extern "C" {
 
     _Unwind_Reason_Code __gnat_personality_v0(
@@ -42,34 +35,6 @@ extern "C" {
     {
         return _URC_CONTINUE_UNWIND;
     }
-
-    void put_char(const char c)
-    {
-        print_stdout.out_char(c);
-    }
-
-    void put_char_stderr(const char c)
-    {
-        print_stderr.out_char(c);
-    }
-
-    void put_int(const int i)
-    {
-        char buf[20];
-        int len = Genode::snprintf(buf, sizeof(buf), "%d", i);
-        for(int j = 0; j < len; j++){
-            put_char(buf[j]);
-        }
-    }
-
-   void put_int_stderr(const int i)
-   {
-        char buf[20];
-        int len = Genode::snprintf(buf, sizeof(buf), "%d", i);
-        for(int j = 0; j < len; j++){
-            put_char_stderr(buf[j]);
-        }
-   }
 
     void log_debug(char *message)
     {
