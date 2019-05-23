@@ -1,8 +1,10 @@
 library project rts is
 
+   OBJ := external ("OBJECT_DIR", "obj");
+
    for Languages use ("Ada", "C");
-   for Source_Dirs use ("obj/adainclude/**");
-   for Object_Dir use "obj";
+   for Source_Dirs use (OBJ & "/adainclude/**");
+   for Object_Dir use OBJ;
 
    package Builder is
       for Global_Configuration_Pragmas use "restrictions.adc";
@@ -15,5 +17,5 @@ library project rts is
 
    for Library_Kind use "static";
    for Library_Name use "gnat";
-   for Library_Dir use "obj/adalib";
+   for Library_Dir use OBJ & "/adalib";
 end rts;

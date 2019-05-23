@@ -31,10 +31,6 @@ SRC = a-except.adb \
       exit.c \
       init.c \
 
-ifneq ($(USE_GNATIO),)
-SRC += gnat.ads g-io.ads g-io.adb
-endif
-
 SRC := $(sort $(SRC) $(patsubst %.adb, %.ads, $(filter %.adb, $(SRC))))
 
 dummy := $(shell mkdir -p $(OBJ_DIR)/adainclude $(OBJ_DIR)/adalib $(OBJ_DIR)/lib)
@@ -42,7 +38,7 @@ dummy := $(shell mkdir -p $(OBJ_DIR)/adainclude $(OBJ_DIR)/adalib $(OBJ_DIR)/lib
 runtime: $(OBJ_DIR)/adalib/libgnat.a
 
 $(OBJ_DIR)/adalib/libgnat.a: $(addprefix $(OBJ_DIR)/adainclude/,$(SRC))
-	$(VERBOSE)gprbuild --RTS=./obj -P$(COMPONENT) -p
+	$(VERBOSE)gprbuild --RTS=$(OBJ_DIR) -P$(COMPONENT) -XOBJECT_DIR=$(OBJ_DIR) -p
 
 $(OBJ_DIR)/adainclude/%: src/minimal/%
 	$(VERBOSE)cp -a $< $@
