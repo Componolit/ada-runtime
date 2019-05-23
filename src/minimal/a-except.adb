@@ -123,30 +123,9 @@ package body Ada.Exceptions is
 
    function Create_File_Line_String (File : System.Address;
                                      Line : Integer) return String is
-      function Image (I : Integer) return String;
-
-      function Image (I : Integer) return String
-      is
-         S : String (1 .. 11) := (others => '_');
-         V : Integer := I;
-      begin
-         for J in reverse S'First + 1 .. S'Last loop
-            S (J) := Character'Val (48 + abs (V rem 10));
-            V := V / 10;
-            if V = 0 then
-               if I < 0 then
-                  S (J - 1) := '-';
-                  return S (J - 1 .. S'Last);
-               end if;
-               return S (J .. S'Last);
-            end if;
-         end loop;
-         return S;
-      end Image;
-
       Msg : constant String :=
           Runtime_Lib.Strings.Convert_To_Ada (File, "unknown file") &
-          ":" & Image (Line);
+          ":" & Runtime_Lib.Strings.Image (Line);
    begin
       return Msg;
    end Create_File_Line_String;
