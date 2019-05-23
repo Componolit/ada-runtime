@@ -69,6 +69,29 @@ is
       end if;
    end Convert_To_Ada;
 
+   -----------
+   -- Image --
+   -----------
+
+   function Image (J : Integer) return String
+   is
+      S : String (1 .. 11) := (others => '_');
+      V : Integer := J;
+   begin
+      for I in reverse S'First + 1 .. S'Last loop
+         S (I) := Character'Val (48 + abs (V rem 10));
+         V := V / 10;
+         if V = 0 then
+            if J < 0 then
+               S (I - 1) := '-';
+               return S (I - 1 .. S'Last);
+            end if;
+            return S (I .. S'Last);
+         end if;
+      end loop;
+      return S;
+   end Image;
+
    --------------
    -- Get_Char --
    --------------
