@@ -37,6 +37,9 @@ is
              or Convert_To_Ada'Result = Default);
    pragma Annotate (GNATprove, Terminating, Convert_To_Ada);
 
+   function Image (J : Integer) return String with
+      Post => Image'Result'Length <= 11;
+
 private
 
    package SSE renames System.Storage_Elements;
