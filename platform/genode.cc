@@ -40,7 +40,7 @@ extern "C" {
             void *,                     //exception
             void *)                     //context
     {
-        return _URC_FOREIGN_EXCEPTION_CAUGHT;
+        return _URC_CONTINUE_UNWIND;
     }
 
     void put_char(const char c)
