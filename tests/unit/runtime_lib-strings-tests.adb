@@ -1,7 +1,7 @@
 with System;
 with Aunit.Assertions;
 
-package body String_Utils.Tests is
+package body Runtime_Lib.Strings.Tests is
 
    -------------------
    -- Test routines --
@@ -57,7 +57,7 @@ package body String_Utils.Tests is
 
    function Name (T : Test_Case) return Aunit.Message_String is
    begin
-      return Aunit.Format ("String_Utils");
+      return Aunit.Format ("Runtime_Lib-Strings");
    end Name;
 
-end String_Utils.Tests;
+end Runtime_Lib.Strings.Tests;

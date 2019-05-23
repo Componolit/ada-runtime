@@ -8,12 +8,15 @@ UNIT_DIR = tests/unit
 SRC = a-except.adb \
       a-unccon.ads \
       ada.ads \
-      ada_exceptions.ads \
       i-c.adb \
       i-cexten.ads \
       interfac.ads \
-      platform.adb \
-      ss_utils.adb \
+      runtime_lib.ads \
+      runtime_lib-secondary_stack.adb \
+      runtime_lib-strings.adb \
+      runtime_lib-debug.adb \
+      runtime_lib-platform.adb \
+      runtime_lib-exceptions.ads \
       s-exctab.adb \
       s-init.adb \
       s-parame.adb \
@@ -23,7 +26,6 @@ SRC = a-except.adb \
       s-stalib.adb \
       s-stoele.adb \
       s-arit64.adb \
-      string_utils.adb \
       system.ads \
       argv.c \
       exit.c \

@@ -10,7 +10,7 @@
 with System;
 with System.Storage_Elements;
 
-package Ss_Utils
+package Runtime_Lib.Secondary_Stack
   with SPARK_Mode
 is
    package SSE renames System.Storage_Elements;
@@ -68,4 +68,4 @@ is
       Post => Address /= Null_Address,
       Global => null;
 
-end Ss_Utils;
+end Runtime_Lib.Secondary_Stack;

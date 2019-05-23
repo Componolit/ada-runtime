@@ -8,16 +8,12 @@
 --  version 3.1, as published by the Free Software Foundation.
 
 with System;
-with Ada_Exceptions;
+with Runtime_Lib.Exceptions;
 
-package Platform
-  with SPARK_Mode
+package Runtime_Lib.Platform with
+   SPARK_Mode
 is
    pragma Preelaborate;
-
-   procedure Log_Debug (Msg : String);
-   procedure Log_Warning (Msg : String);
-   procedure Log_Error (Msg : String);
 
    function Malloc (Size : Natural) return System.Address
      with
@@ -44,41 +40,13 @@ is
        Convention => C,
        External_Name => "allocate_secondary_stack";
 
-   function Get_Thread return System.Address
-     with
-       Import,
-       Convention => C,
-       External_Name => "get_thread";
-
-   procedure Raise_Ada_Exception (T    : Ada_Exceptions.Exception_Type;
+   procedure Raise_Ada_Exception (T    : Runtime_Lib.Exceptions.Exception_Type;
                                   Name : String;
                                   Msg  : String);
 
 private
 
-   generic
-      with procedure C_Log (Str : System.Address);
-   procedure Log (Msg : String);
-
-   procedure C_Debug (Str : System.Address)
-     with
-       Import,
-       Convention => C,
-       External_Name => "log_debug";
-
-   procedure C_Warning (Str : System.Address)
-     with
-       Import,
-       Convention => C,
-       External_Name => "log_warning";
-
-   procedure C_Error (Str : System.Address)
-     with
-       Import,
-       Convention => C,
-       External_Name => "log_error";
-
-   procedure C_Raise_Exception (T    : Ada_Exceptions.Exception_Type;
+   procedure C_Raise_Exception (T    : Runtime_Lib.Exceptions.Exception_Type;
                                 Name : System.Address;
                                 Msg  : System.Address)
      with
@@ -86,4 +54,4 @@ private
        Convention => C,
        External_Name => "raise_ada_exception";
 
-end Platform;
+end Runtime_Lib.Platform;

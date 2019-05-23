@@ -9,7 +9,7 @@
 
 with System.Parameters;
 with System.Storage_Elements;
-with Ss_Utils;
+with Runtime_Lib.Secondary_Stack;
 
 package System.Secondary_Stack is
 
@@ -47,6 +47,7 @@ private
       Sptr : SSE.Integer_Address;
    end record;
 
-   Stack_Mark : Ss_Utils.Mark := Ss_Utils.Null_Mark;
+   Stack_Mark : Runtime_Lib.Secondary_Stack.Mark :=
+      Runtime_Lib.Secondary_Stack.Null_Mark;
 
 end System.Secondary_Stack;

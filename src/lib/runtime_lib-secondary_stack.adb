@@ -7,7 +7,7 @@
 --  additional permissions described in the GCC Runtime Library Exception,
 --  version 3.1, as published by the Free Software Foundation.
 
-package body Ss_Utils with
+package body Runtime_Lib.Secondary_Stack with
    SPARK_Mode
 is
 
@@ -66,4 +66,4 @@ is
       Stack_Mark.Top := Stack_Ptr;
    end S_Release;
 
-end Ss_Utils;
+end Runtime_Lib.Secondary_Stack;
