@@ -33,6 +33,8 @@ with Interfaces; use Interfaces;
 
 with Ada.Unchecked_Conversion;
 
+with Runtime_Lib.Platform;
+
 package body System.Arith_64 is
 
    pragma Suppress (Overflow_Check);
@@ -293,7 +295,8 @@ package body System.Arith_64 is
 
    procedure Raise_Error is
    begin
-      raise Constraint_Error with "64-bit arithmetic overflow";
+      Runtime_Lib.Platform.Terminate_Message
+         ("64-bit arithmetic overflow");
    end Raise_Error;
 
    -------------------
