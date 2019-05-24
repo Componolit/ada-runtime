@@ -1,5 +1,7 @@
 with Aunit.Assertions;
+with System;
 with System.Storage_Elements;
+with Ada.Text_IO;
 
 package body Runtime_Lib.Secondary_Stack.Tests is
 
@@ -29,43 +31,71 @@ package body Runtime_Lib.Secondary_Stack.Tests is
       end if;
    end C_Alloc;
 
-   procedure Alloc_Stack_With_Null_Ptr
+   function Strlen (S : System.Address) return Integer
    is
-      Ptr : SSE.Integer_Address;
+      Ptr : SSE.Integer_Address := SSE.To_Integer (S);
    begin
-      Alloc_Success := False;
-      C_Alloc (0, Ptr);
-   end Alloc_Stack_With_Null_Ptr;
-
-   procedure S_Allocate_Stack_Overflow_1
-   is
-      M : Mark := Null_Mark;
-      Stack_Ptr : SSE.Integer_Address;
-   begin
-      S_Allocate (M, Stack_Ptr, Secondary_Stack_Size * 2);
-   end S_Allocate_Stack_Overflow_1;
-
-   procedure S_Allocate_Stack_Overflow_2
-   is
-      M : Mark := Null_Mark;
-      Stack_Ptr : SSE.Integer_Address;
-   begin
-      for I in 0 .. 1024 loop
-         S_Allocate (M, Stack_Ptr, SSE.Storage_Offset (1024));
+      loop
+         declare
+            C : Character with Address => SSE.To_Address (Ptr);
+         begin
+            exit when C = Character'First;
+            Ptr := Ptr + 1;
+         end;
       end loop;
-   end S_Allocate_Stack_Overflow_2;
+      return Integer (Ptr - SSE.To_Integer (S));
+   end Strlen;
 
-   procedure S_Release_High_Mark
+   procedure Log_Debug (S : System.Address) with
+      Export,
+      Convention => C,
+      External_Name => "log_debug";
+
+   procedure Log_Warning (S : System.Address) with
+      Export,
+      Convention => C,
+      External_Name => "log_warning";
+
+   procedure Log_Error (S : System.Address) with
+      Export,
+      Convention => C,
+      External_Name => "log_error";
+
+   procedure Log_Debug (S : System.Address)
    is
-      M : Mark := Null_Mark;
-      Mark_Id : SSE.Storage_Count;
-      Mark_Base : SSE.Integer_Address;
-      Stack_Ptr : SSE.Integer_Address;
+      Msg : String (1 .. Strlen (S)) with Address => S;
    begin
-      S_Allocate (M, Stack_Ptr, 8);
-      S_Mark (M, Mark_Base, Mark_Id);
-      S_Release (M, Mark_Base, Mark_Id + 1);
-   end S_Release_High_Mark;
+      Ada.Text_IO.Put_Line ("Info: " & Msg);
+   end Log_Debug;
+
+   procedure Log_Warning (S : System.Address)
+   is
+      Msg : String (1 .. Strlen (S)) with Address => S;
+   begin
+      Ada.Text_IO.Put_Line ("Warning: " & Msg);
+   end Log_Warning;
+
+   procedure Log_Error (S : System.Address)
+   is
+      Msg : String (1 .. Strlen (S)) with Address => S;
+   begin
+      Ada.Text_IO.Put_Line ("Error: " & Msg);
+   end Log_Error;
+
+   procedure Raise_Ada_Exception (T : Integer;
+                                  N : System.Address;
+                                  M : System.Address) with
+      Export,
+      Convention => C,
+      External_Name => "raise_ada_exception";
+
+   procedure Raise_Ada_Exception (T : Integer;
+                                  N : System.Address;
+                                  M : System.Address)
+   is
+   begin
+      raise Program_Error;
+   end Raise_Ada_Exception;
 
    -------------------
    -- Test routines --
@@ -118,10 +148,6 @@ package body Runtime_Lib.Secondary_Stack.Tests is
       AUnit.Assertions.Assert (M.Top = 16,
                                "Invalid top");
 
-      AUnit.Assertions.Assert_Exception (S_Allocate_Stack_Overflow_1'Access,
-                                         "Failed to detect stack overflow 1");
-      AUnit.Assertions.Assert_Exception (S_Allocate_Stack_Overflow_2'Access,
-                                         "Failed to detect stack overflow 2");
    end Test_S_Allocate;
 
    procedure Test_S_Mark (T : in out Aunit.Test_Cases.Test_Case'Class)
@@ -146,9 +172,6 @@ package body Runtime_Lib.Secondary_Stack.Tests is
       Mark_Id : SSE.Integer_Address;
       Mark_Pos : SSE.Storage_Count;
    begin
-      AUnit.Assertions.Assert_Exception (S_Release_High_Mark'Access,
-                                         "Invalid stack release");
-
       S_Allocate (M, Stack_Ptr, 8);
       S_Mark (M, Mark_Id, Mark_Pos);
       S_Allocate (M, Stack_Ptr, 4);

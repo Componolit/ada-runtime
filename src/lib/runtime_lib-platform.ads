@@ -13,6 +13,7 @@ with Runtime_Lib.Exceptions;
 package Runtime_Lib.Platform with
    SPARK_Mode
 is
+   pragma Pure;
    pragma Preelaborate;
 
    function Malloc (Size : Natural) return System.Address
@@ -32,6 +33,7 @@ is
        Import,
        Convention => C,
        External_Name => "__gnat_unhandled_terminate";
+   pragma No_Return (Unhandled_Terminate);
 
    function Allocate_Secondary_Stack (Thread : System.Address;
                                       Size   : Natural) return System.Address
@@ -43,6 +45,9 @@ is
    procedure Raise_Ada_Exception (T    : Runtime_Lib.Exceptions.Exception_Type;
                                   Name : String;
                                   Msg  : String);
+
+   procedure Terminate_Message (Msg : String);
+   pragma No_Return (Terminate_Message);
 
 private
 
