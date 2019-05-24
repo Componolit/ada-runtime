@@ -4,6 +4,7 @@ with System;
 package Runtime_Lib.Debug with
    SPARK_Mode
 is
+   pragma Pure;
    pragma Preelaborate;
 
    procedure Log_Debug (Msg : String);
