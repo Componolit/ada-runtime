@@ -2,7 +2,7 @@ library project rts is
 
    OBJ := external ("OBJECT_DIR", "obj");
 
-   for Languages use ("Ada", "C");
+   for Languages use ("Ada", "Asm", "C");
    for Source_Dirs use (OBJ & "/adainclude/**");
    for Object_Dir use OBJ;
 
@@ -14,6 +14,10 @@ library project rts is
    package Compiler is
       for Default_Switches ("Ada") use ("-gnatg", "-fPIC");
    end Compiler;
+
+   package Naming is
+      for Body_Suffix ("Asm") use ".S";
+   end Naming;
 
    for Library_Kind use "static";
    for Library_Name use "gnat";
