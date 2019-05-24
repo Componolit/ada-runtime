@@ -26,6 +26,7 @@ SRC = a-except.adb \
       s-stalib.adb \
       s-stoele.adb \
       s-arit64.adb \
+      s-maccod.ads \
       system.ads \
       argv.c \
       exit.c \
