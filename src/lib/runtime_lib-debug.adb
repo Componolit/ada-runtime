@@ -5,6 +5,7 @@ is
 
    procedure Log (Msg : String)
    is
+      pragma SPARK_Mode (Off);
       C_Msg : String := Msg & Character'Val (0);
    begin
       C_Log (C_Msg'Address);
