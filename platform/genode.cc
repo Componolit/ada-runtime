@@ -34,13 +34,23 @@ static Genode::Buffered_output<512, Write_error> print_stderr = {write_error};
 extern "C" {
 
     _Unwind_Reason_Code __gnat_personality_v0(
-            int,                        //version
-            void *,                     //phases
-            _Unwind_Exception_Class,    //exception class
-            void *,                     //exception
-            void *)                     //context
+            int version,
+            unsigned long phase,
+            _Unwind_Exception_Class cls,
+            void *exc,
+            void *context)
     {
-        return _URC_CONTINUE_UNWIND;
+        if(version == 1 && (phase & 3)){
+            return _URC_CONTINUE_UNWIND;
+        }else{
+            Genode::error(__func__, " called with invalid values",
+                                    " version=", version,
+                                    " phase=", phase,
+                                    " class=", (unsigned)cls,
+                                    " exception=", exc,
+                                    " context=", context);
+            return _URC_FOREIGN_EXCEPTION_CAUGHT;
+        }
     }
 
     void put_char(const char c)
