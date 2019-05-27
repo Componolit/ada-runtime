@@ -6,6 +6,10 @@ project Test is
       for Switches ("Ada") use ("-static");
    end Binder;
 
+   package Builder is
+      for Global_Configuration_Pragmas use "../../../restrictions.adc";
+   end Builder;
+
    package Linker is
       for Required_Switches use ("-L../../../obj/lib", "-lposix_rts", "-lpthread");
    end Linker;

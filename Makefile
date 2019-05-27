@@ -5,8 +5,7 @@ OBJ_DIR = obj
 TEST_DIR = tests/system
 UNIT_DIR = tests/unit
 
-SRC = a-except.adb \
-      a-unccon.ads \
+SRC = a-unccon.ads \
       ada.ads \
       i-c.adb \
       i-cexten.ads \
@@ -16,8 +15,6 @@ SRC = a-except.adb \
       runtime_lib-strings.adb \
       runtime_lib-debug.adb \
       runtime_lib-platform.adb \
-      runtime_lib-exceptions.ads \
-      s-exctab.adb \
       s-init.adb \
       s-parame.adb \
       s-unstyp.ads \
