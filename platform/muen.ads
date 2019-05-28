@@ -1,7 +1,9 @@
 
 with System;
 
-package Muen is
+package Muen with
+   SPARK_Mode
+is
 
    procedure Allocate_Secondary_Stack (Size    : Natural;
                                        Address : out System.Address) with

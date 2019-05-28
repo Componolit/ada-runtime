@@ -1,7 +1,11 @@
 
+with Runtime_Lib.Strings;
 with SK.CPU;
+with Debuglog.Client;
 
-package body Muen is
+package body Muen with
+   SPARK_Mode
+is
 
    type Byte is mod 2 ** 8 with
       Size => 8;
@@ -22,23 +26,26 @@ package body Muen is
 
    procedure Log_Debug (M : System.Address)
    is
-      pragma Unreferenced (M);
    begin
-      null;
+      Debuglog.Client.Put_Line
+         ("Info: " & Runtime_Lib.Strings.Convert_To_Ada
+                        (M, "Invalid string."));
    end Log_Debug;
 
    procedure Log_Warning (M : System.Address)
    is
-      pragma Unreferenced (M);
    begin
-      null;
+      Debuglog.Client.Put_Line
+         ("Warning: " & Runtime_Lib.Strings.Convert_To_Ada
+                           (M, "Invalid string."));
    end Log_Warning;
 
    procedure Log_Error (M : System.Address)
    is
-      pragma Unreferenced (M);
    begin
-      null;
+      Debuglog.Client.Put_Line
+         ("Error: " & Runtime_Lib.Strings.Convert_To_Ada
+                         (M, "Invalid string."));
    end Log_Error;
 
    procedure Unhandled_Terminate
