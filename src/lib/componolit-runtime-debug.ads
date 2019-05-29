@@ -1,7 +1,7 @@
 
 with System;
 
-package Runtime_Lib.Debug with
+package Componolit.Runtime.Debug with
    SPARK_Mode
 is
    pragma Pure;
@@ -21,18 +21,18 @@ private
      with
        Import,
        Convention => C,
-       External_Name => "log_debug";
+       External_Name => "componolit_runtime_log_debug";
 
    procedure C_Warning (Str : System.Address)
      with
        Import,
        Convention => C,
-       External_Name => "log_warning";
+       External_Name => "componolit_runtime_log_warning";
 
    procedure C_Error (Str : System.Address)
      with
        Import,
        Convention => C,
-       External_Name => "log_error";
+       External_Name => "componolit_runtime_log_error";
 
-end Runtime_Lib.Debug;
+end Componolit.Runtime.Debug;

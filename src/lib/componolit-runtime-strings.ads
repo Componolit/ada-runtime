@@ -12,7 +12,7 @@ with System.Storage_Elements;
 use all type System.Address;
 use all type System.Storage_Elements.Integer_Address;
 
-package Runtime_Lib.Strings with
+package Componolit.Runtime.Strings with
    SPARK_Mode
 is
 
@@ -74,4 +74,4 @@ private
           Addr /= System.Null_Address => To_Pointer'Result /= Null_Pointer);
    pragma Annotate (GNATprove, Terminating, To_Pointer);
 
-end Runtime_Lib.Strings;
+end Componolit.Runtime.Strings;

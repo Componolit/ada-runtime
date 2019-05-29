@@ -11,12 +11,13 @@ SRC = a-except.adb \
       i-c.adb \
       i-cexten.ads \
       interfac.ads \
-      runtime_lib.ads \
-      runtime_lib-secondary_stack.adb \
-      runtime_lib-strings.adb \
-      runtime_lib-debug.adb \
-      runtime_lib-platform.adb \
-      runtime_lib-exceptions.ads \
+      componolit.ads \
+      componolit-runtime.ads \
+      componolit-runtime-secondary_stack.adb \
+      componolit-runtime-strings.adb \
+      componolit-runtime-debug.adb \
+      componolit-runtime-platform.adb \
+      componolit-runtime-exceptions.ads \
       s-exctab.adb \
       s-init.adb \
       s-parame.adb \

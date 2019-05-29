@@ -33,7 +33,7 @@ with Interfaces; use Interfaces;
 
 with Ada.Unchecked_Conversion;
 
-with Runtime_Lib.Platform;
+with Componolit.Runtime.Platform;
 
 package body System.Arith_64 is
 
@@ -295,7 +295,7 @@ package body System.Arith_64 is
 
    procedure Raise_Error is
    begin
-      Runtime_Lib.Platform.Terminate_Message
+      Componolit.Runtime.Platform.Terminate_Message
          ("64-bit arithmetic overflow");
    end Raise_Error;
 

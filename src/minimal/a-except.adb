@@ -10,10 +10,10 @@
 
 pragma Compiler_Unit_Warning;
 
-with Runtime_Lib.Platform;
-with Runtime_Lib.Debug;
-with Runtime_Lib.Strings;
-with Runtime_Lib.Exceptions;
+with Componolit.Runtime.Platform;
+with Componolit.Runtime.Debug;
+with Componolit.Runtime.Strings;
+with Componolit.Runtime.Exceptions;
 with System.Standard_Library; use System.Standard_Library;
 
 package body Ada.Exceptions is
@@ -26,12 +26,12 @@ package body Ada.Exceptions is
                                      Message : String := "") is
       pragma Unreferenced (E);
    begin
-      Runtime_Lib.Debug.Log_Warning
+      Componolit.Runtime.Debug.Log_Warning
          ("Raise_Exception_Alwaysis not implemented");
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      Undefined_Exception,
-                                    "Undefined_Exception",
-                                    Message);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.Undefined_Exception,
+          "Undefined_Exception",
+          Message);
    end Raise_Exception_Always;
 
    procedure Raise_Exception (E       : Exception_Id;
@@ -43,29 +43,23 @@ package body Ada.Exceptions is
    procedure Reraise_Occurrence_No_Defer (X : Exception_Occurrence) is
       pragma Unreferenced (X);
    begin
-      Runtime_Lib.Debug.Log_Warning
+      Componolit.Runtime.Debug.Log_Warning
          ("Reraise_Occurrence_No_Deferis not implemented");
    end Reraise_Occurrence_No_Defer;
 
    procedure Save_Occurrence (Target : out Exception_Occurrence;
                               Source : Exception_Occurrence) is
    begin
-      Runtime_Lib.Debug.Log_Warning
+      Componolit.Runtime.Debug.Log_Warning
          ("Save_Occurrenceis not implemented");
       Target := Source;
    end Save_Occurrence;
 
    procedure Last_Chance_Handler (Except : Exception_Occurrence) is
       pragma Unreferenced (Except);
-      procedure Unhandled_Terminate
-        with
-          Import,
-          Convention => C,
-          External_Name => "__gnat_unhandled_terminate",
-          No_Return;
       --  Perform system dependent shutdown code
    begin
-      Unhandled_Terminate;
+      Componolit.Runtime.Platform.Unhandled_Terminate;
    end Last_Chance_Handler;
 
    ---------------------------------------------
@@ -124,8 +118,8 @@ package body Ada.Exceptions is
    function Create_File_Line_String (File : System.Address;
                                      Line : Integer) return String is
       Msg : constant String :=
-          Runtime_Lib.Strings.Convert_To_Ada (File, "unknown file") &
-          ":" & Runtime_Lib.Strings.Image (Line);
+          Componolit.Runtime.Strings.Convert_To_Ada (File, "unknown file") &
+          ":" & Componolit.Runtime.Strings.Image (Line);
    begin
       return Msg;
    end Create_File_Line_String;
@@ -141,9 +135,8 @@ package body Ada.Exceptions is
                                      Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      CE_Access_Check,
-                                    Rmsg_00, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.CE_Access_Check, Rmsg_00, Msg);
    end Rcheck_CE_Access_Check;
 
    procedure Rcheck_CE_Null_Access_Parameter (File : System.Address;
@@ -157,9 +150,9 @@ package body Ada.Exceptions is
                                               Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      CE_Null_Access_Parameter,
-                                    Rmsg_01, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.CE_Null_Access_Parameter,
+          Rmsg_01, Msg);
    end Rcheck_CE_Null_Access_Parameter;
 
    procedure Rcheck_CE_Discriminant_Check (File : System.Address;
@@ -173,9 +166,8 @@ package body Ada.Exceptions is
                                            Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      CE_Discriminant_Check,
-                                    Rmsg_02, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.CE_Discriminant_Check, Rmsg_02, Msg);
    end Rcheck_CE_Discriminant_Check;
 
    procedure Rcheck_CE_Divide_By_Zero (File : System.Address;
@@ -189,9 +181,8 @@ package body Ada.Exceptions is
                                        Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      CE_Divide_By_Zero,
-                                    Rmsg_03, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.CE_Divide_By_Zero, Rmsg_03, Msg);
    end Rcheck_CE_Divide_By_Zero;
 
    procedure Rcheck_CE_Explicit_Raise (File : System.Address;
@@ -205,9 +196,8 @@ package body Ada.Exceptions is
                                        Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      CE_Explicit_Raise,
-                                    Rmsg_04, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.CE_Explicit_Raise, Rmsg_04, Msg);
    end Rcheck_CE_Explicit_Raise;
 
    procedure Rcheck_CE_Index_Check (File : System.Address;
@@ -221,9 +211,8 @@ package body Ada.Exceptions is
                                     Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      CE_Index_Check,
-                                    Rmsg_05, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.CE_Index_Check, Rmsg_05, Msg);
    end Rcheck_CE_Index_Check;
 
    procedure Rcheck_CE_Invalid_Data (File : System.Address;
@@ -237,9 +226,8 @@ package body Ada.Exceptions is
                                      Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      CE_Invalid_Data,
-                                    Rmsg_06, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.CE_Invalid_Data, Rmsg_06, Msg);
    end Rcheck_CE_Invalid_Data;
 
    procedure Rcheck_CE_Length_Check (File : System.Address;
@@ -253,9 +241,8 @@ package body Ada.Exceptions is
                                      Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      CE_Length_Check,
-                                    Rmsg_07, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.CE_Length_Check, Rmsg_07, Msg);
    end Rcheck_CE_Length_Check;
 
    procedure Rcheck_CE_Null_Exception_Id (File : System.Address;
@@ -269,9 +256,8 @@ package body Ada.Exceptions is
                                           Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      CE_Null_Exception_Id,
-                                    Rmsg_08, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.CE_Null_Exception_Id, Rmsg_08, Msg);
    end Rcheck_CE_Null_Exception_Id;
 
    procedure Rcheck_CE_Null_Not_Allowed (File : System.Address;
@@ -285,9 +271,8 @@ package body Ada.Exceptions is
                                          Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      CE_Null_Not_Allowed,
-                                    Rmsg_09, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.CE_Null_Not_Allowed, Rmsg_09, Msg);
    end Rcheck_CE_Null_Not_Allowed;
 
    procedure Rcheck_CE_Overflow_Check (File : System.Address;
@@ -301,9 +286,8 @@ package body Ada.Exceptions is
                                        Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      CE_Overflow_Check,
-                                    Rmsg_10, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.CE_Overflow_Check, Rmsg_10, Msg);
    end Rcheck_CE_Overflow_Check;
 
    procedure Rcheck_CE_Partition_Check (File : System.Address;
@@ -317,9 +301,8 @@ package body Ada.Exceptions is
                                         Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      CE_Partition_Check,
-                                    Rmsg_11, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.CE_Partition_Check, Rmsg_11, Msg);
    end Rcheck_CE_Partition_Check;
 
    procedure Rcheck_CE_Range_Check (File : System.Address;
@@ -333,9 +316,8 @@ package body Ada.Exceptions is
                                     Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      CE_Range_Check,
-                                    Rmsg_12, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.CE_Range_Check, Rmsg_12, Msg);
    end Rcheck_CE_Range_Check;
 
    procedure Rcheck_CE_Tag_Check (File : System.Address;
@@ -349,9 +331,8 @@ package body Ada.Exceptions is
                                   Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      CE_Tag_Check,
-                                    Rmsg_13, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.CE_Tag_Check, Rmsg_13, Msg);
    end Rcheck_CE_Tag_Check;
 
    procedure Rcheck_PE_Access_Before_Elaboration (File : System.Address;
@@ -365,9 +346,9 @@ package body Ada.Exceptions is
                                                   Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      PE_Access_Before_Elaboration,
-                                    Rmsg_14, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.PE_Access_Before_Elaboration,
+          Rmsg_14, Msg);
    end Rcheck_PE_Access_Before_Elaboration;
 
    procedure Rcheck_PE_Accessibility_Check (File : System.Address;
@@ -381,9 +362,8 @@ package body Ada.Exceptions is
                                             Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      PE_Accessibility_Check,
-                                    Rmsg_15, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.PE_Accessibility_Check, Rmsg_15, Msg);
    end Rcheck_PE_Accessibility_Check;
 
    procedure Rcheck_PE_Address_Of_Intrinsic (File : System.Address;
@@ -397,9 +377,8 @@ package body Ada.Exceptions is
                                              Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      PE_Address_Of_Intrinsic,
-                                    Rmsg_16, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.PE_Address_Of_Intrinsic, Rmsg_16, Msg);
    end Rcheck_PE_Address_Of_Intrinsic;
 
    procedure Rcheck_PE_Aliased_Parameters (File : System.Address;
@@ -413,9 +392,8 @@ package body Ada.Exceptions is
                                            Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      PE_Aliased_Parameters,
-                                    Rmsg_17, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.PE_Aliased_Parameters, Rmsg_17, Msg);
    end Rcheck_PE_Aliased_Parameters;
 
    procedure Rcheck_PE_All_Guards_Closed (File : System.Address;
@@ -429,9 +407,8 @@ package body Ada.Exceptions is
                                           Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      PE_All_Guards_Closed,
-                                    Rmsg_18, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.PE_All_Guards_Closed, Rmsg_18, Msg);
    end Rcheck_PE_All_Guards_Closed;
 
    procedure Rcheck_PE_Bad_Predicated_Generic_Type (File : System.Address;
@@ -445,9 +422,9 @@ package body Ada.Exceptions is
                                                     Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      PE_Bad_Predicated_Generic_Type,
-                                    Rmsg_19, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.PE_Bad_Predicated_Generic_Type,
+          Rmsg_19, Msg);
    end Rcheck_PE_Bad_Predicated_Generic_Type;
 
    procedure Rcheck_PE_Current_Task_In_Entry_Body (File : System.Address;
@@ -461,9 +438,9 @@ package body Ada.Exceptions is
                                                    Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      PE_Current_Task_In_Entry_Body,
-                                    Rmsg_20, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.PE_Current_Task_In_Entry_Body,
+          Rmsg_20, Msg);
    end Rcheck_PE_Current_Task_In_Entry_Body;
 
    procedure Rcheck_PE_Duplicated_Entry_Address (File : System.Address;
@@ -477,9 +454,9 @@ package body Ada.Exceptions is
                                                  Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      PE_Duplicated_Entry_Address,
-                                    Rmsg_21, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.PE_Duplicated_Entry_Address,
+          Rmsg_21, Msg);
    end Rcheck_PE_Duplicated_Entry_Address;
 
    procedure Rcheck_PE_Explicit_Raise (File : System.Address;
@@ -493,9 +470,8 @@ package body Ada.Exceptions is
                                        Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      PE_Explicit_Raise,
-                                    Rmsg_22, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.PE_Explicit_Raise, Rmsg_22, Msg);
    end Rcheck_PE_Explicit_Raise;
 
    procedure Rcheck_PE_Implicit_Return (File : System.Address;
@@ -509,9 +485,8 @@ package body Ada.Exceptions is
                                         Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      PE_Implicit_Return,
-                                    Rmsg_23, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.PE_Implicit_Return, Rmsg_23, Msg);
    end Rcheck_PE_Implicit_Return;
 
    procedure Rcheck_PE_Misaligned_Address_Value (File : System.Address;
@@ -525,9 +500,9 @@ package body Ada.Exceptions is
                                                  Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      PE_Misaligned_Address_Value,
-                                    Rmsg_24, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.PE_Misaligned_Address_Value,
+          Rmsg_24, Msg);
    end Rcheck_PE_Misaligned_Address_Value;
 
    procedure Rcheck_PE_Missing_Return (File : System.Address;
@@ -541,9 +516,8 @@ package body Ada.Exceptions is
                                        Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      PE_Missing_Return,
-                                    Rmsg_25, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.PE_Missing_Return, Rmsg_25, Msg);
    end Rcheck_PE_Missing_Return;
 
    procedure Rcheck_PE_Overlaid_Controlled_Object (File : System.Address;
@@ -557,9 +531,9 @@ package body Ada.Exceptions is
                                                    Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      PE_Overlaid_Controlled_Object,
-                                    Rmsg_26, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.PE_Overlaid_Controlled_Object,
+          Rmsg_26, Msg);
    end Rcheck_PE_Overlaid_Controlled_Object;
 
    procedure Rcheck_PE_Non_Transportable_Actual (File : System.Address;
@@ -573,9 +547,9 @@ package body Ada.Exceptions is
                                                  Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      PE_Non_Transportable_Actual,
-                                    Rmsg_27, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.PE_Non_Transportable_Actual,
+          Rmsg_27, Msg);
    end Rcheck_PE_Non_Transportable_Actual;
 
    procedure Rcheck_PE_Potentially_Blocking_Operation (File : System.Address;
@@ -589,9 +563,9 @@ package body Ada.Exceptions is
                                                        Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      PE_Potentially_Blocking_Operation,
-                                    Rmsg_28, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.PE_Potentially_Blocking_Operation,
+          Rmsg_28, Msg);
    end Rcheck_PE_Potentially_Blocking_Operation;
 
    procedure Rcheck_PE_Stream_Operation_Not_Allowed (File : System.Address;
@@ -605,9 +579,9 @@ package body Ada.Exceptions is
                                                      Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      PE_Stream_Operation_Not_Allowed,
-                                    Rmsg_29, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.PE_Stream_Operation_Not_Allowed,
+          Rmsg_29, Msg);
    end Rcheck_PE_Stream_Operation_Not_Allowed;
 
    procedure Rcheck_PE_Stubbed_Subprogram_Called (File : System.Address;
@@ -621,9 +595,9 @@ package body Ada.Exceptions is
                                                   Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      PE_Stubbed_Subprogram_Called,
-                                    Rmsg_30, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.PE_Stubbed_Subprogram_Called,
+          Rmsg_30, Msg);
    end Rcheck_PE_Stubbed_Subprogram_Called;
 
    procedure Rcheck_PE_Unchecked_Union_Restriction (File : System.Address;
@@ -637,9 +611,9 @@ package body Ada.Exceptions is
                                                     Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      PE_Unchecked_Union_Restriction,
-                                    Rmsg_31, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.PE_Unchecked_Union_Restriction,
+          Rmsg_31, Msg);
    end Rcheck_PE_Unchecked_Union_Restriction;
 
    procedure Rcheck_PE_Finalize_Raised_Exception (File : System.Address;
@@ -653,9 +627,9 @@ package body Ada.Exceptions is
                                                   Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      PE_Finalize_Raised_Exception,
-                                    Rmsg_32, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.PE_Finalize_Raised_Exception,
+          Rmsg_32, Msg);
    end Rcheck_PE_Finalize_Raised_Exception;
 
    procedure Rcheck_SE_Empty_Storage_Pool (File : System.Address;
@@ -669,9 +643,8 @@ package body Ada.Exceptions is
                                            Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      SE_Empty_Storage_Pool,
-                                    Rmsg_33, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.SE_Empty_Storage_Pool, Rmsg_33, Msg);
    end Rcheck_SE_Empty_Storage_Pool;
 
    procedure Rcheck_SE_Explicit_Raise (File : System.Address;
@@ -685,9 +658,8 @@ package body Ada.Exceptions is
                                        Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      SE_Explicit_Raise,
-                                    Rmsg_34, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.SE_Explicit_Raise, Rmsg_34, Msg);
    end Rcheck_SE_Explicit_Raise;
 
    procedure Rcheck_SE_Infinite_Recursion (File : System.Address;
@@ -701,9 +673,8 @@ package body Ada.Exceptions is
                                            Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      SE_Infinite_Recursion,
-                                    Rmsg_35, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.SE_Infinite_Recursion, Rmsg_35, Msg);
    end Rcheck_SE_Infinite_Recursion;
 
    procedure Rcheck_SE_Object_Too_Large (File : System.Address;
@@ -717,9 +688,8 @@ package body Ada.Exceptions is
                                          Line : Integer) is
       Msg : constant String := Create_File_Line_String (File, Line);
    begin
-      Runtime_Lib.Platform.Raise_Ada_Exception (Runtime_Lib.Exceptions.
-                                      SE_Object_Too_Large,
-                                    Rmsg_36, Msg);
+      Componolit.Runtime.Platform.Raise_Ada_Exception
+         (Componolit.Runtime.Exceptions.SE_Object_Too_Large, Rmsg_36, Msg);
    end Rcheck_SE_Object_Too_Large;
 
 end Ada.Exceptions;

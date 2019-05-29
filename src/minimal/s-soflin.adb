@@ -7,20 +7,20 @@
 --  additional permissions described in the GCC Runtime Library Exception,
 --  version 3.1, as published by the Free Software Foundation.
 
-with Runtime_Lib.Debug;
+with Componolit.Runtime.Debug;
 
 package body System.Soft_Links is
 
    function Get_Current_Excep_NT return EOA is
    begin
-      Runtime_Lib.Debug.Log_Warning
+      Componolit.Runtime.Debug.Log_Warning
          ("Get_Current_Excep_NT not implemented");
       return null;
    end Get_Current_Excep_NT;
 
    function Get_GNAT_Exception return Ada.Exceptions.Exception_Id is
    begin
-      Runtime_Lib.Debug.Log_Warning
+      Componolit.Runtime.Debug.Log_Warning
          ("Set_Jmpbuf_Address_Soft not implemented");
       return Ada.Exceptions.Null_Exception_Id;
    end Get_GNAT_Exception;

@@ -7,13 +7,19 @@
 --  additional permissions described in the GCC Runtime Library Exception,
 --  version 3.1, as published by the Free Software Foundation.
 
-with Runtime_Lib.Debug;
+with Componolit.Runtime.Debug;
 
-package body Runtime_Lib.Platform
+package body Componolit.Runtime.Platform
   with SPARK_Mode => Off
 is
 
-   procedure Raise_Ada_Exception (T    : Runtime_Lib.Exceptions.Exception_Type;
+   procedure Unhandled_Terminate
+   is
+   begin
+      C_Unhandled_Terminate;
+   end Unhandled_Terminate;
+
+   procedure Raise_Ada_Exception (T    : Exceptions.Exception_Type;
                                   Name : String;
                                   Msg  : String)
    is
@@ -26,8 +32,18 @@ is
    procedure Terminate_Message (Msg : String)
    is
    begin
-      Runtime_Lib.Debug.Log_Error (Msg);
+      Componolit.Runtime.Debug.Log_Error (Msg);
       Unhandled_Terminate;
    end Terminate_Message;
 
-end Runtime_Lib.Platform;
+   function Gnat_Personality_V0 (Status  : Integer;
+                                 Phase   : Long_Integer;
+                                 Class   : Natural;
+                                 Exc     : System.Address;
+                                 Context : System.Address) return Integer
+   is
+   begin
+      return C_Gnat_Personality (Status, Phase, Class, Exc, Context);
+   end Gnat_Personality_V0;
+
+end Componolit.Runtime.Platform;

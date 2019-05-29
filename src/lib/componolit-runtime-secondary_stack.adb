@@ -7,9 +7,9 @@
 --  additional permissions described in the GCC Runtime Library Exception,
 --  version 3.1, as published by the Free Software Foundation.
 
-with Runtime_Lib.Platform;
+with Componolit.Runtime.Platform;
 
-package body Runtime_Lib.Secondary_Stack with
+package body Componolit.Runtime.Secondary_Stack with
    SPARK_Mode
 is
 
@@ -21,7 +21,7 @@ is
          C_Alloc (Secondary_Stack_Size, E.Base);
       end if;
       if E.Base = Null_Address then
-         Runtime_Lib.Platform.Terminate_Message
+         Componolit.Runtime.Platform.Terminate_Message
             ("Secondary stack allocation failed");
       end if;
    end Check_Mark;
@@ -43,7 +43,7 @@ is
          Stack_Mark.Top := Stack_Mark.Top + Storage_Size;
          Address := Stack_Mark.Base - SSE.Integer_Address (Stack_Mark.Top);
       else
-         Runtime_Lib.Platform.Terminate_Message
+         Componolit.Runtime.Platform.Terminate_Message
             ("Secondary stack overflowed");
       end if;
    end S_Allocate;
@@ -65,10 +65,10 @@ is
    begin
       if Stack_Ptr > Stack_Mark.Top or Stack_Base /= Stack_Mark.Base
       then
-         Runtime_Lib.Platform.Terminate_Message
+         Componolit.Runtime.Platform.Terminate_Message
             ("Secondary stack underflowed");
       end if;
       Stack_Mark.Top := Stack_Ptr;
    end S_Release;
 
-end Runtime_Lib.Secondary_Stack;
+end Componolit.Runtime.Secondary_Stack;
