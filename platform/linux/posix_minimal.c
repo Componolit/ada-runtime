@@ -9,23 +9,15 @@
  * version 3.1, as published by the Free Software Foundation.
  */
 
-#include <stdlib.h>
 #include <stdio.h>
-#include <unwind.h>
+#include <stdlib.h>
+#include <componolit_runtime.h>
 
-void *__gnat_malloc(size_t size) {
-    return malloc(size);
-}
-
-void __gnat_free(void *ptr) {
-    free(ptr);
-}
-
-_Unwind_Reason_Code __gnat_personality_v0(int version,
-                                          void *phases,
-                                          _Unwind_Exception_Class class,
-                                          void *exception,
-                                          void *context)
+_Unwind_Reason_Code componolit_runtime_personality(int version,
+                                                   unsigned long phases,
+                                                   _Unwind_Exception_Class class,
+                                                   void *exception,
+                                                   void *context)
 {
     fprintf(stderr, "%s not implemented\n", __func__);
     exit(1);
