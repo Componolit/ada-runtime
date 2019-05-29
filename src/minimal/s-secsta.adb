@@ -13,7 +13,7 @@ package body System.Secondary_Stack is
                           Storage_Size :     SSE.Storage_Count)
    is
    begin
-      Runtime_Lib.Secondary_Stack.S_Allocate
+      Componolit.Runtime.Secondary_Stack.S_Allocate
          (Stack_Mark, Address, Storage_Size);
    end SS_Allocate;
 
@@ -21,7 +21,7 @@ package body System.Secondary_Stack is
    is
       M : Mark_Id;
    begin
-      Runtime_Lib.Secondary_Stack.S_Mark
+      Componolit.Runtime.Secondary_Stack.S_Mark
          (Stack_Mark, M.Sstk, SSE.Storage_Count (M.Sptr));
       return M;
    end SS_Mark;
@@ -29,7 +29,7 @@ package body System.Secondary_Stack is
    procedure SS_Release (M : Mark_Id)
    is
    begin
-      Runtime_Lib.Secondary_Stack.S_Release
+      Componolit.Runtime.Secondary_Stack.S_Release
          (Stack_Mark, M.Sstk, SSE.Storage_Count (M.Sptr));
    end SS_Release;
 

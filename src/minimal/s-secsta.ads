@@ -9,7 +9,7 @@
 
 with System.Parameters;
 with System.Storage_Elements;
-with Runtime_Lib.Secondary_Stack;
+with Componolit.Runtime.Secondary_Stack;
 
 package System.Secondary_Stack is
 
@@ -47,7 +47,7 @@ private
       Sptr : SSE.Integer_Address;
    end record;
 
-   Stack_Mark : Runtime_Lib.Secondary_Stack.Mark :=
-      Runtime_Lib.Secondary_Stack.Null_Mark;
+   Stack_Mark : Componolit.Runtime.Secondary_Stack.Mark :=
+      Componolit.Runtime.Secondary_Stack.Null_Mark;
 
 end System.Secondary_Stack;

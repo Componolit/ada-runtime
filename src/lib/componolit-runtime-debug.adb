@@ -1,5 +1,5 @@
 
-package body Runtime_Lib.Debug with
+package body Componolit.Runtime.Debug with
    SPARK_Mode
 is
 
@@ -20,4 +20,4 @@ is
    procedure Log_Error_Private is new Log (C_Error);
    procedure Log_Error (Msg : String) renames Log_Error_Private;
 
-end Runtime_Lib.Debug;
+end Componolit.Runtime.Debug;

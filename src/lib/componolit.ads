@@ -1,7 +1,6 @@
-
-package Runtime_Lib with
+package Componolit with
    SPARK_Mode
 is
    pragma Pure;
    pragma Preelaborate;
-end Runtime_Lib;
+end Componolit;

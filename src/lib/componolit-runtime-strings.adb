@@ -7,7 +7,7 @@
 --  additional permissions described in the GCC Runtime Library Exception,
 --  version 3.1, as published by the Free Software Foundation.
 
-package body Runtime_Lib.Strings with
+package body Componolit.Runtime.Strings with
    SPARK_Mode
 is
 
@@ -137,4 +137,4 @@ is
       return SSE.To_Integer (Addr);
    end To_Pointer;
 
-end Runtime_Lib.Strings;
+end Componolit.Runtime.Strings;
