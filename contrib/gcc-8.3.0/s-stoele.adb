@@ -32,7 +32,7 @@
 pragma Compiler_Unit_Warning;
 
 with Ada.Unchecked_Conversion;
-with Runtime_Lib.Platform;
+with Componolit.Runtime.Platform;
 
 package body System.Storage_Elements is
 
@@ -125,7 +125,7 @@ package body System.Storage_Elements is
          --  PE, but this really is so obviously more like a constraint error.
 
       else
-         Runtime_Lib.Platform.Terminate_Message
+         Componolit.Runtime.Platform.Terminate_Message
             ("Invalid negative right arugment of mod");
       end if;
    end "mod";

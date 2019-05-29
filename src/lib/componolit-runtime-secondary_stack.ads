@@ -10,7 +10,7 @@
 with System;
 with System.Storage_Elements;
 
-package Runtime_Lib.Secondary_Stack
+package Componolit.Runtime.Secondary_Stack
   with SPARK_Mode
 is
    package SSE renames System.Storage_Elements;
@@ -60,12 +60,14 @@ is
               and then Stack_Ptr <= Stack_Mark.Top,
       Post => Stack_Mark.Base /= Null_Address;
 
+private
+
    procedure C_Alloc (Size    :     SSE.Storage_Count;
                       Address : out SSE.Integer_Address) with
       Import,
       Convention => C,
-      External_Name => "allocate_secondary_stack",
+      External_Name => "componolit_runtime_allocate_secondary_stack",
       Post => Address /= Null_Address,
       Global => null;
 
-end Runtime_Lib.Secondary_Stack;
+end Componolit.Runtime.Secondary_Stack;
