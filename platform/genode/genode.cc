@@ -20,13 +20,13 @@
 
 #include <ada/exception.h>
 #include <ada_exceptions.h>
-#include <unwind.h>
+#include <componolit_runtime.h>
 
 class Gnat_Exception : public Genode::Exception {};
 
 extern "C" {
 
-    _Unwind_Reason_Code __gnat_personality_v0(
+    _Unwind_Reason_Code componolit_runtime_personality(
             int version,
             unsigned long phase,
             _Unwind_Exception_Class cls,
@@ -46,45 +46,35 @@ extern "C" {
         }
     }
 
-    void log_debug(char *message)
+    void componolit_runtime_log_debug(char *message)
     {
         Genode::log(Genode::Cstring(message));
     }
 
-    void log_warning(char *message)
+    void componolit_runtime_log_warning(char *message)
     {
         Genode::warning(Genode::Cstring(message));
     }
 
-    void log_error(char *message)
+    void componolit_runtime_log_error(char *message)
     {
         Genode::error(Genode::Cstring(message));
     }
 
-/*
-    void *__gnat_malloc(Genode::size_t)
-    {
-    }
-
-    void __gnat_free(void *)
-    {
-    }
-*/
-
-    void __gnat_unhandled_terminate()
+    void componolit_runtime_unhandled_terminate()
     {
         Genode::error("Unhandled GNAT exception.");
         throw Gnat_Exception();
     }
 
-    void allocate_secondary_stack(Genode::size_t size, void **address)
+    void componolit_runtime_allocate_secondary_stack(unsigned size, void **address)
     {
         *address = Genode::Thread::myself()->alloc_secondary_stack("ada thread", size);
     }
 
 #define exc_case(c, cpp) case c: throw Ada::Exception::cpp()
 
-    void raise_ada_exception(exception_t exception, char *name, char *message)
+    void componolit_runtime_raise_ada_exception(exception_t exception, char *name, char *message)
     {
         Genode::error("Exception raised: ", Genode::Cstring(name), " in ", Genode::Cstring(message));
         switch(exception){

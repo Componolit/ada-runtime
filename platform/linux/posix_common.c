@@ -14,8 +14,10 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <time.h>
+#include <ada_exceptions.h>
+#include <componolit_runtime.h>
 
-void __gnat_unhandled_terminate() {
+void componolit_runtime_unhandled_terminate() {
     printf("error: unhandled exception\n");
     exit(1);
 }
@@ -28,7 +30,7 @@ static void make_key()
     (void) pthread_key_create(&key, NULL);
 }
 
-void allocate_secondary_stack(size_t size, void **address) {
+void componolit_runtime_allocate_secondary_stack(unsigned size, void **address) {
     void *ptr;
 
     (void) pthread_once(&key_once, make_key);
@@ -40,12 +42,12 @@ void allocate_secondary_stack(size_t size, void **address) {
     *address = pthread_getspecific(key);
 }
 
-void raise_ada_exception(int exception, char *name, char *message) {
-    printf("Exception raised (%d): %s: %s\n", exception, name, message);
+void componolit_runtime_raise_ada_exception(exception_t exception, char *name, char *message) {
+    printf("Exception raised (%d): %s: %s\n", (int)exception, name, message);
     exit(0);
 }
 
-#define LOG(type) void log_##type(char *message) { \
+#define LOG(type) void componolit_runtime_log_##type(char *message) { \
     printf( #type ": %s\n", message); \
 }
 
