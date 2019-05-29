@@ -59,8 +59,8 @@ platform: $(OBJ_DIR)/lib/libposix_rts.a
 $(OBJ_DIR)/lib/libposix_rts.a: $(OBJ_DIR)/posix_common.o $(OBJ_DIR)/posix_minimal.o
 	$(VERBOSE)ar rcs $@ $^
 
-$(OBJ_DIR)/%.o: platform/%.c
-	$(VERBOSE)gcc -c -o $@ $<
+$(OBJ_DIR)/%.o: platform/linux/%.c
+	$(VERBOSE)gcc -Iplatform -c -o $@ $<
 
 clean: clean_test
 	$(VERBOSE)rm -rf $(OBJ_DIR)
