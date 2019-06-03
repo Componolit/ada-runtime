@@ -12,20 +12,11 @@ is
    for URC use (Foreign_Exception_Caught => 1,
                 Continue_Unwind          => 8);
 
-   procedure Log_Debug (S : System.Address) with
-      Export,
-      Convention => C,
-      External_Name => "componolit_runtime_log_debug";
+   procedure Log_Debug (S : String);
 
-   procedure Log_Warning (S : System.Address) with
-      Export,
-      Convention => C,
-      External_Name => "componolit_runtime_log_warning";
+   procedure Log_Warning (S : String);
 
-   procedure Log_Error (S : System.Address) with
-      Export,
-      Convention => C,
-      External_Name => "componolit_runtime_log_error";
+   procedure Log_Error (S : String);
 
    procedure Unhandled_Terminate with
       Export,
@@ -33,11 +24,8 @@ is
       External_Name => "componolit_runtime_unhandled_terminate";
 
    procedure Raise_Ada_Exception (E : CRE.Exception_Type;
-                                  N : System.Address;
-                                  M : System.Address) with
-      Export,
-      Convention => C,
-      External_Name => "componolit_runtime_raise_ada_exception";
+                                  N : String;
+                                  M : String);
 
    procedure Allocate_Secondary_Stack (Size :     Natural;
                                        Addr : out System.Address) with
