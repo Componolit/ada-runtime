@@ -62,7 +62,7 @@ is
                          Exc     : System.Address;
                          Context : System.Address) return Gnat_Helpers.URC with
       Export,
-      Conventions => C,
+      Convention => C,
       External_Name => "__gnat_personality_v0";
 
    function Personality (Version : Integer;
