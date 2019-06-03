@@ -3,7 +3,7 @@ with System;
 with System.Storage_Elements;
 with Ada.Text_IO;
 
-package body Runtime_Lib.Secondary_Stack.Tests is
+package body Componolit.Runtime.Secondary_Stack.Tests is
 
    package SSE renames System.Storage_Elements;
    Alloc_Success : Boolean := False;
@@ -18,7 +18,7 @@ package body Runtime_Lib.Secondary_Stack.Tests is
      with
        Export,
        Convention => C,
-       External_Name => "allocate_secondary_stack";
+       External_Name => "componolit_runtime_allocate_secondary_stack";
 
    procedure C_Alloc (Size    :     SSE.Storage_Count;
                       Address : out SSE.Integer_Address)
@@ -49,17 +49,17 @@ package body Runtime_Lib.Secondary_Stack.Tests is
    procedure Log_Debug (S : System.Address) with
       Export,
       Convention => C,
-      External_Name => "log_debug";
+      External_Name => "componolit_runtime_log_debug";
 
    procedure Log_Warning (S : System.Address) with
       Export,
       Convention => C,
-      External_Name => "log_warning";
+      External_Name => "componolit_runtime_log_warning";
 
    procedure Log_Error (S : System.Address) with
       Export,
       Convention => C,
-      External_Name => "log_error";
+      External_Name => "componolit_runtime_log_error";
 
    procedure Log_Debug (S : System.Address)
    is
@@ -87,7 +87,7 @@ package body Runtime_Lib.Secondary_Stack.Tests is
                                   M : System.Address) with
       Export,
       Convention => C,
-      External_Name => "raise_ada_exception";
+      External_Name => "componolit_runtime_raise_ada_exception";
 
    procedure Raise_Ada_Exception (T : Integer;
                                   N : System.Address;
@@ -226,7 +226,7 @@ package body Runtime_Lib.Secondary_Stack.Tests is
 
    function Name (T : Test_Case) return Aunit.Message_String is
    begin
-      return Aunit.Format ("Runtime_Lib.Secondary_Stack");
+      return Aunit.Format ("Componolit.Runtime.Secondary_Stack");
    end Name;
 
-end Runtime_Lib.Secondary_Stack.Tests;
+end Componolit.Runtime.Secondary_Stack.Tests;
