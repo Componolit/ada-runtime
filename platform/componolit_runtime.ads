@@ -54,4 +54,14 @@ is
       Convention => C,
       External_Name => "componolit_runtime_personality";
 
+   procedure Initialize with
+      Export,
+      Convention => C,
+      External_Name => "componolit_runtime_initialize";
+
+   procedure Finalize with
+      Export,
+      Convention => C,
+      External_Name => "componolit_runtime_finalize";
+
 end Componolit_Runtime;

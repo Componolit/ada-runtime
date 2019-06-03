@@ -35,6 +35,10 @@ _Unwind_Reason_Code componolit_runtime_personality(
         void *exc,
         void *context);
 
+void componolit_runtime_initialize(void);
+
+void componolit_runtime_finalize(void);
+
 #ifdef __cplusplus
 }
 #endif

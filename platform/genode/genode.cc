@@ -120,4 +120,10 @@ extern "C" {
                 throw Genode::Exception();
         }
     }
+
+    void componolit_runtime_initialize(void)
+    { }
+
+    void componolit_runtime_finalize(void)
+    { }
 }

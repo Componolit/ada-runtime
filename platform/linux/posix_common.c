@@ -55,3 +55,9 @@ LOG(debug)
 LOG(warning)
 LOG(error)
 
+
+void componolit_runtime_initialize(void)
+{ }
+
+void componolit_runtime_finalize(void)
+{ }
