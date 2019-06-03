@@ -1,6 +1,7 @@
 
 with SK.CPU;
 with Debuglog.Client;
+with Gnat_Helpers;
 
 package body Componolit_Runtime with
    SPARK_Mode
@@ -44,6 +45,11 @@ is
          ("Error: " & S);
    end Log_Error;
 
+   procedure Unhandled_Terminate with
+      Export,
+      Convention => C,
+      External_Name => "__gnat_unhandled_terminate";
+
    procedure Unhandled_Terminate
    is
    begin
@@ -54,11 +60,20 @@ is
                          Phase   : Long_Integer;
                          Class   : Natural;
                          Exc     : System.Address;
-                         Context : System.Address) return URC
+                         Context : System.Address) return Gnat_Helpers.URC with
+      Export,
+      Conventions => C,
+      External_Name => "__gnat_personality_v0";
+
+   function Personality (Version : Integer;
+                         Phase   : Long_Integer;
+                         Class   : Natural;
+                         Exc     : System.Address;
+                         Context : System.Address) return Gnat_Helpers.URC
    is
    begin
       SK.CPU.Stop;
-      return Foreign_Exception_Caught;
+      return Gnat_Helpers.Foreign_Exception_Caught;
    end Personality;
 
    procedure Raise_Ada_Exception (E : CRE.Exception_Type;
