@@ -73,6 +73,18 @@ is
       SK.CPU.Stop;
    end Raise_Ada_Exception;
 
+   procedure Initialize
+   is
+   begin
+      null;
+   end Initialize;
+
+   procedure Finalize
+   is
+   begin
+      null;
+   end Finalize;
+
    procedure Unwind_Resume with
       Export,
       Convention => C,
