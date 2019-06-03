@@ -16,27 +16,12 @@ is
    pragma Pure;
    pragma Preelaborate;
 
-   procedure Unhandled_Terminate with
-      Export,
-      Convention => C,
-      External_Name => "__gnat_unhandled_terminate";
-   pragma No_Return (Unhandled_Terminate);
-
    procedure Raise_Ada_Exception (T    : Exceptions.Exception_Type;
                                   Name : String;
                                   Msg  : String);
 
    procedure Terminate_Message (Msg : String);
    pragma No_Return (Terminate_Message);
-
-   function Gnat_Personality_V0 (Status  : Integer;
-                                 Phase   : Long_Integer;
-                                 Class   : Natural;
-                                 Exc     : System.Address;
-                                 Context : System.Address) return Integer with
-      Export,
-      Convention => C,
-      External_Name => "__gnat_personality_v0";
 
 private
 
@@ -51,16 +36,7 @@ private
    procedure C_Unhandled_Terminate with
       Import,
       Convention => C,
-      External_Name => "componolit_runtime_unhandled_terminate";
+      External_Name => "__gnat_unhandled_terminate";
    pragma No_Return (C_Unhandled_Terminate);
-
-   function C_Gnat_Personality (Status  : Integer;
-                                Phase   : Long_Integer;
-                                Class   : Natural;
-                                Exc     : System.Address;
-                                Context : System.Address) return Integer with
-      Import,
-      Convention => C,
-      External_Name => "componolit_runtime_personality";
 
 end Componolit.Runtime.Platform;
