@@ -10,24 +10,36 @@
 package System.Init is
    pragma Preelaborate;
 
-   procedure Initialize
-      with Export,
-           Convention => C,
-           External_Name => "__gnat_initialize";
+   procedure Initialize with
+      Export,
+      Convention => C,
+      External_Name => "__gnat_initialize";
 
-   procedure Finalize
-      with Export,
-           Convention => C,
-           External_Name => "__gnat_finalize";
+   procedure Finalize with
+      Export,
+      Convention => C,
+      External_Name => "__gnat_finalize";
 
-   procedure Runtime_Initialize
-      with Export,
-           Convention => C,
-           External_Name => "__gnat_runtime_initialize";
+   procedure Runtime_Initialize with
+      Export,
+      Convention => C,
+      External_Name => "__gnat_runtime_initialize";
 
-   procedure Runtime_Finalize
-      with Export,
-           Convention => C,
-           External_Name => "__gnat_runtime_finalize";
+   procedure Runtime_Finalize with
+      Export,
+      Convention => C,
+      External_Name => "__gnat_runtime_finalize";
+
+private
+
+   procedure C_Runtime_Initialize with
+      Import,
+      Convention => C,
+      External_Name => "componolit_runtime_initialize";
+
+   procedure C_Runtime_Finalize with
+      Import,
+      Convention => C,
+      External_Name => "componolit_runtime_finalize";
 
 end System.Init;

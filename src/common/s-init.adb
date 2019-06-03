@@ -21,12 +21,12 @@ package body System.Init is
 
    procedure Runtime_Initialize is
    begin
-      null;
+      C_Runtime_Initialize;
    end Runtime_Initialize;
 
    procedure Runtime_Finalize is
    begin
-      null;
+      C_Runtime_Finalize;
    end Runtime_Finalize;
 
 end System.Init;
