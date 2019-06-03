@@ -21,12 +21,13 @@
 #include <ada/exception.h>
 #include <ada_exceptions.h>
 #include <componolit_runtime.h>
+#include <gnat_helpers.h>
 
 class Gnat_Exception : public Genode::Exception {};
 
 extern "C" {
 
-    _Unwind_Reason_Code componolit_runtime_personality(
+    _Unwind_Reason_Code __gnat_personality_v0(
             int version,
             unsigned long phase,
             _Unwind_Exception_Class cls,
@@ -61,7 +62,7 @@ extern "C" {
         Genode::error(Genode::Cstring(message));
     }
 
-    void componolit_runtime_unhandled_terminate()
+    void __gnat_unhandled_terminate()
     {
         Genode::error("Unhandled GNAT exception.");
         throw Gnat_Exception();
