@@ -1,7 +1,7 @@
 with Aunit;
 with Aunit.Test_Cases;
 
-package Runtime_Lib.Strings.Tests is
+package Componolit.Runtime.Secondary_Stack.Tests is
 
    type Test_Case is new Aunit.Test_Cases.Test_Case with null record;
 
@@ -9,4 +9,4 @@ package Runtime_Lib.Strings.Tests is
 
    function Name (T : Test_Case) return Aunit.Message_String;
 
-end Runtime_Lib.Strings.Tests;
+end Componolit.Runtime.Secondary_Stack.Tests;

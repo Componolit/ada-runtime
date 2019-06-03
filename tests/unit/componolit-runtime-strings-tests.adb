@@ -1,7 +1,7 @@
 with System;
 with Aunit.Assertions;
 
-package body Runtime_Lib.Strings.Tests is
+package body Componolit.Runtime.Strings.Tests is
 
    -------------------
    -- Test routines --
@@ -76,7 +76,7 @@ package body Runtime_Lib.Strings.Tests is
 
    function Name (T : Test_Case) return Aunit.Message_String is
    begin
-      return Aunit.Format ("Runtime_Lib.Strings");
+      return Aunit.Format ("Componolit.Runtime.Strings");
    end Name;
 
-end Runtime_Lib.Strings.Tests;
+end Componolit.Runtime.Strings.Tests;
