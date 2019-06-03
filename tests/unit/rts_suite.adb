@@ -1,13 +1,13 @@
-with Runtime_Lib.Secondary_Stack.Tests;
-with Runtime_Lib.Strings.Tests;
+with Componolit.Runtime.Secondary_Stack.Tests;
+with Componolit.Runtime.Strings.Tests;
 
 package body Rts_Suite is
    use Aunit.Test_Suites;
 
    Result : aliased Test_Suite;
 
-   Secondary_Stack_Case : aliased Runtime_Lib.Secondary_Stack.Tests.Test_Case;
-   Strings_Case : aliased Runtime_Lib.Strings.Tests.Test_Case;
+   Secondary_Stack_Case : aliased Componolit.Runtime.Secondary_Stack.Tests.Test_Case;
+   Strings_Case : aliased Componolit.Runtime.Strings.Tests.Test_Case;
 
    -----------
    -- Suite --

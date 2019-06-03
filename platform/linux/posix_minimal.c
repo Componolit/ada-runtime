@@ -12,8 +12,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <componolit_runtime.h>
+#include <gnat_helpers.h>
 
-_Unwind_Reason_Code componolit_runtime_personality(int version,
+_Unwind_Reason_Code __gnat_personality_v0(int version,
                                                    unsigned long phases,
                                                    _Unwind_Exception_Class class,
                                                    void *exception,
