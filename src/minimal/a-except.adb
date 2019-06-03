@@ -59,7 +59,7 @@ package body Ada.Exceptions is
       pragma Unreferenced (Except);
       --  Perform system dependent shutdown code
    begin
-      Componolit.Runtime.Platform.Unhandled_Terminate;
+      Componolit.Runtime.Platform.Terminate_Message ("Last_Chance_Handler");
    end Last_Chance_Handler;
 
    ---------------------------------------------

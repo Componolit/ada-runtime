@@ -17,7 +17,7 @@
 #include <ada_exceptions.h>
 #include <componolit_runtime.h>
 
-void componolit_runtime_unhandled_terminate() {
+void __gnat_unhandled_terminate() {
     printf("error: unhandled exception\n");
     exit(1);
 }
