@@ -1,5 +1,4 @@
 
-with Componolit.Runtime.Strings;
 with SK.CPU;
 with Debuglog.Client;
 
@@ -24,28 +23,25 @@ is
       end if;
    end Allocate_Secondary_Stack;
 
-   procedure Log_Debug (S : System.Address)
+   procedure Log_Debug (S : String)
    is
    begin
       Debuglog.Client.Put_Line
-         ("Info: " & Componolit.Runtime.Strings.Convert_To_Ada
-                        (S, "Invalid string."));
+         ("Info: " & S);
    end Log_Debug;
 
-   procedure Log_Warning (S : System.Address)
+   procedure Log_Warning (S : String)
    is
    begin
       Debuglog.Client.Put_Line
-         ("Warning: " & Componolit.Runtime.Strings.Convert_To_Ada
-                           (S, "Invalid string."));
+         ("Warning: " & S);
    end Log_Warning;
 
-   procedure Log_Error (S : System.Address)
+   procedure Log_Error (S : String)
    is
    begin
       Debuglog.Client.Put_Line
-         ("Error: " & Componolit.Runtime.Strings.Convert_To_Ada
-                         (S, "Invalid string."));
+         ("Error: " & S);
    end Log_Error;
 
    procedure Unhandled_Terminate
@@ -66,10 +62,12 @@ is
    end Personality;
 
    procedure Raise_Ada_Exception (E : CRE.Exception_Type;
-                                  N : System.Address;
-                                  M : System.Address)
+                                  N : String;
+                                  M : String)
    is
+      pragma Unreferenced (E);
    begin
+      Log_Error (N & ": " & M);
       SK.CPU.Stop;
    end Raise_Ada_Exception;
 
