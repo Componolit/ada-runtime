@@ -27,6 +27,18 @@ class Gnat_Exception : public Genode::Exception {};
 
 extern "C" {
 
+#ifdef __arm__
+
+    _Unwind_Reason_Code __gnat_personality_v0(
+            _Unwind_State, //state
+            void *,        //header
+            void *)        //context
+    {
+        return _URC_FAILURE;
+    }
+
+#else
+
     _Unwind_Reason_Code __gnat_personality_v0(
             int version,
             unsigned long phase,
@@ -43,9 +55,11 @@ extern "C" {
                                     " class=", (unsigned)cls,
                                     " exception=", exc,
                                     " context=", context);
-            return _URC_FOREIGN_EXCEPTION_CAUGHT;
+            return _URC_FAILURE;
         }
     }
+
+#endif
 
     void componolit_runtime_log_debug(char *message)
     {
