@@ -3,7 +3,9 @@
 #define _GNAT_HELPERS_H_
 
 typedef enum
-{ } _Unwind_State;
+{
+    _US_VIRTUAL_UNWIND_FRAME = 0
+} _Unwind_State;
 
 typedef enum
 {
