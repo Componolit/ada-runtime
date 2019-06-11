@@ -55,7 +55,7 @@ extern "C" {
                                     " class=", (unsigned)cls,
                                     " exception=", exc,
                                     " context=", context);
-            return _URC_FAILURE;
+            return _URC_FOREIGN_EXCEPTION_CAUGHT;
         }
     }
 
