@@ -6,30 +6,10 @@ with Ada.Text_IO;
 package body Componolit.Runtime.Secondary_Stack.Tests is
 
    package SSE renames System.Storage_Elements;
-   Alloc_Success : Boolean := False;
-   Valid_Stack : SSE.Integer_Address := 16#ffffffff#;
 
    ---------------------------
    -- Test helper functions --
    ---------------------------
-
-   procedure C_Alloc (Size    :     SSE.Storage_Count;
-                      Address : out SSE.Integer_Address)
-     with
-       Export,
-       Convention => C,
-       External_Name => "componolit_runtime_allocate_secondary_stack";
-
-   procedure C_Alloc (Size    :     SSE.Storage_Count;
-                      Address : out SSE.Integer_Address)
-   is
-   begin
-      if Alloc_Success then
-         Address := Valid_Stack;
-      else
-         Address := Null_Address;
-      end if;
-   end C_Alloc;
 
    function Strlen (S : System.Address) return Integer
    is
@@ -101,35 +81,16 @@ package body Componolit.Runtime.Secondary_Stack.Tests is
    -- Test routines --
    -------------------
 
-   procedure Test_Check_Mark (T : in out Aunit.Test_Cases.Test_Case'Class)
-   is
-      pragma Unreferenced (T);
-      Test_Mark : Mark := (Base => Null_Address,
-                           Top  => 0);
-      T1_Mark : Mark;
-   begin
-      Alloc_Success := True;
-      Check_Mark (Test_Mark);
-      AUnit.Assertions.Assert (Test_Mark.Base /= Null_Address,
-                               "Stack not initialized");
-      AUnit.Assertions.Assert (Test_Mark.Top = 0,
-                               "Top not null after initialization");
-      T1_Mark := Test_Mark;
-      Check_Mark (Test_Mark);
-      AUnit.Assertions.Assert (Test_Mark = T1_Mark,
-                               "Initialized mark altered in check");
-   end Test_Check_Mark;
+   Test_Stack_Size : constant Positive := 128;
+   Test_Stack : String (1 .. Test_Stack_Size);
 
    procedure Test_S_Allocate (T : in out Aunit.Test_Cases.Test_Case'Class)
    is
       pragma Unreferenced (T);
-      M : Mark := Null_Mark;
+      M : Mark := (Base => SSE.To_Integer (Test_Stack'Address), Top => 0);
       Stack_Base : SSE.Integer_Address;
       Stack_Ptr  : SSE.Integer_Address;
    begin
-      Alloc_Success := True;
-
-      Check_Mark (M);
       AUnit.Assertions.Assert (M.Base /= Null_Address,
                                "Base allocation failed");
       AUnit.Assertions.Assert (M.Top = 0,
@@ -153,7 +114,7 @@ package body Componolit.Runtime.Secondary_Stack.Tests is
    procedure Test_S_Mark (T : in out Aunit.Test_Cases.Test_Case'Class)
    is
       pragma Unreferenced (T);
-      M : Mark := Null_Mark;
+      M : Mark := (Base => SSE.To_Integer (Test_Stack'Address), Top => 0);
       S_Addr : SSE.Integer_Address;
       S_Pos : SSE.Storage_Count;
       Stack_Ptr : SSE.Integer_Address;
@@ -167,7 +128,7 @@ package body Componolit.Runtime.Secondary_Stack.Tests is
    procedure Test_S_Release (T : in out Aunit.Test_Cases.Test_Case'Class)
    is
       pragma Unreferenced (T);
-      M : Mark := Null_Mark;
+      M : Mark := (Base => SSE.To_Integer (Test_Stack'Address), Top => 0);
       Stack_Ptr : SSE.Integer_Address;
       Mark_Id : SSE.Integer_Address;
       Mark_Pos : SSE.Storage_Count;
@@ -191,21 +152,6 @@ package body Componolit.Runtime.Secondary_Stack.Tests is
                                "Invalid stack ptr location");
    end Test_S_Release;
 
-   procedure Test_C_Alloc (T : in out Aunit.Test_Cases.Test_Case'Class)
-   is
-      pragma Unreferenced (T);
-      Address : SSE.Integer_Address;
-   begin
-      Alloc_Success := True;
-      C_Alloc (0, Address);
-      AUnit.Assertions.Assert (Address /= Null_Address,
-                               "Alloc test failed");
-      Alloc_Success := False;
-      C_Alloc (0, Address);
-      AUnit.Assertions.Assert (Address = Null_Address,
-                               "Null Address test failed");
-   end Test_C_Alloc;
-
    --------------------
    -- Register_Tests --
    --------------------
@@ -213,11 +159,9 @@ package body Componolit.Runtime.Secondary_Stack.Tests is
    procedure Register_Tests (T : in out Test_Case) is
       use AUnit.Test_Cases.Registration;
    begin
-      Register_Routine (T, Test_Check_Mark'Access, "Test Check_Mark");
       Register_Routine (T, Test_S_Allocate'Access, "Test S_Allocate");
       Register_Routine (T, Test_S_Mark'Access, "Test S_Mark");
       Register_Routine (T, Test_S_Release'Access, "Test S_Release");
-      Register_Routine (T, Test_C_Alloc'Access, "Test C_Alloc");
    end Register_Tests;
 
    ----------
@@ -229,4 +173,6 @@ package body Componolit.Runtime.Secondary_Stack.Tests is
       return Aunit.Format ("Componolit.Runtime.Secondary_Stack");
    end Name;
 
+begin
+   Secondary_Stack_Size := SSE.Storage_Count (Test_Stack_Size);
 end Componolit.Runtime.Secondary_Stack.Tests;

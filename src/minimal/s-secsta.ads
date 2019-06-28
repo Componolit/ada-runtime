@@ -15,6 +15,7 @@ package System.Secondary_Stack is
 
    package SP renames System.Parameters;
    package SSE renames System.Storage_Elements;
+   package CRS renames Componolit.Runtime.Secondary_Stack;
 
    type SS_Stack (Size : SP.Size_Type) is private;
 
@@ -37,9 +38,7 @@ private
    for Memory'Alignment use Standard'Maximum_Alignment;
 
    type SS_Stack (Size : SP.Size_Type) is record
-      Top : SS_Ptr;
-      Max : SS_Ptr;
-      Internal_Chunk : Memory (1 .. Size);
+      Stack_Space : Memory (1 .. Size);
    end record;
 
    type Mark_Id is record
@@ -47,7 +46,21 @@ private
       Sptr : SSE.Integer_Address;
    end record;
 
-   Stack_Mark : Componolit.Runtime.Secondary_Stack.Mark :=
-      Componolit.Runtime.Secondary_Stack.Null_Mark;
+   Stack_Size : SP.Size_Type with
+      Export,
+      Convention => Ada,
+      External_Name => "__gnat_default_ss_size";
+
+   Stack_Count : Natural with
+      Export,
+      Convention => Ada,
+      External_Name => "__gnat_binder_ss_count";
+
+   Stack_Pool_Address : System.Address with
+      Export,
+      Convention => Ada,
+      External_Name => "__gnat_default_ss_pool";
+
+   Stack_Mark : CRS.Mark;
 
 end System.Secondary_Stack;
