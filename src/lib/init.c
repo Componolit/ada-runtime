@@ -14,7 +14,3 @@ int   __gl_detect_blocking               = 0;
 int   __gl_default_stack_size            = -1;
 int   __gl_leap_seconds_support          = 0;
 int   __gl_exception_tracebacks          = 0;
-
-int   __gnat_binder_ss_count             = 0;
-int   __gnat_default_ss_pool             = 0;
-int   __gnat_default_ss_size             = 0;

@@ -13,26 +13,11 @@ package body Componolit.Runtime.Secondary_Stack with
    SPARK_Mode
 is
 
-   procedure Check_Mark (E : in out Mark)
-   is
-   begin
-      if E.Base = Null_Address then
-         E.Top := 0;
-         C_Alloc (Secondary_Stack_Size, E.Base);
-      end if;
-      if E.Base = Null_Address then
-         Componolit.Runtime.Platform.Terminate_Message
-            ("Secondary stack allocation failed");
-      end if;
-   end Check_Mark;
-
    procedure S_Allocate (Stack_Mark   : in out Mark;
                          Address      :    out SSE.Integer_Address;
                          Storage_Size :        SSE.Storage_Count)
    is
    begin
-      Check_Mark (Stack_Mark);
-
       if
          Stack_Mark.Top < Secondary_Stack_Size
          and then Storage_Size < Secondary_Stack_Size
@@ -48,12 +33,11 @@ is
       end if;
    end S_Allocate;
 
-   procedure S_Mark (Stack_Mark : in out Mark;
-                     Stack_Base :    out SSE.Integer_Address;
-                     Stack_Ptr  :    out SSE.Storage_Count)
+   procedure S_Mark (Stack_Mark :     Mark;
+                     Stack_Base : out SSE.Integer_Address;
+                     Stack_Ptr  : out SSE.Storage_Count)
    is
    begin
-      Check_Mark (Stack_Mark);
       Stack_Base := Stack_Mark.Base;
       Stack_Ptr  := Stack_Mark.Top;
    end S_Mark;
