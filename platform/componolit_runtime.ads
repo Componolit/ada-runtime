@@ -16,12 +16,6 @@ is
                                   N : String;
                                   M : String);
 
-   procedure Allocate_Secondary_Stack (Size :     Natural;
-                                       Addr : out System.Address) with
-      Export,
-      Convention => C,
-      External_Name => "componolit_runtime_allocate_secondary_stack";
-
    procedure Initialize with
       Export,
       Convention => C,

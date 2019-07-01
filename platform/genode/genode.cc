@@ -82,11 +82,6 @@ extern "C" {
         throw Gnat_Exception();
     }
 
-    void componolit_runtime_allocate_secondary_stack(unsigned size, void **address)
-    {
-        *address = Genode::Thread::myself()->alloc_secondary_stack("ada thread", size);
-    }
-
 #define exc_case(c, cpp) case c: throw Ada::Exception::cpp()
 
     void componolit_runtime_raise_ada_exception(exception_t exception, char *name, char *message)

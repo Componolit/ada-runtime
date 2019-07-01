@@ -7,23 +7,6 @@ package body Componolit_Runtime with
    SPARK_Mode
 is
 
-   type Byte is mod 2 ** 8 with
-      Size => 8;
-   type Stack is array (Natural range <>) of Byte;
-
-   Secondary_Stack : Stack (1 .. 1024 ** 2) := (others => 0);
-
-   procedure Allocate_Secondary_Stack (Size :     Natural;
-                                       Addr : out System.Address)
-   is
-   begin
-      if Size = 0 or else Size > Secondary_Stack'Last then
-         Addr := System.Null_Address;
-      else
-         Addr := Secondary_Stack (Secondary_Stack'First)'Address;
-      end if;
-   end Allocate_Secondary_Stack;
-
    procedure Log_Debug (S : String)
    is
    begin
