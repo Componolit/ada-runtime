@@ -31,6 +31,8 @@ is
                          Address      :    out SSE.Integer_Address;
                          Storage_Size :        SSE.Storage_Count) with
       Pre  => Secondary_Stack_Size > 0
+              and then Secondary_Stack_Size <=
+                 SSE.Storage_Count (Integer'Last)
               and then Stack_Mark.Base /= Null_Address
               and then Stack_Mark.Top < Secondary_Stack_Size
               and then Storage_Size < Secondary_Stack_Size
@@ -42,6 +44,7 @@ is
    procedure S_Mark (Stack_Mark :     Mark;
                      Stack_Base : out SSE.Integer_Address;
                      Stack_Ptr  : out SSE.Storage_Count) with
+      Pre  => Stack_Mark.Base /= Null_Address,
       Post => Stack_Base /= Null_Address
               and then Stack_Base = Stack_Mark.Base;
 
@@ -49,6 +52,8 @@ is
                         Stack_Base :        SSE.Integer_Address;
                         Stack_Ptr  :        SSE.Storage_Count) with
       Pre  => Secondary_Stack_Size > 0
+              and then Secondary_Stack_Size <=
+                 SSE.Storage_Count (Integer'Last)
               and then Stack_Base /= Null_Address
               and then Stack_Mark.Base = Stack_Base
               and then Stack_Ptr <= Stack_Mark.Top,
