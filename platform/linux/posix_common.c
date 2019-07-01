@@ -30,18 +30,6 @@ static void make_key()
     (void) pthread_key_create(&key, NULL);
 }
 
-void componolit_runtime_allocate_secondary_stack(unsigned size, void **address) {
-    void *ptr;
-
-    (void) pthread_once(&key_once, make_key);
-    if ((ptr = pthread_getspecific(key)) == NULL) {
-        ptr = malloc(size) + size;
-        (void) pthread_setspecific(key, ptr);
-    }
-
-    *address = pthread_getspecific(key);
-}
-
 void componolit_runtime_raise_ada_exception(exception_t exception, char *name, char *message) {
     printf("Exception raised (%d): %s: %s\n", (int)exception, name, message);
     exit(0);
