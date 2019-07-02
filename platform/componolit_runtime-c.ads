@@ -1,4 +1,5 @@
 
+with System;
 with Componolit.Runtime.Exceptions;
 
 package Componolit_Runtime.C
