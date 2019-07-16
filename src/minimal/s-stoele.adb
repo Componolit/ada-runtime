@@ -34,7 +34,9 @@ pragma Compiler_Unit_Warning;
 with Ada.Unchecked_Conversion;
 with Componolit.Runtime.Platform;
 
-package body System.Storage_Elements is
+package body System.Storage_Elements with
+   SPARK_Mode
+is
 
    pragma Suppress (All_Checks);
 
