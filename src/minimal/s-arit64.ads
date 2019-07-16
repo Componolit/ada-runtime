@@ -38,7 +38,10 @@ pragma Restrictions (No_Elaboration_Code);
 
 with Interfaces;
 
-package System.Arith_64 is
+package System.Arith_64 with
+   SPARK_Mode
+is
+
    pragma Pure;
 
    subtype Int64 is Interfaces.Integer_64;
