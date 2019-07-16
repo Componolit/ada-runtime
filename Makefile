@@ -79,7 +79,7 @@ $(UNIT_DIR)/test:
 test: runtime platform clean_test $(TEST_BINS) $(UNIT_DIR)/test
 
 proof:
-	$(VERBOSE)gnatprove --level=2 --checks-as-errors -j0 -Psrc/lib/generic_rts.gpr -XOBJECT_DIR=$(OBJ_DIR)
+	$(VERBOSE)gnatprove --level=2 --checks-as-errors -j0 -Psrc/componolit_runtime.gpr -XOBJECT_DIR=$(OBJ_DIR)
 
 clean_test:
 	$(VERBOSE)$(foreach DIR,$(TEST_DIRS) $(UNIT_DIR),cd $(DIR) && gprclean -q -Ptest -r; cd -;)

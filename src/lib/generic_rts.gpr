@@ -1,5 +1,0 @@
-project generic_rts is
-
-   for Source_Dirs use (".");
-
-end generic_rts;
