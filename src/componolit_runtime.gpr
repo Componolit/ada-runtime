@@ -1,0 +1,5 @@
+project Componolit_Runtime is
+
+   for Source_Dirs use ("lib", "minimal");
+
+end Componolit_Runtime;
