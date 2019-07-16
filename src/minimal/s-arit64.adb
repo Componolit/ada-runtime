@@ -35,14 +35,21 @@ with Ada.Unchecked_Conversion;
 
 with Componolit.Runtime.Platform;
 
-package body System.Arith_64 is
+package body System.Arith_64 with
+   SPARK_Mode
+is
 
    pragma Suppress (Overflow_Check);
    pragma Suppress (Range_Check);
 
    subtype Uns64 is Unsigned_64;
    function To_Uns is new Ada.Unchecked_Conversion (Int64, Uns64);
-   function To_Int is new Ada.Unchecked_Conversion (Uns64, Int64);
+   function To_Int_Unchecked is new Ada.Unchecked_Conversion (Uns64, Int64);
+
+   function To_Int (U : Uns64) return Int64 with
+      Inline,
+      Contract_Cases => (U <= Uns64 (Int64'Last) => To_Int'Result >= 0,
+                         U > Uns64 (Int64'Last) => To_Int'Result < 0);
 
    subtype Uns32 is Unsigned_32;
 
@@ -57,7 +64,10 @@ package body System.Arith_64 is
    function "*" (A, B : Uns32) return Uns64 is (Uns64 (A) * Uns64 (B));
    --  Length doubling multiplication
 
-   function "/" (A : Uns64; B : Uns32) return Uns64 is (A / Uns64 (B));
+   function "/" (A : Uns64; B : Uns32) return Uns64
+   is
+      (A / Uns64 (B)) with
+         Pre => B /= 0;
    --  Length doubling division
 
    function "&" (Hi, Lo : Uns32) return Uns64 is
@@ -69,7 +79,10 @@ package body System.Arith_64 is
    --  Convert absolute value of X to unsigned. Note that we can't just use
    --  the expression of the Else, because it overflows for X = Int64'First.
 
-   function "rem" (A : Uns64; B : Uns32) return Uns64 is (A rem Uns64 (B));
+   function "rem" (A : Uns64; B : Uns32) return Uns64
+   is
+      (A rem Uns64 (B)) with
+         Pre => B /= 0;
    --  Length doubling remainder
 
    function Le3 (X1, X2, X3 : Uns32; Y1, Y2, Y3 : Uns32) return Boolean;
@@ -84,13 +97,17 @@ package body System.Arith_64 is
    procedure Sub3 (X1, X2, X3 : in out Uns32; Y1, Y2, Y3 : Uns32);
    --  Computes X1&X2&X3 := X1&X2&X3 - Y1&Y1&Y3 with mod 2**96 wrap
 
-   function To_Neg_Int (A : Uns64) return Int64 with Inline;
+   function To_Neg_Int (A : Uns64) return Int64 with
+      Inline,
+      Pre => A <= Uns64 (Int64'Last);
    --  Convert to negative integer equivalent. If the input is in the range
    --  0 .. 2 ** 63, then the corresponding negative signed integer (obtained
    --  by negating the given value) is returned, otherwise constraint error
    --  is raised.
 
-   function To_Pos_Int (A : Uns64) return Int64 with Inline;
+   function To_Pos_Int (A : Uns64) return Int64 with
+      Inline,
+      Pre => A <= Uns64 (Int64'Last);
    --  Convert to positive integer equivalent. If the input is in the range
    --  0 .. 2 ** 63-1, then the corresponding non-negative signed integer is
    --  returned, otherwise constraint error is raised.
@@ -98,6 +115,13 @@ package body System.Arith_64 is
    procedure Raise_Error with Inline;
    pragma No_Return (Raise_Error);
    --  Raise constraint error with appropriate message
+
+   function To_Int (U : Uns64) return Int64 with
+      SPARK_Mode => Off
+   is
+   begin
+      return To_Int_Unchecked (U);
+   end To_Int;
 
    --------------------------
    -- Add_With_Ovflo_Check --
