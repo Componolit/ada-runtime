@@ -1,4 +1,5 @@
-package body System.Parameters
+package body System.Parameters with
+   SPARK_Mode => Off
 is
    --  We enforce a body in the spec, as the orignial version in the runtime
    --  has one. If the contrib directory is in our search path, we get an error

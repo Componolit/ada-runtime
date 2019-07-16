@@ -7,7 +7,11 @@
 --  additional permissions described in the GCC Runtime Library Exception,
 --  version 3.1, as published by the Free Software Foundation.
 
-package System.Parameters is
+package System.Parameters with
+   SPARK_Mode => Off
+   --  Attribute 'Address_Size is not allowed in SPARK
+is
+
    pragma Pure;
    pragma Elaborate_Body;
 

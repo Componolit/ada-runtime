@@ -10,7 +10,11 @@
 
 with Ada.Unchecked_Conversion;
 
-package System.Standard_Library is
+package System.Standard_Library with
+   SPARK_Mode => Off
+   --  Use of access types
+is
+
    pragma Preelaborate;
    pragma Elaborate_Body;
 
