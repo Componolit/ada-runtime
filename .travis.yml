@@ -9,6 +9,7 @@ env:
   - TEST_SUITE=gnat-8.3
   - TEST_SUITE=gnat-community-2019
   - TEST_SUITE=genode
+  - TEST_SUITE=muen
 
 git:
   submodules: false
@@ -20,3 +21,4 @@ script:
   - if [ "$TEST_SUITE" = "gnat-8.3" ]; then docker run -v $PWD:/app -w /app debian:buster /bin/sh -c "apt-get update && apt-get install -y --no-install-recommends gcc gnat gprbuild make libaunit18-dev && make && make test"; fi
   - if [ "$TEST_SUITE" = "gnat-community-2019" ]; then docker run -v $PWD:/app jklmnn/componolit-ci /bin/sh -c "/app/tests/posix.sh"; fi
   - if [ "$TEST_SUITE" = "genode" ]; then docker run -v $PWD:/app jklmnn/componolit-ci /bin/sh -c "/app/tests/genode.sh"; fi
+  - if [ "$TEST_SUITE" = "muen" ]; then docker run -v $PWD:/app jklmnn/componolit-ci /bin/sh -c "/app/tests/muen.sh"; fi
