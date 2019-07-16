@@ -9,7 +9,10 @@
 
 with Componolit.Runtime.Debug;
 
-package body System.Exception_Table is
+package body System.Exception_Table with
+   SPARK_Mode => Off
+   --  Exception_Data_Ptr is an access type
+is
 
    use System.Standard_Library;
 

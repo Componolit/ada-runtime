@@ -9,7 +9,12 @@
 
 with Ada.Exceptions;
 
-package System.Soft_Links is
+package System.Soft_Links with
+   SPARK_Mode => Off
+   --  Use of unallowed access types
+   --  pragma Favor_Top_Level is not yet supported
+is
+
    pragma Preelaborate;
 
    subtype EOA is Ada.Exceptions.Exception_Occurrence_Access;

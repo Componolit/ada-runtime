@@ -9,7 +9,9 @@
 
 with Componolit.Runtime.Debug;
 
-package body System.Soft_Links is
+package body System.Soft_Links with
+   SPARK_Mode => Off
+is
 
    function Get_Current_Excep_NT return EOA is
    begin
