@@ -15,7 +15,10 @@
 
 with System.Parameters;
 
-package Interfaces.C is
+package Interfaces.C with
+   SPARK_Mode
+is
+
    pragma Pure;
    pragma Elaborate_Body;
 
@@ -64,7 +67,8 @@ package Interfaces.C is
 
    type C_float     is new Float;
    type double      is new Standard.Long_Float;
-   type long_double is new Standard.Long_Long_Float;
+   --  type long_double is new Standard.Long_Long_Float;
+   --  extended precision floating point type is not yet supported
 
    ----------------------------
    -- Characters and Strings --
