@@ -9,7 +9,9 @@
 
 with System.Standard_Library;
 
-package System.Exception_Table is
+package System.Exception_Table with
+   SPARK_Mode => Off
+is
 
    package SSL renames System.Standard_Library;
 
