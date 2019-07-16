@@ -39,7 +39,10 @@
 
 pragma Compiler_Unit_Warning;
 
-package System.Storage_Elements is
+package System.Storage_Elements with
+   SPARK_Mode
+is
+
    pragma Pure;
    --  Note that we take advantage of the implementation permission to make
    --  this unit Pure instead of Preelaborable; see RM 13.7.1(15). In Ada 2005,
@@ -64,8 +67,10 @@ package System.Storage_Elements is
    type Storage_Element is mod 2 ** Storage_Unit;
    for Storage_Element'Size use Storage_Unit;
 
+   pragma Warnings (Off, "pragma ""Universal_Aliasing"" ignored");
    pragma Universal_Aliasing (Storage_Element);
    --  This type is used by the expander to implement aggregate copy
+   pragma Warnings (On, "pragma ""Universal_Aliasing"" ignored");
 
    type Storage_Array is
      array (Storage_Offset range <>) of aliased Storage_Element;
@@ -95,7 +100,8 @@ package System.Storage_Elements is
 
    function "mod"
      (Left  : Address;
-      Right : Storage_Offset) return  Storage_Offset;
+      Right : Storage_Offset) return  Storage_Offset with
+      Pre => Right > 0;
    pragma Convention (Intrinsic, "mod");
    pragma Inline_Always ("mod");
    pragma Pure_Function ("mod");
