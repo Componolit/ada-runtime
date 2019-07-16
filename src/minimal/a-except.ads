@@ -12,7 +12,11 @@ pragma Compiler_Unit_Warning;
 with System;
 with System.Standard_Library;
 
-package Ada.Exceptions is
+package Ada.Exceptions with
+   SPARK_Mode => Off
+   --  Ada.Exceptions needs access types
+is
+
    pragma Preelaborate;
    --  We make this preelaborable. If we did not do this, then run time units
    --  used by the compiler (e.g. s-soflin.ads) would run into trouble.
