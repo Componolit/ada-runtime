@@ -16,7 +16,9 @@ with Componolit.Runtime.Strings;
 with Componolit.Runtime.Exceptions;
 with System.Standard_Library; use System.Standard_Library;
 
-package body Ada.Exceptions is
+package body Ada.Exceptions with
+   SPARK_Mode => Off
+is
 
    ----------------------------
    -- Raise_Exception_Always --
