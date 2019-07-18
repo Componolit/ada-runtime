@@ -198,7 +198,9 @@ is
    procedure Double_Divide
      (X, Y, Z : Int64;
       Q, R    : out Int64;
-      Round   : Boolean)
+      Round   : Boolean) with
+      SPARK_Mode => Off
+      --  TODO: https://github.com/Componolit/ada-runtime/issues/50
    is
       Xu  : constant Uns64 := abs X;
       Yu  : constant Uns64 := abs Y;
@@ -305,7 +307,10 @@ is
    -- Multiply_With_Ovflo_Check --
    -------------------------------
 
-   function Multiply_With_Ovflo_Check (X, Y : Int64) return Int64 is
+   function Multiply_With_Ovflo_Check (X, Y : Int64) return Int64 with
+      SPARK_Mode => Off
+      --  TODO: https://github.com/Componolit/ada-runtime/issues/50
+   is
       Xu  : constant Uns64 := abs X;
       Xhi : constant Uns32 := Hi (Xu);
       Xlo : constant Uns32 := Lo (Xu);
@@ -376,7 +381,9 @@ is
    procedure Scaled_Divide
      (X, Y, Z : Int64;
       Q, R    : out Int64;
-      Round   : Boolean)
+      Round   : Boolean) with
+      SPARK_Mode => Off
+      --  TODO: https://github.com/Componolit/ada-runtime/issues/50
    is
       Xu  : constant Uns64 := abs X;
       Xhi : constant Uns32 := Hi (Xu);
