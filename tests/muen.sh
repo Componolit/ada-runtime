@@ -3,7 +3,7 @@
 cd /muen
 git reset --hard
 git fetch --all
-git checkout d78c4ac4cdbf66dc21eda82b315414eba783adb6
+git checkout 82250b20144be95bc0af4ba266035c24042acccf
 rm -r components/spark_runtime/src
 ln -sf /app components/spark_runtime/src
 make -j$(nproc)
