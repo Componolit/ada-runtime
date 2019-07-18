@@ -31,8 +31,8 @@
 
 with Interfaces; use Interfaces;
 
-with Ada.Unchecked_Conversion;
-
+with Componolit.Runtime.Conversions;
+use Componolit.Runtime.Conversions;
 with Componolit.Runtime.Platform;
 
 package body System.Arith_64 with
@@ -43,46 +43,6 @@ is
    pragma Suppress (Range_Check);
 
    subtype Uns64 is Unsigned_64;
-   function To_Uns_Unchecked is new Ada.Unchecked_Conversion (Int64, Uns64);
-   function To_Int_Unchecked is new Ada.Unchecked_Conversion (Uns64, Int64);
-
-   function To_Int (U : Uns64) return Int64 with
-      Inline,
-      Contract_Cases => (U <= Uns64 (Int64'Last) =>
-                               To_Int'Result = Int64 (U),
-                         U > Uns64 (Int64'Last) =>
-                               To_Int'Result = -Int64 (Uns64'Last - U) - 1);
-
-   function To_Uns (I : Int64) return Uns64 with
-      Inline,
-      Contract_Cases => (I >= 0 => To_Uns'Result = Uns64 (I),
-                         I < 0 => To_Uns'Result =
-                            Uns64'Last - (abs (I) - Uns64'(1)));
-
-   pragma Warnings (Off, "procedure ""Lemma_Identity"" is not referenced");
-   --  This lemma is only used to prove its properties.
-   procedure Lemma_Identity (I : Int64; U : Uns64) with
-      Post => I = To_Int (To_Uns (I))
-              and U = To_Uns (To_Int (U));
-   pragma Warnings (On, "procedure ""Lemma_Identity"" is not referenced");
-
-   procedure Lemma_Uns_Associativity_Add (X, Y : Int64) with
-      Ghost,
-      Pre      => (if X < 0 and Y <= 0 then Int64'First - X < Y)
-                  and (if X >= 0 and Y >= 0 then Int64'Last - X >= Y),
-      Post     => X + Y = To_Int (To_Uns (X) + To_Uns (Y)),
-      Annotate => (GNATprove, False_Positive, "postcondition",
-                   "addition in 2 complement is associative");
-
-   procedure Lemma_Uns_Associativity_Sub (X, Y : Int64) with
-      Ghost,
-      Pre      => (if X >= 0 and Y <= 0 then Y > Int64'First
-                      and then Int64'Last - X >= abs (Y))
-                   and (if X < 0 and Y > 0 then Y < Int64'First - X),
-      Post     => X - Y = To_Int (To_Uns (X) - To_Uns (Y)),
-      Annotate => (GNATprove, False_Positive, "postcondition",
-                   "subtraction in 2 complement is associative");
-
    subtype Uns32 is Unsigned_32;
 
    -----------------------
@@ -147,26 +107,6 @@ is
    procedure Raise_Error with Inline;
    pragma No_Return (Raise_Error);
    --  Raise constraint error with appropriate message
-
-   function To_Int (U : Uns64) return Int64 with
-      SPARK_Mode => Off
-   is
-   begin
-      return To_Int_Unchecked (U);
-   end To_Int;
-
-   function To_Uns (I : Int64) return Uns64 with
-      SPARK_Mode => Off
-   is
-   begin
-      return To_Uns_Unchecked (I);
-   end To_Uns;
-
-   procedure Lemma_Identity (I : Int64; U : Uns64) is null;
-
-   procedure Lemma_Uns_Associativity_Add (X, Y : Int64) is null;
-
-   procedure Lemma_Uns_Associativity_Sub (X, Y : Int64) is null;
 
    --------------------------
    -- Add_With_Ovflo_Check --
