@@ -54,7 +54,11 @@ is
    --  Raises Constraint_Error if sum of operands overflows 64 bits,
    --  otherwise returns the 64-bit signed integer sum.
 
-   function Subtract_With_Ovflo_Check (X, Y : Int64) return Int64;
+   function Subtract_With_Ovflo_Check (X, Y : Int64) return Int64 with
+      Pre  => (if X >= 0 and Y <= 0 then Y > Int64'First
+                  and then Int64'Last - X >= abs (Y))
+              and (if X < 0 and Y > 0 then Y < Int64'First - X),
+      Post => Subtract_With_Ovflo_Check'Result = X - Y;
    --  Raises Constraint_Error if difference of operands overflows 64
    --  bits, otherwise returns the 64-bit signed integer difference.
 
