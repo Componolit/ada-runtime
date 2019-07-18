@@ -17,6 +17,7 @@ SRC = a-except.adb \
       componolit-runtime-debug.adb \
       componolit-runtime-platform.adb \
       componolit-runtime-exceptions.ads \
+      componolit-runtime-conversions.adb \
       s-exctab.adb \
       s-init.adb \
       s-parame.adb \
