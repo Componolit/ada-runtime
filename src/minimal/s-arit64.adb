@@ -66,13 +66,22 @@ is
               and U = To_Uns (To_Int (U));
    pragma Warnings (On, "procedure ""Lemma_Identity"" is not referenced");
 
-   procedure Lemma_Uns_Associativity (X, Y : Int64) with
+   procedure Lemma_Uns_Associativity_Add (X, Y : Int64) with
       Ghost,
       Pre      => (if X < 0 and Y <= 0 then Int64'First - X < Y)
                   and (if X >= 0 and Y >= 0 then Int64'Last - X >= Y),
       Post     => X + Y = To_Int (To_Uns (X) + To_Uns (Y)),
       Annotate => (GNATprove, False_Positive, "postcondition",
                    "addition in 2 complement is associative");
+
+   procedure Lemma_Uns_Associativity_Sub (X, Y : Int64) with
+      Ghost,
+      Pre      => (if X >= 0 and Y <= 0 then Y > Int64'First
+                      and then Int64'Last - X >= abs (Y))
+                   and (if X < 0 and Y > 0 then Y < Int64'First - X),
+      Post     => X - Y = To_Int (To_Uns (X) - To_Uns (Y)),
+      Annotate => (GNATprove, False_Positive, "postcondition",
+                   "subtraction in 2 complement is associative");
 
    subtype Uns32 is Unsigned_32;
 
@@ -155,7 +164,9 @@ is
 
    procedure Lemma_Identity (I : Int64; U : Uns64) is null;
 
-   procedure Lemma_Uns_Associativity (X, Y : Int64) is null;
+   procedure Lemma_Uns_Associativity_Add (X, Y : Int64) is null;
+
+   procedure Lemma_Uns_Associativity_Sub (X, Y : Int64) is null;
 
    --------------------------
    -- Add_With_Ovflo_Check --
@@ -165,7 +176,7 @@ is
       R : constant Int64 := To_Int (To_Uns (X) + To_Uns (Y));
 
    begin
-      Lemma_Uns_Associativity (X, Y);
+      Lemma_Uns_Associativity_Add (X, Y);
       if X >= 0 then
          if Y < 0 or else R >= 0 then
             return R;
@@ -620,6 +631,7 @@ is
       R : constant Int64 := To_Int (To_Uns (X) - To_Uns (Y));
 
    begin
+      Lemma_Uns_Associativity_Sub (X, Y);
       if X >= 0 then
          if Y > 0 or else R >= 0 then
             return R;
