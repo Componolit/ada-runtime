@@ -45,8 +45,12 @@ is
    pragma Pure;
 
    subtype Int64 is Interfaces.Integer_64;
+   use type Interfaces.Integer_64;
 
-   function Add_With_Ovflo_Check (X, Y : Int64) return Int64;
+   function Add_With_Ovflo_Check (X, Y : Int64) return Int64 with
+      Pre  => (if X < 0 and Y <= 0 then Int64'First - X < Y)
+              and (if X >= 0 and Y >= 0 then Int64'Last - X >= Y),
+      Post => Add_With_Ovflo_Check'Result = X + Y;
    --  Raises Constraint_Error if sum of operands overflows 64 bits,
    --  otherwise returns the 64-bit signed integer sum.
 
