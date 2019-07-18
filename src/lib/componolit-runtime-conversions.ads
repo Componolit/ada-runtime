@@ -32,15 +32,13 @@ is
                          I < 0 => To_Uns'Result =
                             Uns64'Last - (abs (I) - Uns64'(1)));
 
-   --  pragma Warnings (Off, "procedure ""Lemma_Identity"" is not referenced");
-   --  This lemma is only used to prove its properties.
    procedure Lemma_Identity (I : Int64; U : Uns64) with
+      --  Ghost, --  This should be Ghost but the FSF GNAT crashes here
       Post => I = To_Int (To_Uns (I))
               and U = To_Uns (To_Int (U));
-   --  pragma Warnings (On, "procedure ""Lemma_Identity"" is not referenced");
 
    procedure Lemma_Uns_Associativity_Add (X, Y : Int64) with
-      Ghost,
+      --  Ghost, --  This should be Ghost but the FSF GNAT crashes here
       Pre      => (if X < 0 and Y <= 0 then Int64'First - X < Y)
                   and (if X >= 0 and Y >= 0 then Int64'Last - X >= Y),
       Post     => X + Y = To_Int (To_Uns (X) + To_Uns (Y)),
@@ -48,7 +46,7 @@ is
                    "addition in 2 complement is associative");
 
    procedure Lemma_Uns_Associativity_Sub (X, Y : Int64) with
-      Ghost,
+      --  Ghost, --  This should be Ghost but the FSF GNAT crashes here
       Pre      => (if X >= 0 and Y <= 0 then Y > Int64'First
                       and then Int64'Last - X >= abs (Y))
                    and (if X < 0 and Y > 0 then Y < Int64'First - X),
