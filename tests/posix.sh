@@ -3,4 +3,4 @@
 set -e
 cd /app
 make test
-make proof
+make REPORT=all proof
