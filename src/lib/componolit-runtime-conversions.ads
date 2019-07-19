@@ -41,9 +41,7 @@ is
       --  Ghost, --  This should be Ghost but the FSF GNAT crashes here
       Pre      => (if X < 0 and Y <= 0 then Int64'First - X < Y)
                   and (if X >= 0 and Y >= 0 then Int64'Last - X >= Y),
-      Post     => X + Y = To_Int (To_Uns (X) + To_Uns (Y)),
-      Annotate => (GNATprove, False_Positive, "postcondition",
-                   "addition in 2 complement is associative");
+      Post     => X + Y = To_Int (To_Uns (X) + To_Uns (Y));
 
    procedure Lemma_Uns_Associativity_Sub (X, Y : Int64) with
       --  Ghost, --  This should be Ghost but the FSF GNAT crashes here
