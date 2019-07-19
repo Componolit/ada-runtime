@@ -78,8 +78,10 @@ $(UNIT_DIR)/test:
 
 test: runtime platform clean_test $(TEST_BINS) $(UNIT_DIR)/test
 
+REPORT ?= fail
+
 proof:
-	$(VERBOSE)gnatprove --level=3 --checks-as-errors -j0 -Psrc/componolit_runtime.gpr -XOBJECT_DIR=$(OBJ_DIR)
+	$(VERBOSE)gnatprove --level=3 --checks-as-errors -j0 -Psrc/componolit_runtime.gpr -XOBJECT_DIR=$(OBJ_DIR) --info --report=$(REPORT)
 
 clean_test:
 	$(VERBOSE)$(foreach DIR,$(TEST_DIRS) $(UNIT_DIR),cd $(DIR) && gprclean -q -Ptest -r; cd -;)
