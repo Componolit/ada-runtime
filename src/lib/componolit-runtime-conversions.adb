@@ -98,6 +98,52 @@ is
       end if;
    end Lemma_Uns_Associativity_Add;
 
-   procedure Lemma_Uns_Associativity_Sub (X, Y : Int64) is null;
+   procedure Lemma_Uns_Associativity_Sub (X, Y : Int64)
+   is
+   begin
+      if X < 0 and Y < 0 then
+         if X = Int64'First and Y = Int64'First then
+            pragma Assert (X - Y = To_Int (To_Uns (X) - To_Uns (Y)));
+         elsif X = Int64'First then
+            pragma Assert (X - Y = X + (-Y));
+            pragma Assert (X - Y = To_Int (To_Uns (X) + To_Uns (-Y)));
+            pragma Assert (-To_Uns (Y) = To_Uns (-Y));
+            pragma Assert (X - Y = To_Int (To_Uns (X) - To_Uns (Y)));
+         elsif Y = Int64'First then
+            pragma Assert (X - Y = To_Int (To_Uns (X) - To_Uns (Y)));
+         else
+            if X >= Y then
+               pragma Assert (X - Y = To_Int (To_Uns (X) - To_Uns (Y)));
+            else --  X < Y
+               pragma Assert (X - Y = X + (-Y));
+               pragma Assert (X - Y = To_Int (To_Uns (X) + (-To_Uns (Y))));
+               pragma Assert (X - Y = To_Int (To_Uns (X) + To_Uns (-Y)));
+               pragma Assert (X - Y = To_Int (To_Uns (X) - To_Uns (Y)));
+            end if;
+         end if;
+      elsif X >= 0 and Y >= 0 then
+         if X >= Y then
+            pragma Assert (X - Y = To_Int (To_Uns (X) - To_Uns (Y)));
+         else --  X < Y
+            pragma Assert (X - Y = -Y - (-X));
+            pragma Assert (X - Y = -Y + X);
+            pragma Assert (X - Y = To_Int (To_Uns (-Y) + To_Uns (X)));
+            pragma Assert (X - Y = To_Int (To_Uns (X) - To_Uns (Y)));
+         end if;
+      elsif X >= 0 and Y < 0 then
+         if Y = Int64'First then
+            pragma Assert (X - Y = To_Int (To_Uns (X) - To_Uns (Y)));
+         else
+            pragma Assert (X - Y = X + (-Y));
+            pragma Assert (X - Y = To_Int (To_Uns (X) + To_Uns (-Y)));
+            pragma Assert (X - Y = To_Int (To_Uns (X) + (-To_Uns (Y))));
+            pragma Assert (X - Y = To_Int (To_Uns (X) - To_Uns (Y)));
+         end if;
+      elsif X < 0 and Y >= 0 then
+         pragma Assert (X - Y = To_Int (To_Uns (X) - To_Uns (Y)));
+      else
+         pragma Assert (X - Y = To_Int (To_Uns (X) - To_Uns (Y)));
+      end if;
+   end Lemma_Uns_Associativity_Sub;
 
 end Componolit.Runtime.Conversions;

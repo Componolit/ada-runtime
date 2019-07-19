@@ -48,8 +48,6 @@ is
       Pre      => (if X >= 0 and Y <= 0 then Y > Int64'First
                       and then Int64'Last - X >= abs (Y))
                    and (if X < 0 and Y > 0 then Y < Int64'First - X),
-      Post     => X - Y = To_Int (To_Uns (X) - To_Uns (Y)),
-      Annotate => (GNATprove, False_Positive, "postcondition",
-                   "subtraction in 2 complement is associative");
+      Post     => X - Y = To_Int (To_Uns (X) - To_Uns (Y));
 
 end Componolit.Runtime.Conversions;
