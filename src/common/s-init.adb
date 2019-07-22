@@ -9,7 +9,8 @@
 
 package body System.Init is
 
-   procedure Initialize is
+   procedure Initialize (Addr : System.Address) is
+      pragma Unreferenced (Addr);
    begin
       null;
    end Initialize;
@@ -19,7 +20,8 @@ package body System.Init is
       null;
    end Finalize;
 
-   procedure Runtime_Initialize is
+   procedure Runtime_Initialize (Handler : Integer) is
+      pragma Unreferenced (Handler);
    begin
       C_Runtime_Initialize;
    end Runtime_Initialize;
