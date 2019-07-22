@@ -1,142 +1,104 @@
-| Symbol                             | C signature                                            | Ada signature                                                                                       |
-|------------------------------------|--------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
-| `log_debug`                        | `void log_debug(char *)`                               | `procedure Log_Debug (Msg : String)`                                                                |
-| `log_warning`                      | `void log_warning(char *)`                             | `procedure Log_Warning (Msg : String)`                                                              |
-| `log_error`                        | `void log_error(char *)`                               | `procedure Log_Error (Msg : String)`                                                                |
-| `__gnat_malloc`                    | `void *__gnat_malloc(size_t)`                          | `function Malloc (Size : Natural) return System.Address`                                            |
-| `__gnat_free`                      | `void __gnat_free(void *)`                             | `procedure Free (Ptr : System.Address)`                                                             |
-| `__gnat_unhandled_terminate`       | `void __gnat_unhandled_terminate()`                    | `procedure Unhandled_Terminate`                                                                     |
-| `__gnat_personality_v0`            | `int __gnat_personality_v0(int, void *, unsigned, void *, void *)` | n/a |
-| `allocate_secondary_stack`         | `void allocate_secondary_stack(size_t, void **)`       | `procedure Allocate_Secondary_Stack (Size : Natural; Address : out System.Address)` |
-| `raise_ada_exception`              | `void raise_ada_exception(exception_t, char *, char*)` | `procedure Raise_Ada_Exception (T : Exception_Type; Name : String; Msg : String)`                   |
-| `__ada_runtime_exit_status`        | `int __ada_runtime_exit_status`                        | n/a                                                                                                 |
+# Componolit runtime platform interface
+
+The Componolit runtime platform interface defines a linker interface the platform must provide.
+That interface can either be implemented in C using [`componolit_runtime.h`](../platform/componolit_runtime.h) or in Ada using [`componolit_runtime.ads`](../platform/componolit_runtime.ads).
+The table below shows the symbol names and language signatures to implement.
+Note that the Ada signatures are not ABI compatible to the C signatures.
+This has been done to simplify the support of native Ada platforms.
+The package [`Componolit_Runtime.C`](../platform/componolit_runtime-c.ads) does the required conversions.
+
+| Symbol                                   | C signature                                                               | Ada signature                                                                     |
+|------------------------------------------|---------------------------------------------------------------------------|-----------------------------------------------------------------------------------|
+| `componolit_runtime_log_debug`           | `void componolit_runtime_log_debug(char *)`                               | `procedure Log_Debug (Msg : String)`                                              |
+| `componolit_runtime_log_warning`         | `void componolit_runtime_log_warning(char *)`                             | `procedure Log_Warning (Msg : String)`                                            |
+| `componolit_runtime_log_error`           | `void componolit_runtime_log_error(char *)`                               | `procedure Log_Error (Msg : String)`                                              |
+| `componolit_runtime_raise_ada_exception` | `void componolit_runtime_raise_ada_exception(exception_t, char *, char*)` | `procedure Raise_Ada_Exception (T : Exception_Type; Name : String; Msg : String)` |
+| `componolit_runtime_initialize`          | `void componolit_runtime_initialize(void)`                                | `procedure Initialize`                                                            |
+| `componolit_runtime_finalize`            | `void componolit_runtime_finalize(void)`                                  | `procedure Finalize`                                                              |
 
 
-# Symbol definitions
+## Symbol definitions
 
-## `log_debug`
+### `componolit_runtime_log_debug`
 
-### Signature
+#### Signature
 
- - C: `void log_debug(char *)`
+ - C: `void componolit_runtime_log_debug(char *)`
  - Ada: `procedure Log_Debug(Msg : String)`
 
  * Msg: Log message
 
-### Semantics
+#### Semantics
 
 Prints log message with debug priority.
 
-## `log_warning`
+### `componolit_runtime_log_warning`
 
-### Signature
+#### Signature
 
- - C: `void log_warning(char *)`
+ - C: `void componolit_runtime_log_warning(char *)`
  - Ada: `procedure Log_Warning(Msg : String)`
 
  * Msg: Log message
 
-### Semantics
+#### Semantics
 
 Prints log message with warning priority.
 
-## `log_error`
+### `componolit_runtime_log_error`
 
-### Signature
+#### Signature
 
- - C: `void log_error(char *)`
+ - C: `void componolit_runtime_log_error(char *)`
  - Ada: `procedure Log_Error(Msg : String)`
 
  * Msg: Log message
 
-### Semantics
+#### Semantics
 
 Prints log message with error priority.
 
-## `__gnat_malloc`
+### `componolit_runtime_raise_ada_exception`
 
-### Signature
- 
- - C: `void *__gnat_malloc(size_t)`
- - Ada: `function Malloc(Size : Natural) return System.Address`
+#### Signature
 
- * Size: Memory size that shall be allocated
-
-### Semantics
-
-Allocates memory on the heap. When Size is 0 a null pointer should be returned.
-
-## `__gnat_free`
-
-### Signature
-
- - C: `void __gnat_free(void *)`
- - Ada: `procedure Free(Ptr : System.Address)`
-
- * Ptr: Address of memory range that should be freed
-
-### Semantics
-
-Frees (only) memory allocated by `__gnat_malloc`. Should do nothing if Ptr is a null pointer.
-
-## `__gnat_unhandled_terminate`
-
-### Signature
-
- - C: `void __gnat_unhandled_terminate()`
- - Ada: `procedure Unhandled_Terminate`
-
-### Semantics
-
-Called if an exception has been raised and no exception handler is able to catch it. Should terminate the program.
-
-## `__gnat_personality_v0`
-
-### Signature
-
- - C: `int __gnat_personality_v0(int, void *, unsigned, void *, void *)`
- 
-### Semantics
-
-Called if an exception is thrown, used to unwind the stack frame. Since exceptions are not supported in this runtime other than raising this function should either pass the exception to the platform or exit the program.
-The return value depicts the exception unwind reason. For a simple implementation a foreign exception is assumed that is handled by the platform which can be indicated by returning `1`.
-
-## `allocate_secondary_stack`
-
-### Signature
-
- - C: `void allocate_secondary_stack(size_t, void **)`
- - Ada: `procedure Allocate_Secondary_Stack(Size : Natural; Address : out System.Address)`
-
- * Size: size of the stack frame to be allocated
- * Address: base address of the stack
-
-### Semantics
-
-Allocates a secondary stack frame. As the stack grows downwards the address must be the upper address of the stack frame. In C the function gets a pointer to an uninitialized void pointer that needs to be initialized with the stack base pointer.
-
-## `raise_ada_exception`
-
-### Signature
-
- - C: `void raise_ada_exception(exception_t, char *, char*)`
+ - C: `void componolit_runtime_raise_ada_exception(exception_t, char *, char*)`
  - Ada: `procedure Raise_Ada_Exception(T : Exception_Type; Name : String; Msg : String)`
 
  * T: Type of the exception (enum)
  * Name: Name of the raised exception (or short description)
  * Msg: Exception message
 
-### Semantics
+#### Semantics
 
 Called when any exception is raised. The Name is usually the name of the Ada exception or a short description of it. In this runtime Msg consists of the file name and line number of the exception occurrence.
 
-## `__ada_runtime_exit_status`
+### `componolit_runtime_initialize`
 
-### Signature
+#### Signature
 
- - C: `int __ada_runtime_exit_status`
+ - C: `void componolit_runtime_initialize(void)`
+ - Ada: `procedure Initialize`
 
-### Semantics
+#### Semantics
 
-Contains the applications exit status as set by
-`Ada.Command_Line.Set_Exit_Status`.
+Called in `adainit` when the runtime gets initialized by the binder.
+Implementation can be empty.
+
+### `componolit_runtime_finalize`
+
+#### Signature
+
+ - C: `void componolit_runtime_finalize(void)`
+ - Ada: `procedure Finalize`
+
+#### Semantics
+
+Called in `adafinal` when the runtime is finalized by the binder.
+Implementation can be empty.
+
+## Other symbols
+
+When porting the runtime to a platform ther can be other missing symbols, often starting with `__gnat_`.
+These are functions inserted by the compiler for memory management and exception handling.
+As they are highly platform dependent and are not required by the runtime code to work they are not listed here.
