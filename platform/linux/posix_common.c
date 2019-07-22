@@ -22,14 +22,6 @@ void __gnat_unhandled_terminate() {
     exit(1);
 }
 
-static pthread_key_t key;
-static pthread_once_t key_once = PTHREAD_ONCE_INIT;
-
-static void make_key()
-{
-    (void) pthread_key_create(&key, NULL);
-}
-
 void componolit_runtime_raise_ada_exception(exception_t exception, char *name, char *message) {
     printf("Exception raised (%d): %s: %s\n", (int)exception, name, message);
     exit(0);

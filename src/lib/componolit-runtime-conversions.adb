@@ -10,7 +10,7 @@
 with Ada.Unchecked_Conversion;
 
 package body Componolit.Runtime.Conversions with
-SPARK_Mode
+   SPARK_Mode
 is
 
    function To_Uns_Unchecked is new Ada.Unchecked_Conversion (Int64, Uns64);
