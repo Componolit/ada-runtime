@@ -10,7 +10,7 @@
 package System.Init is
    pragma Preelaborate;
 
-   procedure Initialize with
+   procedure Initialize (Addr : System.Address) with
       Export,
       Convention => C,
       External_Name => "__gnat_initialize";
@@ -20,7 +20,7 @@ package System.Init is
       Convention => C,
       External_Name => "__gnat_finalize";
 
-   procedure Runtime_Initialize with
+   procedure Runtime_Initialize (Handler : Integer) with
       Export,
       Convention => C,
       External_Name => "__gnat_runtime_initialize";
