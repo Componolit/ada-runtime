@@ -4,6 +4,10 @@
 *.stderr
 *.stdout
 b__*.ad[bs]
+*.a
+*.d
+*.lexch
+*.deps
 obj/
 tests/system
 tests/unit
