@@ -22,13 +22,7 @@ is
                           Storage_Size :     SSE.Storage_Count)
    is
    begin
-      if
-         Stack.Top < SSE.Storage_Count (Stack_Size)
-         and then Storage_Size < SSE.Storage_Count (Stack_Size)
-         and then Storage_Size + Stack.Top < SSE.Storage_Count (Stack_Size)
-         and then SSE.Integer_Address (Storage_Size + Stack.Top)
-                  < Stack.Base
-      then
+      if Sufficient_Stack_Space (Storage_Size) then
          Stack.Top := Stack.Top + Storage_Size;
          Address   := Stack.Base - SSE.Integer_Address (Stack.Top);
       else

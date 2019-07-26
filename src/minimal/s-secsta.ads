@@ -44,7 +44,6 @@ is
       Depends => (Consistent_Mark_Id'Result => (M, Stack_State));
 
    function Sufficient_Stack_Space (S : SSE.Storage_Count) return Boolean with
-      Ghost,
       Global  => (Input => (Stack_State, Binder_State)),
       Depends => (Sufficient_Stack_Space'Result =>
                      (S, Stack_State, Binder_State));
