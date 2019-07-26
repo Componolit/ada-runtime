@@ -37,6 +37,7 @@ is
    procedure Unhandled_Terminate
    is
    begin
+      Debuglog.Client.Put_Line ("Unhandled_Terminate called, stopping.");
       SK.CPU.Stop;
    end Unhandled_Terminate;
 

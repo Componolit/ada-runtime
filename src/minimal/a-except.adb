@@ -29,7 +29,7 @@ is
       pragma Unreferenced (E);
    begin
       Componolit.Runtime.Debug.Log_Warning
-         ("Raise_Exception_Alwaysis not implemented");
+         ("Raise_Exception_Always is not implemented");
       Componolit.Runtime.Platform.Raise_Ada_Exception
          (Componolit.Runtime.Exceptions.Undefined_Exception,
           "Undefined_Exception",
@@ -46,14 +46,14 @@ is
       pragma Unreferenced (X);
    begin
       Componolit.Runtime.Debug.Log_Warning
-         ("Reraise_Occurrence_No_Deferis not implemented");
+         ("Reraise_Occurrence_No_Defer is not implemented");
    end Reraise_Occurrence_No_Defer;
 
    procedure Save_Occurrence (Target : out Exception_Occurrence;
                               Source : Exception_Occurrence) is
    begin
       Componolit.Runtime.Debug.Log_Warning
-         ("Save_Occurrenceis not implemented");
+         ("Save_Occurrence is not implemented");
       Target := Source;
    end Save_Occurrence;
 
