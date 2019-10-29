@@ -39,7 +39,10 @@ dummy := $(shell mkdir -p $(OBJ_DIR)/adainclude $(OBJ_DIR)/adalib $(OBJ_DIR)/lib
 
 runtime: $(OBJ_DIR)/adalib/libgnat.a
 
-$(OBJ_DIR)/adalib/libgnat.a: $(addprefix $(OBJ_DIR)/adainclude/,$(SRC))
+$(OBJ_DIR)/adalib/libgnat.so: $(addprefix $(OBJ_DIR)/adainclude/,$(SRC))
+	$(VERBOSE)gprbuild --RTS=$(OBJ_DIR) -P$(COMPONENT) -XOBJECT_DIR=$(OBJ_DIR) -XLIBRARY_KIND=dynamic -p
+
+$(OBJ_DIR)/adalib/libgnat.a: $(addprefix $(OBJ_DIR)/adainclude/,$(SRC)) $(OBJ_DIR)/adalib/libgnat.so
 	$(VERBOSE)gprbuild --RTS=$(OBJ_DIR) -P$(COMPONENT) -XOBJECT_DIR=$(OBJ_DIR) -p
 
 $(OBJ_DIR)/adainclude/%: src/minimal/%

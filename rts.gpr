@@ -1,6 +1,7 @@
 library project rts is
 
-   OBJ := external ("OBJECT_DIR", "obj");
+   OBJ  := external ("OBJECT_DIR", "obj");
+   KIND := external ("LIBRARY_KIND", "static");
 
    for Languages use ("Ada", "Asm", "C");
    for Source_Dirs use (OBJ & "/adainclude/**");
@@ -19,7 +20,14 @@ library project rts is
       for Body_Suffix ("Asm") use ".S";
    end Naming;
 
-   for Library_Kind use "static";
    for Library_Name use "gnat";
    for Library_Dir use OBJ & "/adalib";
+
+   case KIND is
+      when "dynamic" =>
+         for Library_Kind use "dynamic";
+         for Library_Options use ("-nostdlib", "-nostdinc");
+      when others =>
+         for Library_Kind use "static";
+   end case;
 end rts;
