@@ -13,6 +13,7 @@ library project rts is
 
    package Compiler is
       for Default_Switches ("Ada") use ("-gnatg", "-fPIC");
+      for Default_Switches ("C") use ("-fPIC");
    end Compiler;
 
    package Naming is

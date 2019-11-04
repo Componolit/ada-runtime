@@ -32,6 +32,11 @@ SRC = a-except.adb \
       argv.c \
       exit.c \
       init.c \
+      posix_common.c \
+      posix_minimal.c \
+      componolit_runtime.h \
+      ada_exceptions.h \
+      gnat_helpers.h
 
 SRC := $(sort $(SRC) $(patsubst %.adb, %.ads, $(filter %.adb, $(SRC))))
 
@@ -54,13 +59,11 @@ $(OBJ_DIR)/adainclude/%: src/lib/%
 $(OBJ_DIR)/adainclude/%: contrib/gcc-8.3.0/%
 	$(VERBOSE)cp -a $< $@
 
-platform: $(OBJ_DIR)/lib/libposix_rts.a
+$(OBJ_DIR)/adainclude/%: platform/%
+	$(VERBOSE)cp -a $< $@
 
-$(OBJ_DIR)/lib/libposix_rts.a: $(OBJ_DIR)/posix_common.o $(OBJ_DIR)/posix_minimal.o
-	$(VERBOSE)ar rcs $@ $^
-
-$(OBJ_DIR)/%.o: platform/linux/%.c
-	$(VERBOSE)gcc -Iplatform -c -o $@ $<
+$(OBJ_DIR)/adainclude/%: platform/linux/%
+	$(VERBOSE)cp -a $< $@
 
 clean: clean_test
 	$(VERBOSE)rm -rf $(OBJ_DIR)
@@ -76,7 +79,7 @@ $(UNIT_DIR)/test:
 	@echo "UNITTEST $(dir $@)"
 	$(VERBOSE)cd $(dir $@) && gprbuild -q -P test && ./test
 
-test: runtime platform clean_test $(TEST_BINS) $(UNIT_DIR)/test
+test: runtime clean_test $(TEST_BINS) $(UNIT_DIR)/test
 
 REPORT ?= fail
 

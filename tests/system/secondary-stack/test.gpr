@@ -7,7 +7,7 @@ project Test is
    end Binder;
 
    package Linker is
-      for Required_Switches use ("-L../../../obj/lib", "-lposix_rts", "-lpthread");
+      for Required_Switches use ("-lpthread");
    end Linker;
 
 end Test;
