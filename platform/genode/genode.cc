@@ -136,4 +136,9 @@ extern "C" {
 
     void componolit_runtime_finalize(void)
     { }
+
+    int memcmp(const void *s1, const void *s2, Genode::size_t n)
+    {
+        return Genode::memcmp(s1, s2, n);
+    }
 }
