@@ -7,6 +7,8 @@ UNIT_DIR = tests/unit
 SRC_COMMON = a-except.adb \
 	     a-unccon.ads \
 	     ada.ads \
+	     a-tags.ads \
+	     a-tags.adb \
 	     i-c.adb \
 	     i-cexten.ads \
 	     interfac.ads \
