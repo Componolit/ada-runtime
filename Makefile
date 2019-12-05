@@ -58,6 +58,10 @@ $(TEST_DIR)/%/test:
 	@echo "TEST $(dir $@)"
 	$(VERBOSE)cd $(dir $@) && gprbuild -q --RTS=../../../build/posix/obj -p && ./test
 
+$(TEST_DIR)/exception/test:
+	@echo "TEST $(dir $@)"
+	$(VERBOSE)cd $(dir $@) && gprbuild -q --RTS=../../../build/posix/obj -p && ./test; test $$? -gt 0
+
 $(UNIT_DIR)/test:
 	@echo "UNITTEST $(dir $@)"
 	$(VERBOSE)cd $(dir $@) && gprbuild -q -P test && ./test

@@ -24,7 +24,7 @@ void __gnat_unhandled_terminate() {
 
 void componolit_runtime_raise_ada_exception(exception_t exception, char *name, char *message) {
     printf("Exception raised (%d): %s: %s\n", (int)exception, name, message);
-    exit(0);
+    exit(1);
 }
 
 void componolit_runtime_log(const char *message) {
