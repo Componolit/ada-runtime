@@ -7,6 +7,6 @@ package Child is
       null;
    end record;
 
-   overriding procedure Print (O : in out Object);
+   overriding function Is_Parent (O : Object) return Boolean;
 
 end Child;
