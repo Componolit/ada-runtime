@@ -5,6 +5,6 @@ package Parent is
       null;
    end record;
 
-   procedure Print (O : in out Object);
+   function Is_Parent (O : Object) return Boolean;
 
 end Parent;

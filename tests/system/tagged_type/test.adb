@@ -4,16 +4,20 @@ with Child;
 
 procedure Test
 is
-   procedure Print (O : in out Parent.Object'Class)
+   function Is_Parent (O : Parent.Object'Class) return Boolean
    is
    begin
-      O.Print;
-   end Print;
+      return O.Is_Parent;
+   end Is_Parent;
    O_P : Parent.Object;
    O_C : Child.Object;
 begin
-   O_P.Print;
-   O_C.Print;
-   Print (O_P);
-   Print (O_C);
+   if
+      not O_P.Is_Parent
+      or else O_C.Is_Parent
+      or else not Is_Parent (O_P)
+      or else Is_Parent (O_C)
+   then
+      raise Program_Error;
+   end if;
 end Test;

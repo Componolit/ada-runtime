@@ -3,11 +3,11 @@ with Componolit.Runtime.Debug;
 
 package body Parent is
 
-   procedure Print (O : in out Object)
+   function Is_Parent (O : Object) return Boolean
    is
       pragma Unreferenced (O);
    begin
-      Componolit.Runtime.Debug.Log_Debug ("Parent");
-   end Print;
+      return True;
+   end Is_Parent;
 
 end Parent;
