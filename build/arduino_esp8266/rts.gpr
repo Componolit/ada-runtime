@@ -2,22 +2,22 @@ library project rts is
 
    OBJ := external ("OBJECT_DIR", "obj");
 
-   Target_Switches := ("--target=xtensa", "-mcpu=esp8266");
+   Target_Switches := ("--target=xtensa", "-mcpu=esp8266", "-Os", "-fno-rtti", "-falign-functions=4", "-ffunction-sections", "-fdata-sections", "-fno-exceptions");
 
-   for Languages use ("Ada");
+   for Languages use ("Ada", "C");
    for Source_Dirs use (OBJ & "/adainclude/**");
    for Object_Dir use OBJ;
 
    package Builder is
-      for Global_Configuration_Pragmas use "../../restrictions.adc";
+      for Global_Configuration_Pragmas use "restrictions.adc";
       for Default_Switches ("Ada") use ("-nostdlib", "-nostdinc");
    end Builder;
 
    package Compiler is
       for Driver ("Ada") use "llvm-gcc";
       for Driver ("C") use "llvm-gcc";
-      for Default_Switches ("Ada") use ("-gnatg") & Target_Switches;
-      for Default_Switches ("C") use  Target_Switches;
+      for Default_Switches ("Ada") use ("-gnatg", "-mlong-calls") & Target_Switches;
+      for Default_Switches ("C") use Target_Switches;
    end Compiler;
 
    for Library_Kind use "static";
