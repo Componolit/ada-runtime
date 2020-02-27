@@ -32,7 +32,8 @@ SRC = a-except.adb \
       init.c \
       componolit_runtime.h \
       ada_exceptions.h \
-      gnat_helpers.h
+      gnat_helpers.h \
+      arduino_esp8266.c
 
 SRC := $(sort $(SRC) $(patsubst %.adb, %.ads, $(filter %.adb, $(SRC))))
 
@@ -69,3 +70,4 @@ src/esp8266/ada_runtime.a: $(OBJ_DIR)/adalib/libgnat.a src/esp8266
 
 clean:
 	$(VERBOSE)rm -rf $(OBJ_DIR)
+	$(VERBOSE)rm -f src/esp8266/ada_runtime.a
