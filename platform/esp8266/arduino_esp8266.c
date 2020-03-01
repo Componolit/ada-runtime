@@ -2,6 +2,9 @@
 #include <gnat_helpers.h>
 
 extern void exit(int);
+extern void Serial;
+extern unsigned strlen(const char *);
+extern unsigned _ZN14HardwareSerial5writeEPKhj(void *, const unsigned char *, unsigned);
 
 void __gnat_unhandled_terminate()
 {
@@ -13,7 +16,8 @@ void componolit_runtime_raise_ada_exception(int exception, char *name, char *mes
     exit(0);
 }
 
-#define LOG(type) void componolit_runtime_log_##type(char *message) { \
+#define LOG(type) void componolit_runtime_log_##type(const char *message) { \
+    _ZN14HardwareSerial5writeEPKhj(&Serial, (const unsigned char *)message, strlen(message)); \
 }
 
 LOG(debug)
@@ -28,3 +32,9 @@ _Unwind_Reason_Code __gnat_personality_v0(int version,
 {
     exit(0);
 }
+
+void componolit_runtime_initialize(void)
+{ }
+
+void componolit_runtime_finalize(void)
+{ }
