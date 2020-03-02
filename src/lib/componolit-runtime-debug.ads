@@ -22,25 +22,13 @@ is
 private
 
    generic
-      with procedure C_Log (Str : System.Address);
+      Prefix : String;
    procedure Log (Msg : String);
 
-   procedure C_Debug (Str : System.Address)
+   procedure C_Log (Str : System.Address)
      with
        Import,
        Convention => C,
-       External_Name => "componolit_runtime_log_debug";
-
-   procedure C_Warning (Str : System.Address)
-     with
-       Import,
-       Convention => C,
-       External_Name => "componolit_runtime_log_warning";
-
-   procedure C_Error (Str : System.Address)
-     with
-       Import,
-       Convention => C,
-       External_Name => "componolit_runtime_log_error";
+       External_Name => "componolit_runtime_log";
 
 end Componolit.Runtime.Debug;

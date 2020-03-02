@@ -27,14 +27,9 @@ void componolit_runtime_raise_ada_exception(exception_t exception, char *name, c
     exit(0);
 }
 
-#define LOG(type) void componolit_runtime_log_##type(char *message) { \
-    printf( #type ": %s\n", message); \
+void componolit_runtime_log(const char *message) {
+    fprintf(stderr, "%s\n", message);
 }
-
-LOG(debug)
-LOG(warning)
-LOG(error)
-
 
 void componolit_runtime_initialize(void)
 { }

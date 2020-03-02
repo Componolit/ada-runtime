@@ -9,9 +9,7 @@ The package [`Componolit_Runtime.C`](../platform/componolit_runtime-c.ads) does 
 
 | Symbol                                   | C signature                                                               | Ada signature                                                                     |
 |------------------------------------------|---------------------------------------------------------------------------|-----------------------------------------------------------------------------------|
-| `componolit_runtime_log_debug`           | `void componolit_runtime_log_debug(char *)`                               | `procedure Log_Debug (Msg : String)`                                              |
-| `componolit_runtime_log_warning`         | `void componolit_runtime_log_warning(char *)`                             | `procedure Log_Warning (Msg : String)`                                            |
-| `componolit_runtime_log_error`           | `void componolit_runtime_log_error(char *)`                               | `procedure Log_Error (Msg : String)`                                              |
+| `componolit_runtime_log`                 | `void componolit_runtime_log(char *)`                                     | `procedure Log (Msg : String)`                                                    |
 | `componolit_runtime_raise_ada_exception` | `void componolit_runtime_raise_ada_exception(exception_t, char *, char*)` | `procedure Raise_Ada_Exception (T : Exception_Type; Name : String; Msg : String)` |
 | `componolit_runtime_initialize`          | `void componolit_runtime_initialize(void)`                                | `procedure Initialize`                                                            |
 | `componolit_runtime_finalize`            | `void componolit_runtime_finalize(void)`                                  | `procedure Finalize`                                                              |
@@ -19,44 +17,18 @@ The package [`Componolit_Runtime.C`](../platform/componolit_runtime-c.ads) does 
 
 ## Symbol definitions
 
-### `componolit_runtime_log_debug`
+### `componolit_runtime_log`
 
 #### Signature
 
- - C: `void componolit_runtime_log_debug(char *)`
- - Ada: `procedure Log_Debug(Msg : String)`
+ - C: `void componolit_runtime_log(const char *)`
+ - Ada: `procedure Log (Msg : String)`
 
  * Msg: Log message
 
 #### Semantics
 
-Prints log message with debug priority.
-
-### `componolit_runtime_log_warning`
-
-#### Signature
-
- - C: `void componolit_runtime_log_warning(char *)`
- - Ada: `procedure Log_Warning(Msg : String)`
-
- * Msg: Log message
-
-#### Semantics
-
-Prints log message with warning priority.
-
-### `componolit_runtime_log_error`
-
-#### Signature
-
- - C: `void componolit_runtime_log_error(char *)`
- - Ada: `procedure Log_Error(Msg : String)`
-
- * Msg: Log message
-
-#### Semantics
-
-Prints log message with error priority.
+Prints log message. Intended for debugging.
 
 ### `componolit_runtime_raise_ada_exception`
 
