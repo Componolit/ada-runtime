@@ -5,11 +5,7 @@ package Componolit_Runtime
 is
    package CRE renames Componolit.Runtime.Exceptions;
 
-   procedure Log_Debug (S : String);
-
-   procedure Log_Warning (S : String);
-
-   procedure Log_Error (S : String);
+   procedure Log (S : String);
 
    procedure Raise_Ada_Exception (E : CRE.Exception_Type;
                                   N : String;

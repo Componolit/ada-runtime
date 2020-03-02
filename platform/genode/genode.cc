@@ -61,19 +61,9 @@ extern "C" {
 
 #endif
 
-    void componolit_runtime_log_debug(char *message)
+    void componolit_runtime_log(const char *message)
     {
         Genode::log(Genode::Cstring(message));
-    }
-
-    void componolit_runtime_log_warning(char *message)
-    {
-        Genode::warning(Genode::Cstring(message));
-    }
-
-    void componolit_runtime_log_error(char *message)
-    {
-        Genode::error(Genode::Cstring(message));
     }
 
     void __gnat_unhandled_terminate()

@@ -16,13 +16,11 @@ void componolit_runtime_raise_ada_exception(int exception, char *name, char *mes
     exit(0);
 }
 
-#define LOG(type) void componolit_runtime_log_##type(const char *message) { \
-    _ZN14HardwareSerial5writeEPKhj(&Serial, (const unsigned char *)message, strlen(message)); \
+void componolit_runtime_log(const char *message) {
+    const unsigned char newline[] = "\r\n\0";
+    _ZN14HardwareSerial5writeEPKhj(&Serial, (const unsigned char *)message, strlen(message));
+    _ZN14HardwareSerial5writeEPKhj(&Serial, newline, sizeof(newline));
 }
-
-LOG(debug)
-LOG(warning)
-LOG(error)
 
 _Unwind_Reason_Code __gnat_personality_v0(_Unwind_State state,
                                           void *header,

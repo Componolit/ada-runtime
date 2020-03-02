@@ -8,11 +8,7 @@
 extern "C" {
 #endif
 
-void componolit_runtime_log_debug(char *);
-
-void componolit_runtime_log_warning(char *);
-
-void componolit_runtime_log_error(char *);
+void componolit_runtime_log(const char *);
 
 void componolit_runtime_raise_ada_exception(exception_t, char *, char *);
 

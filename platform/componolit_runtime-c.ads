@@ -6,20 +6,10 @@ package Componolit_Runtime.C
 is
    package CRE renames Componolit.Runtime.Exceptions;
 
-   procedure C_Log_Debug (S : System.Address) with
+   procedure C_Log (S : System.Address) with
       Export,
       Convention => C,
-      External_Name => "componolit_runtime_log_debug";
-
-   procedure C_Log_Warning (S : System.Address) with
-      Export,
-      Convention => C,
-      External_Name => "componolit_runtime_log_warning";
-
-   procedure C_Log_Error (S : System.Address) with
-      Export,
-      Convention => C,
-      External_Name => "componolit_runtime_log_error";
+      External_Name => "componolit_runtime_log";
 
    procedure C_Raise_Exception (E : CRE.Exception_Type;
                                 N : System.Address;

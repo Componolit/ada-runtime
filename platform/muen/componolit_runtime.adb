@@ -8,26 +8,11 @@ package body Componolit_Runtime with
    SPARK_Mode
 is
 
-   procedure Log_Debug (S : String)
+   procedure Log (S : String)
    is
    begin
-      Debuglog.Client.Put_Line
-         ("Info: " & S);
-   end Log_Debug;
-
-   procedure Log_Warning (S : String)
-   is
-   begin
-      Debuglog.Client.Put_Line
-         ("Warning: " & S);
-   end Log_Warning;
-
-   procedure Log_Error (S : String)
-   is
-   begin
-      Debuglog.Client.Put_Line
-         ("Error: " & S);
-   end Log_Error;
+      Debuglog.Client.Put_Line (S);
+   end Log;
 
    procedure Unhandled_Terminate with
       Export,
@@ -37,7 +22,7 @@ is
    procedure Unhandled_Terminate
    is
    begin
-      Debuglog.Client.Put_Line ("Unhandled_Terminate called, stopping.");
+      Log ("Error: Unhandled_Terminate called, stopping.");
       SK.CPU.Stop;
    end Unhandled_Terminate;
 
@@ -67,7 +52,7 @@ is
    is
       pragma Unreferenced (E);
    begin
-      Log_Error (N & ": " & M);
+      Log ("Error: " & N & ": " & M);
       SK.CPU.Stop;
    end Raise_Ada_Exception;
 
