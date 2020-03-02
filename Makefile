@@ -3,13 +3,44 @@ VERBOSE ?= @
 TEST_DIR = tests/system
 UNIT_DIR = tests/unit
 
+SRC_COMMON = a-except.adb \
+	     a-unccon.ads \
+	     ada.ads \
+	     i-c.adb \
+	     i-cexten.ads \
+	     interfac.ads \
+	     componolit.ads \
+	     componolit-runtime.ads \
+	     componolit-runtime-strings.adb \
+	     componolit-runtime-debug.adb \
+	     componolit-runtime-platform.adb \
+	     componolit-runtime-exceptions.ads \
+	     componolit-runtime-conversions.adb \
+	     s-exctab.adb \
+	     s-init.adb \
+	     s-parame.adb \
+	     s-unstyp.ads \
+	     s-secsta.adb \
+	     s-soflin.adb \
+	     s-stalib.adb \
+	     s-stoele.adb \
+	     s-arit64.adb \
+	     s-maccod.ads \
+	     system.ads \
+	     argv.c \
+	     exit.c \
+	     init.c \
+	     componolit_runtime.h \
+	     ada_exceptions.h \
+	     gnat_helpers.h
+
 .PHONY: posix esp8266
 
 posix:
-	make -C build/posix
+	make SRC_COMMON="$(SRC_COMMON)" -C build/posix
 
 esp8266:
-	make -C build/arduino_esp8266
+	make SRC_COMMON="$(SRC_COMMON)" -C build/arduino_esp8266
 
 TEST_DIRS = $(addprefix $(TEST_DIR)/,$(shell ls tests/system))
 TEST_BINS = $(addsuffix /test,$(TEST_DIRS))
