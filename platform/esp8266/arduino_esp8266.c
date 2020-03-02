@@ -24,10 +24,8 @@ LOG(debug)
 LOG(warning)
 LOG(error)
 
-_Unwind_Reason_Code __gnat_personality_v0(int version,
-                                          unsigned long phases,
-                                          _Unwind_Exception_Class class,
-                                          void *exception,
+_Unwind_Reason_Code __gnat_personality_v0(_Unwind_State state,
+                                          void *header,
                                           void *context)
 {
     exit(0);
