@@ -1,0 +1,38 @@
+library project rts is
+
+   OBJ := external ("OBJECT_DIR", "obj");
+
+   for Target use "arm-eabi";
+
+   for Languages use ("Ada", "Asm_CPP", "C");
+   for Source_Dirs use (OBJ & "/adainclude/**");
+   for Object_Dir use OBJ;
+
+   package Builder is
+      for Global_Configuration_Pragmas use "../../restrictions.adc";
+      for Default_Switches ("Ada") use ("-nostdlib", "-nostdinc");
+   end Builder;
+
+   package Compiler is
+      for Default_Switches ("Ada") use ("-gnatg", "-g", "-mthumb", "-ffunction-sections", "-fdata-sections");
+      for Default_Switches ("C") use ("-g", "-mthumb", "-ffunction-sections", "-fdata-sections");
+      for Default_Switches ("Asm_CPP") use ("-g", "-mthumb", "-ffunction-sections", "-fdata-sections");
+   end Compiler;
+
+   package Device_Configuration is
+      for CPU_Name use "cortex-m4f";
+      for Number_Of_Interrupts use "37";
+      for Memories use ("flash", "sram");
+      for Mem_Kind ("flash") use "ROM";
+      for Address ("flash") use "0x00000000";
+      for Size ("flash") use "512K";
+      for Mem_Kind ("sram") use "RAM";
+      for Address ("sram") use "0x20000000";
+      for Size ("sram") use "64K";
+      for Boot_Memory use "flash";
+   end Device_Configuration;
+
+   for Library_Kind use "static";
+   for Library_Name use "gnat";
+   for Library_Dir use OBJ & "/adalib";
+end rts;
