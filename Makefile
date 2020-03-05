@@ -1,4 +1,5 @@
 VERBOSE ?= @
+BOARD ?= default
 
 TEST_DIR = tests/system
 UNIT_DIR = tests/unit
@@ -42,6 +43,9 @@ posix:
 esp8266:
 	make SRC_COMMON="$(SRC_COMMON)" -C build/arduino_esp8266
 
+nrf52:
+	make BOARD=$(BOARD) SRC_COMMON="$(SRC_COMMON)" -C build/nrf52
+
 TEST_DIRS = $(addprefix $(TEST_DIR)/,$(shell ls tests/system))
 TEST_BINS = $(addsuffix /test,$(TEST_DIRS))
 
@@ -63,6 +67,7 @@ proof:
 clean: clean_test
 	make -C build/posix clean
 	make -C build/arduino_esp8266 clean
+	make -C build/nrf52 clean
 
 clean_test:
 	$(VERBOSE)$(foreach DIR,$(TEST_DIRS) $(UNIT_DIR),cd $(DIR) && gprclean -q -Ptest -r; cd -;)
