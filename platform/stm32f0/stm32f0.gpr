@@ -1,0 +1,20 @@
+
+project STM32F0 is
+
+   package Device_Configuration is
+      for CPU_Name use "cortex-m0";
+      for Number_Of_Interrupts use "32";
+      for Memories use ("flash", "sram");
+      for Boot_Memory use "flash";
+
+      for Mem_Kind ("flash") use "ROM";
+      for Address ("flash") use "16#0800_0000#";
+      for Size ("flash") use "16#0001_0000#";
+
+      for Mem_Kind ("sram") use "RAM";
+      for Address ("sram") use "16#2000_0000#";
+      for Size ("sram") use "16#0000_2000#";
+
+   end Device_Configuration;
+
+end STM32F0;

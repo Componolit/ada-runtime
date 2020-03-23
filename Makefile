@@ -46,6 +46,9 @@ esp8266:
 nrf52:
 	make BOARD=$(BOARD) SRC_COMMON="$(SRC_COMMON)" -C build/nrf52
 
+stm32f0:
+	make BOARD=$(BOARD) SRC_COMMON="$(SRC_COMMON)" -C build/stm32f0
+
 TEST_DIRS = $(addprefix $(TEST_DIR)/,$(shell ls tests/system))
 TEST_BINS = $(addsuffix /test,$(TEST_DIRS))
 
