@@ -5,13 +5,23 @@ is
    use type SSE.Integer_Address;
 
    procedure Configure (P : Pin;
-                        M : Mode)
+                        M : Mode;
+                        D : Value := Low)
    is
       Reg : Mode_Register with
          Import,
          Address => SSE.To_Address (Offset (P) + Mode_Offset);
+      P_Reg : Pull_Register with
+         Import,
+         Address => SSE.To_Address (Offset (P) + Pull_Offset);
    begin
       Reg (Pin_Offset (P)) := M;
+      case M is
+         when Port_In =>
+            P_Reg (Pin_Offset (P)) := (if D = Low then Down else Up);
+         when Port_Out =>
+            P_Reg (Pin_Offset (P)) := Pull_None;
+      end case;
    end Configure;
 
    function Pin_Mode (P : Pin) return Mode
