@@ -71,6 +71,7 @@ clean: clean_test
 	make -C build/posix clean
 	make -C build/arduino_esp8266 clean
 	make -C build/nrf52 clean
+	make -C build/stm32f0 clean
 
 clean_test:
 	$(VERBOSE)$(foreach DIR,$(TEST_DIRS) $(UNIT_DIR),cd $(DIR) && gprclean -q -Ptest -r; cd -;)

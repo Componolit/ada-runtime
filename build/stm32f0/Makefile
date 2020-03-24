@@ -9,7 +9,12 @@ SRC = $(SRC_COMMON) \
       componolit_runtime.ads \
       componolit_runtime.adb \
       componolit_runtime-c.ads \
-      componolit_runtime-c.adb
+      componolit_runtime-c.adb \
+      componolit-runtime-drivers.ads \
+      componolit-runtime-drivers-gpio.ads \
+      componolit-runtime-drivers-gpio.adb \
+      componolit-runtime-drivers-rcc.ads \
+      componolit-runtime-drivers-rcc.adb
 
 SRC := $(sort $(SRC) $(patsubst %.adb, %.ads, $(filter %.adb, $(SRC))))
 
@@ -36,6 +41,9 @@ $(OBJ_DIR)/adainclude/%: ../../platform/%
 	$(VERBOSE)cp -a $< $@
 
 $(OBJ_DIR)/adainclude/%: ../../platform/stm32f0/%
+	$(VERBOSE)cp -a $< $@
+
+$(OBJ_DIR)/adainclude/%: ../../platform/stm32f0/drivers/%
 	$(VERBOSE)cp -a $< $@
 
 clean:
