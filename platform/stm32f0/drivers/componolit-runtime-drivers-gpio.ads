@@ -17,8 +17,11 @@ is
    type Mode is (Port_In, Port_Out) with
       Size => 2;
    type Value is (Low, High);
+   for Value use (Low => 0, High => 1);
 
-   procedure Configure (P : Pin; M : Mode);
+   procedure Configure (P : Pin;
+                        M : Mode;
+                        D : Value := Low);
    function Pin_Mode (P : Pin) return Mode;
    procedure Write (P : Pin;
                     V : Value);
@@ -28,7 +31,10 @@ is
 private
 
    for Mode use (Port_In => 0, Port_Out => 1);
-   for Value use (Low => 0, High => 1);
+
+   type Pull is (Pull_None, Up, Down, Pull_Reserved) with
+      Size => 2;
+   for Pull use (Pull_None => 0, Up => 1, Down => 2, Pull_Reserved => 3);
 
    type Bit is range 0 .. 1 with
       Size => 1;
@@ -36,6 +42,7 @@ private
    type Pin_Index is mod 16;
 
    Mode_Offset  : constant SSE.Integer_Address := 16#00#;
+   Pull_Offset  : constant SSE.Integer_Address := 16#0C#;
    Input_Offset : constant SSE.Integer_Address := 16#10#;
    SR_Offset    : constant SSE.Integer_Address := 16#18#;
 
@@ -64,5 +71,9 @@ private
    for Input_Register use record
       Data at 0 range 0 .. 15;
    end record;
+
+   type Pull_Register is array (Pin_Index'Range) of Pull with
+      Size => 32,
+      Pack;
 
 end Componolit.Runtime.Drivers.GPIO;
