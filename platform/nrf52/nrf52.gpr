@@ -1,0 +1,20 @@
+
+project nRF52 is
+
+   package Device_Configuration is
+      for CPU_Name use "cortex-m4f";
+      for Number_Of_Interrupts use "37";
+      for Memories use ("flash", "sram");
+      for Boot_Memory use "flash";
+
+      for Mem_Kind ("flash") use "ROM";
+      for Address ("flash") use "16#0000_0000#";
+      for Size ("flash") use "16#0008_0000#";
+
+      for Mem_Kind ("sram") use "RAM";
+      for Address ("sram") use "16#2000_0000#";
+      for Size ("sram") use "16#0001_0000#";
+
+   end Device_Configuration;
+
+end nRF52;
