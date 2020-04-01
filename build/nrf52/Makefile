@@ -4,7 +4,6 @@ COMPONENT = rts
 OBJ_DIR = obj
 
 SRC = $(SRC_COMMON) \
-      crt0.S \
       gnat_helpers.ads \
       componolit_runtime.ads \
       componolit_runtime.adb \

@@ -8,7 +8,7 @@ git remote add jklmnn https://github.com/jklmnn/genode.git
 git fetch --all
 git checkout 3f0651588ed1c2d432b24276f48a0fc6c8785eb9
 ./tool/create_builddir x86_64
-./tool/ports/prepare_port ada-runtime
+./tool/ports/prepare_port ada-runtime gcov
 ln -sf /genode/contrib/ada-runtime-$(cat /genode/repos/libports/ports/ada-runtime.hash)/ada-runtime-alis /genode/contrib/ada-runtime-test/
 echo "test" > /genode/repos/libports/ports/ada-runtime.hash
 cd build/x86_64
