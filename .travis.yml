@@ -20,9 +20,9 @@ before_install:
   - git submodule update --init --recursive --depth=1
 
 script:
-  - if [ "$TEST_SUITE" = "gnat-8.3" ]; then docker run -v $PWD:/app -w /app debian:buster /bin/sh -c "apt-get update && apt-get install -y --no-install-recommends gcc gnat gprbuild make libaunit18-dev && make && make test"; fi
-  - if [ "$TEST_SUITE" = "gnat-community-2019" ]; then docker run -v $PWD:/app jklmnn/componolit-ci /bin/sh -c "/app/tests/posix.sh"; fi
-  - if [ "$TEST_SUITE" = "genode" ]; then docker run -v $PWD:/app jklmnn/componolit-ci /bin/sh -c "/app/tests/genode.sh"; fi
-  - if [ "$TEST_SUITE" = "muen" ]; then travis_wait 60 docker run -v $PWD:/app jklmnn/componolit-ci /bin/sh -c "/app/tests/muen.sh"; fi
-  - if [ "$TEST_SUITE" = "esp8266" ]; then docker run -v $PWD:/app jklmnn/componolit-ci /bin/sh -c "/app/tests/esp8266.sh"; fi
+  - if [ "$TEST_SUITE" = "gnat-8.3" ]; then docker run -v $PWD:/app -w /app componolit/ci:gnat-fsf-8.3 /bin/sh -c "make && make test"; fi
+  - if [ "$TEST_SUITE" = "gnat-community-2019" ]; then docker run -v $PWD:/app componolit/ci:gnat-community-2019 /bin/sh -c "/app/tests/posix.sh"; fi
+  - if [ "$TEST_SUITE" = "genode" ]; then docker run -v $PWD:/app componolit/ci:genode /bin/sh -c "/app/tests/genode.sh"; fi
+  - if [ "$TEST_SUITE" = "muen" ]; then travis_wait 60 docker run -v $PWD:/app componolit/ci:muen /bin/sh -c "/app/tests/muen.sh"; fi
+  - if [ "$TEST_SUITE" = "esp8266" ]; then docker run -v $PWD:/app componolit/ci:gnat-community-2019 /bin/sh -c "/app/tests/esp8266.sh"; fi
   - if [ "$TEST_SUITE" = "gnat-community-2019-arm" ]; then docker run -v $PWD:/app componolit/ci:gnat-community-2019-arm /bin/sh -c "/app/tests/arm.sh"; fi
