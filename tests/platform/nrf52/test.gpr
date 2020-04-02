@@ -27,9 +27,10 @@ project Test is
       for Gnat use "arm-eabi-gnat";
       for Gnatlist use "arm-eabi-gnatls";
       for Debugger_Command use "arm-eabi-gdb";
-      for Program_Host use "localhost:4242";
+      for Program_Host use ":3333";
       for Communication_Protocol use "remote";
-      for Connection_Tool use "openocd";
+      for Connection_Tool use "";
+      for Connection_Config_File use "";
    end Ide;
 
 end Test;
