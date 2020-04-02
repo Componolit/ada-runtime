@@ -1,0 +1,48 @@
+name: CI
+
+on: push
+
+jobs:
+    gnat_8_3:
+        name: gnat-8.3
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - name: GNAT 8.3 on Posix
+              run: docker run -v $PWD:/app -w /app componolit/ci:gnat-fsf-8.3 /bin/sh -c "make && make test"
+    gnat_community_2019:
+        name: gnat-community-2019
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - name: GNAT Community 2019
+              run: docker run -v $PWD:/app componolit/ci:gnat-community-2019 /bin/sh -c "/app/tests/posix.sh"
+    gnat_community_2019_arm:
+        name: gnat-community-2019-arm
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - name: GNAT Community 2019 ARM
+              run: docker run -v $PWD:/app componolit/ci:gnat-community-2019-arm /bin/sh -c "/app/tests/arm.sh"
+    genode:
+        name: Genode
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - name: Genode
+              run: docker run -v $PWD:/app componolit/ci:genode /bin/sh -c "/app/tests/genode.sh"
+    muen:
+        name: Muen
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - name: Muen
+              run: docker run -v $PWD:/app componolit/ci:muen /bin/sh -c "/app/tests/muen.sh"
+    esp8266:
+        name: ESP8266
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - name: ESP8266
+              run: docker run -v $PWD:/app componolit/ci:gnat-community-2019 /bin/sh -c "/app/tests/esp8266.sh"
+
