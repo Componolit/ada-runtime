@@ -23,7 +23,7 @@ package body Componolit.Runtime.Board is
       is
       begin
          for I in Integer range 0 .. 1000000 loop
-            null;
+            pragma Inspection_Point (I);
          end loop;
       end Wait;
    begin
