@@ -1,4 +1,4 @@
-# Generic Ada Runtime [![Build Status](https://travis-ci.org/Componolit/ada-runtime.svg?branch=master)](https://travis-ci.org/Componolit/ada-runtime)
+# Generic Ada Runtime [![CI](https://github.com/Componolit/ada-runtime/workflows/CI/badge.svg)](https://github.com/Componolit/ada-runtime/actions)
 
 The generic Ada runtime is a downsized Ada runtime which can be adapted to different platforms.
 The offered feature set is a tradeoff between complexity and useful features.
@@ -24,6 +24,9 @@ It furthermore adds a small selection of more complex features:
 - Posix/Linux
 - [Genode](https://genode.org/)
 - [Muen](https://muen.sk/)
+- nRF52832
+- STM32F051
+- ESP8266 on Arduino
 
 ## Directory Structure
 
@@ -31,6 +34,7 @@ It furthermore adds a small selection of more complex features:
 - `platform/`: platform-specific sources of Ada runtime
 - `src/`: Ada runtime sources
 - `tests/`: test sources
+- `build`: platform specific build directories
 
 ## Platform-specific Symbols
 
