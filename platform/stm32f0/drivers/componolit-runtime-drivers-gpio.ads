@@ -1,8 +1,11 @@
 
 package Componolit.Runtime.Drivers.GPIO with
    SPARK_Mode,
-   Abstract_State => GPIO_State,
-   Initializes    => GPIO_State
+   Abstract_State => (Configuration_State,
+                      (GPIO_State with External => (Async_Writers,
+                                                   Async_Readers,
+                                                   Effective_Writes))),
+   Initializes    => (Configuration_State, GPIO_State)
 is
 
    type Pin is (PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7,
@@ -24,20 +27,22 @@ is
    procedure Configure (P : Pin;
                         M : Mode;
                         D : Value := Low) with
-      Global => (Output => GPIO_State);
+      Global => (In_Out => Configuration_State);
 
    function Pin_Mode (P : Pin) return Mode with
-      Global => (Input => GPIO_State);
+      Global => (Input => Configuration_State);
 
    procedure Write (P : Pin;
                     V : Value) with
-      Global => (Output => GPIO_State);
+      Global => (In_Out => GPIO_State);
 
    procedure Read (P :     Pin;
                    V : out Value) with
       Global => (Input => GPIO_State);
 
 private
+
+   type Bank_Id is (A, B, C, D, E, F);
 
    for Mode use (Port_In => 0, Port_Out => 1);
 
@@ -55,7 +60,9 @@ private
    Input_Offset : constant SSE.Integer_Address := 16#10#;
    SR_Offset    : constant SSE.Integer_Address := 16#18#;
 
-   function Offset (P : Pin) return SSE.Integer_Address;
+   function Bank_Select (P : Pin) return Bank_Id with
+      Post => Bank_Select'Result /= E;
+
    function Pin_Offset (P : Pin) return Pin_Index;
 
    type Mode_Register is array (Pin_Index'Range) of Mode with
@@ -83,6 +90,38 @@ private
 
    type Pull_Register is array (Pin_Index'Range) of Pull with
       Size => 32,
+      Pack;
+
+   pragma Warnings (Off, "* bits of * unused");
+   type Bank_Config is record
+      Port_Mode : Mode_Register;
+      Pull_Mode : Pull_Register;
+   end record with
+      Size => 1024 * 8;
+
+   for Bank_Config use record
+      Port_Mode at 0 range 0 .. 31;
+      Pull_Mode at 12 range 0 .. 31;
+   end record;
+
+   type Bank_IO is record
+      Input : Input_Register;
+      Set_Reset : Set_Reset_Register;
+   end record with
+      Size => 1024 * 8;
+
+   for Bank_IO use record
+      Input     at 16 range 0 .. 31;
+      Set_Reset at 24 range 0 .. 31;
+   end record;
+   pragma Warnings (On, "* bits of * unused");
+
+   type Configuration is array (Bank_Id'Range) of Bank_Config with
+      Size => 6 * 1024 * 8,
+      Pack;
+
+   type Input_Output is array (Bank_Id'Range) of Bank_IO with
+      Size => 6 * 1024 * 8,
       Pack;
 
 end Componolit.Runtime.Drivers.GPIO;
