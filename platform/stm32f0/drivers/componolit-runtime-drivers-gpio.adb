@@ -1,76 +1,80 @@
 
 package body Componolit.Runtime.Drivers.GPIO with
    SPARK_Mode,
-   Refined_State => (GPIO_State => null)
+   Refined_State => (Configuration_State => Config_Registers,
+                     GPIO_State          => IO_Registers)
 is
 
    use type SSE.Integer_Address;
+
+   Config_Registers : Configuration with
+      Import,
+      Address => SSE.To_Address (16#4800_0000#);
+
+   IO_Registers : Input_Output with
+      Import,
+      Address => SSE.To_Address (16#4800_0000#),
+      Volatile,
+      Async_Readers,
+      Async_Writers,
+      Effective_Writes;
 
    procedure Configure (P : Pin;
                         M : Mode;
                         D : Value := Low)
    is
-      Reg : Mode_Register with
-         Import,
-         Address => SSE.To_Address (Offset (P) + Mode_Offset);
-      P_Reg : Pull_Register with
-         Import,
-         Address => SSE.To_Address (Offset (P) + Pull_Offset);
    begin
-      Reg (Pin_Offset (P)) := M;
+      Config_Registers (Bank_Select (P)).Port_Mode (Pin_Offset (P)) := M;
       case M is
          when Port_In =>
-            P_Reg (Pin_Offset (P)) := (if D = Low then Down else Up);
+            Config_Registers (Bank_Select (P)).Pull_Mode (Pin_Offset (P))
+               := (if D = Low then Down else Up);
          when Port_Out =>
-            P_Reg (Pin_Offset (P)) := Pull_None;
+            Config_Registers (Bank_Select (P)).Pull_Mode (Pin_Offset (P))
+               := Pull_None;
       end case;
    end Configure;
 
    function Pin_Mode (P : Pin) return Mode
    is
-      Reg : Mode_Register with
-         Import,
-         Address => SSE.To_Address (Offset (P) + Mode_Offset);
    begin
-      return Reg (Pin_Offset (P));
+      return Config_Registers (Bank_Select (P)).Port_Mode (Pin_Offset (P));
    end Pin_Mode;
 
    procedure Write (P : Pin;
                     V : Value)
    is
-      Reg  : Set_Reset_Register with
-         Import,
-         Address => SSE.To_Address (Offset (P) + SR_Offset);
       Bits : Bit_Register := (others => 0);
    begin
       Bits (Pin_Offset (P)) := 1;
       case V is
          when Low =>
-            Reg := Set_Reset_Register'(Set   => (others => 0),
-                                       Reset => Bits);
+            IO_Registers (Bank_Select (P)).Set_Reset
+               := Set_Reset_Register'(Set   => (others => 0),
+                                      Reset => Bits);
          when High =>
-            Reg := Set_Reset_Register'(Set   => Bits,
-                                       Reset => (others => 0));
+            IO_Registers (Bank_Select (P)).Set_Reset
+               := Set_Reset_Register'(Set   => Bits,
+                                      Reset => (others => 0));
       end case;
    end Write;
 
    procedure Read (P :     Pin;
                    V : out Value)
    is
-      Reg : Input_Register with
-         Import,
-         Address => SSE.To_Address (Offset (P) + Input_Offset);
+      B : Bit;
    begin
-      V := Value'Val (Reg.Data (Pin_Offset (P)));
+      B := IO_Registers (Bank_Select (P)).Input.Data (Pin_Offset (P));
+      V := Value'Val (B);
    end Read;
 
-   function Offset (P : Pin) return SSE.Integer_Address is
+   function Bank_Select (P : Pin) return Bank_Id is
       (case P is
-         when PA0 .. PA15 => 16#4800_0000#,
-         when PB0 .. PB15 => 16#4800_0400#,
-         when PC0 .. PC15 => 16#4800_0800#,
-         when PD0 .. PD15 => 16#4800_0C00#,
-         when PF0 .. PF15 => 16#4800_1400#);
+         when PA0 .. PA15 => A,
+         when PB0 .. PB15 => B,
+         when PC0 .. PC15 => C,
+         when PD0 .. PD15 => D,
+         when PF0 .. PF15 => F);
 
    function Pin_Offset (P : Pin) return Pin_Index is
       (Pin_Index (Pin'Pos (P) mod 16));
