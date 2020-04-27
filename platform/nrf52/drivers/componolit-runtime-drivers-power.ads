@@ -1,7 +1,12 @@
 
-package Componolit.Runtime.Drivers.Power is
+package Componolit.Runtime.Drivers.Power with
+SPARK_Mode,
+   Abstract_State => (Power_State with External => (Async_Readers,
+                                                    Effective_Writes))
+is
 
-   procedure Off;
+   procedure Off with
+      Global => (Output => Power_State);
 
 private
 

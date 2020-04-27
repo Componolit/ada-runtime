@@ -1,5 +1,8 @@
 
-package body Componolit.Runtime.Drivers.Power is
+package body Componolit.Runtime.Drivers.Power with
+SPARK_Mode,
+   Refined_State => (Power_State => Reg)
+is
 
    use type SSE.Integer_Address;
 

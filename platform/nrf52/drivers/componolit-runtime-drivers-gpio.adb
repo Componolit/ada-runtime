@@ -1,6 +1,11 @@
 
 package body Componolit.Runtime.Drivers.GPIO with
-   SPARK_Mode
+   SPARK_Mode,
+   Refined_State => (GPIO_Configuration => Direction,
+                     GPIO_State         => (Outset,
+                                            Outclr,
+                                            Outreg,
+                                            Inreg))
 is
    use type SSE.Integer_Address;
 
@@ -11,22 +16,28 @@ is
    Outset : Pin_Values with
       Address => SSE.To_Address (AHB_Base + OUTSET_Offset),
       Import,
-      Volatile;
+      Volatile,
+      Async_Readers,
+      Effective_Writes;
 
    Outclr : Pin_Values with
       Address => SSE.To_Address (AHB_Base + OUTCLR_Offset),
       Import,
-      Volatile;
+      Volatile,
+      Async_Readers,
+      Effective_Writes;
 
    Outreg : Pin_Values with
       Address => SSE.To_Address (AHB_Base + OUT_Offset),
       Import,
-      Volatile;
+      Volatile,
+      Async_Writers;
 
    Inreg : Pin_Values with
       Address => SSE.To_Address (AHB_Base + IN_Offset),
       Import,
-      Volatile;
+      Volatile,
+      Async_Writers;
 
    function Convert (P : Pin_Value) return Value is
       (case P is
