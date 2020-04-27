@@ -1,13 +1,18 @@
 
 package Componolit.Runtime.Drivers.RCC with
-   SPARK_Mode
+   SPARK_Mode,
+   Abstract_State => RCC_State,
+   Initializes    => RCC_State
 is
 
    type Clock is (IOPA, IOPB, IOPC, IOPD);
 
    procedure Set (Clk    : Clock;
-                  Enable : Boolean);
-   function Enabled (Clk : Clock) return Boolean;
+                  Enable : Boolean) with
+      Global => (In_Out => RCC_State);
+
+   function Enabled (Clk : Clock) return Boolean with
+      Global => (Input => RCC_State);
 
 private
 
@@ -15,6 +20,13 @@ private
    AHB_EN_Offset : constant SSE.Integer_Address := 16#14#;
 
    for Clock use (IOPA => 17, IOPB => 18, IOPC => 19, IOPD => 20);
+
+   function Clock_Bit (C : Clock) return Natural is
+      (case C is
+          when IOPA => 17,
+          when IOPB => 18,
+          when IOPC => 19,
+          when IOPD => 20);
 
    type Bit is range 0 .. 1 with
       Size => 1;
