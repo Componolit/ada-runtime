@@ -1,7 +1,9 @@
 
 package body Componolit.Runtime.Drivers.GPIO with
-   SPARK_Mode
+   SPARK_Mode,
+   Refined_State => (GPIO_State => null)
 is
+
    use type SSE.Integer_Address;
 
    procedure Configure (P : Pin;

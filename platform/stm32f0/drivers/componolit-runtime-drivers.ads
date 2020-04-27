@@ -1,7 +1,9 @@
 
 with System.Storage_Elements;
 
-package Componolit.Runtime.Drivers is
+package Componolit.Runtime.Drivers with
+   SPARK_Mode
+is
 
    package SSE renames System.Storage_Elements;
 

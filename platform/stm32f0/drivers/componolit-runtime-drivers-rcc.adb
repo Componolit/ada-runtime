@@ -1,28 +1,28 @@
 
 package body Componolit.Runtime.Drivers.RCC with
-   SPARK_Mode
+   SPARK_Mode,
+   Refined_State => (RCC_State => Reg)
 is
+
    use type SSE.Integer_Address;
+
+   Reg : Register with
+      Address => SSE.To_Address (RCC_Base + AHB_EN_Offset),
+      Import;
 
    procedure Set (Clk    : Clock;
                   Enable : Boolean)
    is
-      Reg :   Register with
-         Address => SSE.To_Address (RCC_Base + AHB_EN_Offset),
-         Import;
       Cache : Register := Reg;
    begin
-      Cache (Clk'Enum_Rep) := (if Enable then 1 else 0);
+      Cache (Clock_Bit (Clk)) := (if Enable then 1 else 0);
       Reg := Cache;
    end Set;
 
    function Enabled (Clk : Clock) return Boolean
    is
-      Reg : Register with
-         Address => SSE.To_Address (RCC_Base + AHB_EN_Offset),
-         Import;
    begin
-      return Reg (Clk'Enum_Rep) = 1;
+      return Reg (Clock_Bit (Clk)) = 1;
    end Enabled;
 
 end Componolit.Runtime.Drivers.RCC;

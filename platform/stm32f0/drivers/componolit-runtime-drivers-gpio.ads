@@ -1,6 +1,8 @@
 
 package Componolit.Runtime.Drivers.GPIO with
-   SPARK_Mode
+   SPARK_Mode,
+   Abstract_State => GPIO_State,
+   Initializes    => GPIO_State
 is
 
    type Pin is (PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7,
@@ -21,12 +23,19 @@ is
 
    procedure Configure (P : Pin;
                         M : Mode;
-                        D : Value := Low);
-   function Pin_Mode (P : Pin) return Mode;
+                        D : Value := Low) with
+      Global => (Output => GPIO_State);
+
+   function Pin_Mode (P : Pin) return Mode with
+      Global => (Input => GPIO_State);
+
    procedure Write (P : Pin;
-                    V : Value);
+                    V : Value) with
+      Global => (Output => GPIO_State);
+
    procedure Read (P :     Pin;
-                   V : out Value);
+                   V : out Value) with
+      Global => (Input => GPIO_State);
 
 private
 
