@@ -3,9 +3,9 @@ package Componolit.Runtime.Drivers.GPIO with
    SPARK_Mode,
    Abstract_State => (GPIO_Configuration,
                       (GPIO_State with External => (Async_Readers,
-                                                   Async_Writers,
-                                                   Effective_Reads,
-                                                   Effective_Writes))),
+                                                    Async_Writers,
+                                                    Effective_Reads,
+                                                    Effective_Writes))),
    Initializes    => (GPIO_Configuration, GPIO_State)
 is
 

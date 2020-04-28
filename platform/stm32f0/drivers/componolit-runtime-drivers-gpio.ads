@@ -3,8 +3,8 @@ package Componolit.Runtime.Drivers.GPIO with
    SPARK_Mode,
    Abstract_State => (Configuration_State,
                       (GPIO_State with External => (Async_Writers,
-                                                   Async_Readers,
-                                                   Effective_Writes))),
+                                                    Async_Readers,
+                                                    Effective_Writes))),
    Initializes    => (Configuration_State, GPIO_State)
 is
 
@@ -100,12 +100,12 @@ private
       Size => 1024 * 8;
 
    for Bank_Config use record
-      Port_Mode at 0 range 0 .. 31;
+      Port_Mode at  0 range 0 .. 31;
       Pull_Mode at 12 range 0 .. 31;
    end record;
 
    type Bank_IO is record
-      Input : Input_Register;
+      Input     : Input_Register;
       Set_Reset : Set_Reset_Register;
    end record with
       Size => 1024 * 8;

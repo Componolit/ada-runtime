@@ -1,39 +1,39 @@
 
 package body Componolit.Runtime.Drivers.GPIO with
    SPARK_Mode,
-   Refined_State => (GPIO_Configuration => Direction,
-                     GPIO_State         => (Outset,
-                                            Outclr,
-                                            Outreg,
-                                            Inreg))
+   Refined_State => (GPIO_Configuration => DIR_Reg,
+                     GPIO_State         => (OUTSET_Reg,
+                                            OUTCLR_Reg,
+                                            OUT_Reg,
+                                            IN_Reg))
 is
    use type SSE.Integer_Address;
 
-   Direction : Pin_Modes with
+   DIR_Reg : Pin_Modes with
       Address => SSE.To_Address (AHB_Base + DIR_Offset),
       Import;
 
-   Outset : Pin_Values with
+   OUTSET_Reg : Pin_Values with
       Address => SSE.To_Address (AHB_Base + OUTSET_Offset),
       Import,
       Volatile,
       Async_Readers,
       Effective_Writes;
 
-   Outclr : Pin_Values with
+   OUTCLR_Reg : Pin_Values with
       Address => SSE.To_Address (AHB_Base + OUTCLR_Offset),
       Import,
       Volatile,
       Async_Readers,
       Effective_Writes;
 
-   Outreg : Pin_Values with
+   OUT_Reg : Pin_Values with
       Address => SSE.To_Address (AHB_Base + OUT_Offset),
       Import,
       Volatile,
       Async_Writers;
 
-   Inreg : Pin_Values with
+   IN_Reg : Pin_Values with
       Address => SSE.To_Address (AHB_Base + IN_Offset),
       Import,
       Volatile,
@@ -47,13 +47,13 @@ is
    procedure Configure (P : Pin; M : Mode)
    is
    begin
-      Direction (P) := M;
+      DIR_Reg (P) := M;
    end Configure;
 
    function Pin_Mode (P : Pin) return Mode
    is
    begin
-      return Direction (P);
+      return DIR_Reg (P);
    end Pin_Mode;
 
    procedure Write (P : Pin; V : Value)
@@ -63,16 +63,16 @@ is
       Enable (P) := 1;
       case V is
          when Low =>
-            Outclr := Enable;
+            OUTCLR_Reg := Enable;
          when High =>
-            Outset := Enable;
+            OUTSET_Reg := Enable;
       end case;
    end Write;
 
    procedure Read (P : Pin; V : out Value)
    is
-      In_Value  : constant Pin_Value := Inreg (P);
-      Out_Value : constant Pin_Value := Outreg (P);
+      In_Value  : constant Pin_Value := IN_Reg (P);
+      Out_Value : constant Pin_Value := OUT_Reg (P);
    begin
       case Pin_Mode (P) is
          when Port_In =>
