@@ -7,6 +7,20 @@ is
 
    use type SSE.Integer_Address;
 
+   --  Both register arrays span over the whole GPIO memory region as arrays of
+   --  GPIO ports. While they might overlap each other their components only
+   --  access slices of memory that are non-overlapping:
+   --
+   --  Port:   |     A     |     B     |
+   --          ---------------------------
+   --  Config: | 1 |       | 1 |       |
+   --          ---------------------------
+   --  IO:     |   | 2 |   |   | 2 |   |
+   --          ---------------------------
+   --
+   --  The Config registers only access region 1 of each port while the
+   --  IO registers only access region 2.
+
    Config_Registers : Configuration with
       Import,
       Address => SSE.To_Address (16#4800_0000#);

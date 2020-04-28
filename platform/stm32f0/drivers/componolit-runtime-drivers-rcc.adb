@@ -13,10 +13,8 @@ is
    procedure Set (Clk    : Clock;
                   Enable : Boolean)
    is
-      Cache : Register := Reg;
    begin
-      Cache (Clock_Bit (Clk)) := (if Enable then 1 else 0);
-      Reg := Cache;
+      Reg (Clock_Bit (Clk)) := (if Enable then 1 else 0);
    end Set;
 
    function Enabled (Clk : Clock) return Boolean
