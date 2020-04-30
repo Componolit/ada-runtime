@@ -8,9 +8,13 @@ is
 
    use type SSE.Integer_Address;
 
-   --  Both register arrays span over the whole GPIO memory region as arrays of
-   --  GPIO ports. While they might overlap each other their components only
-   --  access slices of memory that are non-overlapping:
+   --  The GPIOs on a STM32F0 are divided into several so called Ports. Each
+   --  Port has its own set of registers but they're all identical. To prevent
+   --  code duplication the register sets are contained in arrays. Since some
+   --  registers have different volatile properties than others there are two
+   --  register arrays. Both span over the whole GPIO memory region as arrays
+   --  of GPIO ports. While they might overlap each other their components
+   --  only access slices of memory that are non-overlapping:
    --
    --  Port:   |     A     |     B     |
    --          ---------------------------
