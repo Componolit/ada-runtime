@@ -1,8 +1,9 @@
 
 package body Componolit.Runtime.Drivers.GPIO with
    SPARK_Mode,
-   Refined_State => (Configuration_State => Config_Registers,
-                     GPIO_State          => IO_Registers)
+   Refined_State => (Configuration_State        => Config_Registers,
+                     GPIO_State                 => IO_Registers,
+                     Shadow_Configuration_State => Shadow_Config)
 is
 
    use type SSE.Integer_Address;
@@ -23,7 +24,10 @@ is
 
    Config_Registers : Configuration with
       Import,
-      Address => SSE.To_Address (16#4800_0000#);
+      Address => SSE.To_Address (16#4800_0000#),
+      Volatile,
+      Async_Readers,
+      Effective_Writes;
 
    IO_Registers : Input_Output with
       Import,
@@ -33,27 +37,27 @@ is
       Async_Writers,
       Effective_Writes;
 
+   Shadow_Config : Configuration := Config_Registers;
+
    procedure Configure (P : Pin;
                         M : Mode;
                         D : Value := Low)
    is
    begin
-      Config_Registers (Bank_Select (P)).Port_Mode (Pin_Offset (P)) := M;
+      Shadow_Config (Bank_Select (P)).Port_Mode (Pin_Offset (P)) := M;
       case M is
          when Port_In =>
-            Config_Registers (Bank_Select (P)).Pull_Mode (Pin_Offset (P))
+            Shadow_Config (Bank_Select (P)).Pull_Mode (Pin_Offset (P))
                := (if D = Low then Down else Up);
          when Port_Out =>
-            Config_Registers (Bank_Select (P)).Pull_Mode (Pin_Offset (P))
+            Shadow_Config (Bank_Select (P)).Pull_Mode (Pin_Offset (P))
                := Pull_None;
       end case;
+      Config_Registers := Shadow_Config;
    end Configure;
 
-   function Pin_Mode (P : Pin) return Mode
-   is
-   begin
-      return Config_Registers (Bank_Select (P)).Port_Mode (Pin_Offset (P));
-   end Pin_Mode;
+   function Pin_Mode (P : Pin) return Mode is
+      (Shadow_Config (Bank_Select (P)).Port_Mode (Pin_Offset (P)));
 
    procedure Write (P : Pin;
                     V : Value)

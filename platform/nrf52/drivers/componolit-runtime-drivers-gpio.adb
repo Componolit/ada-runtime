@@ -1,17 +1,21 @@
 
 package body Componolit.Runtime.Drivers.GPIO with
    SPARK_Mode,
-   Refined_State => (GPIO_Configuration => DIR_Reg,
-                     GPIO_State         => (OUTSET_Reg,
-                                            OUTCLR_Reg,
-                                            OUT_Reg,
-                                            IN_Reg))
+   Refined_State => (Shadow_GPIO_Configuration => Shadow_DIR_Reg,
+                     GPIO_Configuration        => DIR_Reg,
+                     GPIO_State                => (OUTSET_Reg,
+                                                   OUTCLR_Reg,
+                                                   OUT_Reg,
+                                                   IN_Reg))
 is
    use type SSE.Integer_Address;
 
    DIR_Reg : Pin_Modes with
       Address => SSE.To_Address (AHB_Base + DIR_Offset),
-      Import;
+      Import,
+      Volatile,
+      Async_Readers,
+      Effective_Writes;
 
    OUTSET_Reg : Pin_Values with
       Address => SSE.To_Address (AHB_Base + OUTSET_Offset),
@@ -39,6 +43,8 @@ is
       Volatile,
       Async_Writers;
 
+   Shadow_DIR_Reg : Pin_Modes := DIR_Reg;
+
    function Convert (P : Pin_Value) return Value is
       (case P is
          when 0 => Low,
@@ -47,14 +53,12 @@ is
    procedure Configure (P : Pin; M : Mode)
    is
    begin
-      DIR_Reg (P) := M;
+      Shadow_DIR_Reg (P) := M;
+      DIR_Reg            := Shadow_DIR_Reg;
    end Configure;
 
-   function Pin_Mode (P : Pin) return Mode
-   is
-   begin
-      return DIR_Reg (P);
-   end Pin_Mode;
+   function Pin_Mode (P : Pin) return Mode is
+      (Shadow_DIR_Reg (P));
 
    procedure Write (P : Pin; V : Value)
    is
@@ -74,7 +78,7 @@ is
       In_Value  : constant Pin_Value := IN_Reg (P);
       Out_Value : constant Pin_Value := OUT_Reg (P);
    begin
-      case Pin_Mode (P) is
+      case DIR_Reg (P) is
          when Port_In =>
             V := Convert (In_Value);
          when Port_Out =>
