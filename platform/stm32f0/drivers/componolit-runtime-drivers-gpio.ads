@@ -1,11 +1,16 @@
 
 package Componolit.Runtime.Drivers.GPIO with
    SPARK_Mode,
-   Abstract_State => (Configuration_State,
+   Abstract_State => ((Configuration_State with External =>
+                        (Async_Readers,
+                         Effective_Writes)),
+                      Shadow_Configuration_State,
                       (GPIO_State with External => (Async_Writers,
                                                     Async_Readers,
                                                     Effective_Writes))),
-   Initializes    => (Configuration_State, GPIO_State)
+   Initializes    => (Configuration_State,
+                      GPIO_State,
+                      Shadow_Configuration_State)
 is
 
    type Pin is (PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7,
@@ -27,14 +32,19 @@ is
    procedure Configure (P : Pin;
                         M : Mode;
                         D : Value := Low) with
-      Global => (In_Out => Configuration_State);
+      Post   => Pin_Mode (P) = M,
+      Global => (In_Out => Shadow_Configuration_State,
+                 Output => Configuration_State);
 
    function Pin_Mode (P : Pin) return Mode with
-      Global => (Input => Configuration_State);
+      Global => (Input => Shadow_Configuration_State),
+      Ghost;
 
    procedure Write (P : Pin;
                     V : Value) with
-      Global => (In_Out => GPIO_State);
+      Pre    => Pin_Mode (P) = Port_Out,
+      Global => (In_Out   => GPIO_State,
+                 Proof_In => Shadow_Configuration_State);
 
    procedure Read (P :     Pin;
                    V : out Value) with
