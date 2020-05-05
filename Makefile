@@ -72,6 +72,7 @@ REPORT ?= fail
 
 proof:
 	$(VERBOSE)gnatprove --level=3 --checks-as-errors -j0 -Psrc/componolit_runtime.gpr -XOBJECT_DIR=$(OBJ_DIR) --info --report=$(REPORT)
+	$(VERBOSE)gnatprove --level=3 --checks-as-errors -j0 -Pplatform/stm32f0/drivers.gpr -XOBJECT_DIR=$(OBJ_DIR) --info --report=$(REPORT)
 
 clean: clean_test
 	make -C build/posix clean

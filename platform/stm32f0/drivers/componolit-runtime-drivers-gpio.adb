@@ -3,7 +3,8 @@ package body Componolit.Runtime.Drivers.GPIO with
    SPARK_Mode,
    Refined_State => (Configuration_State        => Config_Registers,
                      GPIO_State                 => IO_Registers,
-                     Shadow_Configuration_State => Shadow_Config)
+                     Shadow_Configuration_State => (Shadow_Config,
+                                                    Modes))
 is
 
    use type SSE.Integer_Address;
@@ -43,11 +44,44 @@ is
 
    Shadow_Config : Configuration := Config_Registers;
 
+   Modes : Proof_Pin_Mode := (others => Port_In) with Ghost;
+
+   procedure Unfold_Valid with
+      Ghost,
+      Pre  => (for all Pn in Pin => Valid (Pn)),
+      Post => (for all Pn in Pin => Modes (Pn) =
+                     Shadow_Config (Bank_Select
+                  (Pn)).Port_Mode (Pin_Offset (Pn)));
+
+   procedure Unfold_Valid
+   is
+   begin
+      for P in Pin loop
+         pragma Assert (Valid (P));
+         pragma Loop_Invariant (for all Q in Pin'First .. P => Modes (Q) =
+                                   Shadow_Config (Bank_Select (Q)).
+                                      Port_Mode (Pin_Offset (Q)));
+      end loop;
+   end Unfold_Valid;
+
+   procedure Initialize
+   is
+   begin
+      for P in Pin'Range loop
+         Modes (P) :=
+            Shadow_Config (Bank_Select (P)).Port_Mode (Pin_Offset (P));
+         pragma Loop_Invariant (for all Q in Pin'First .. P => Modes (Q) =
+                                   Shadow_Config (Bank_Select (Q)).
+                                      Port_Mode (Pin_Offset (Q)));
+      end loop;
+   end Initialize;
+
    procedure Configure (P : Pin;
                         M : Mode;
                         D : Value := Low)
    is
    begin
+      Unfold_Valid;
       Shadow_Config (Bank_Select (P)).Port_Mode (Pin_Offset (P)) := M;
       case M is
          when Port_In =>
@@ -58,6 +92,7 @@ is
                := Pull_None;
       end case;
       Config_Registers := Shadow_Config;
+      Modes (P) := Shadow_Config (Bank_Select (P)).Port_Mode (Pin_Offset (P));
    end Configure;
 
    function Pin_Mode (P : Pin) return Mode is
@@ -100,5 +135,11 @@ is
 
    function Pin_Offset (P : Pin) return Pin_Index is
       (Pin_Index (Pin'Pos (P) mod 16));
+
+   function Pin_Modes return Proof_Pin_Mode is (Modes);
+
+   function Valid (P : Pin) return Boolean is
+      (Shadow_Config (Bank_Select (P)).Port_Mode
+       (Pin_Offset (P)) = Modes (P));
 
 end Componolit.Runtime.Drivers.GPIO;
