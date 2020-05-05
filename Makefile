@@ -70,10 +70,12 @@ test: posix clean_test $(TEST_BINS) $(UNIT_DIR)/test
 
 REPORT ?= fail
 
-proof:
+proof: stm32f0 nrf52
 	$(VERBOSE)gnatprove --level=3 --checks-as-errors -j0 -Psrc/componolit_runtime.gpr -XOBJECT_DIR=$(OBJ_DIR) --info --report=$(REPORT)
 	$(VERBOSE)gnatprove --level=4 --checks-as-errors -j0 -Pplatform/stm32f0/drivers.gpr -XOBJECT_DIR=$(OBJ_DIR) --info --report=$(REPORT)
 	$(VERBOSE)gnatprove --level=3 --checks-as-errors -j0 -Pplatform/nrf52/drivers.gpr -XOBJECT_DIR=$(OBJ_DIR) --info --report=$(REPORT)
+	$(VERBOSE)gnatprove --level=3 --checks-as-errors -j0 -Ptests/platform/stm32f0/test.gpr -XOBJECT_DIR=$(OBJ_DIR) --info --report=$(REPORT)
+	$(VERBOSE)gnatprove --level=3 --checks-as-errors -j0 -Ptests/platform/nrf52/test.gpr -XOBJECT_DIR=$(OBJ_DIR) --info --report=$(REPORT)
 
 clean: clean_test
 	make -C build/posix clean
