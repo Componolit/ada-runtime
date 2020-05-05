@@ -12,6 +12,8 @@ package Componolit.Runtime.Drivers.GPIO with
                       GPIO_State)
 is
 
+   pragma Unevaluated_Use_Of_Old (Allow);
+
    type Pin is range 0 .. 31;
 
    type Mode is (Port_In, Port_Out) with
@@ -19,11 +21,23 @@ is
 
    type Value is (Low, High);
 
+   type Pin_Modes is array (Pin'Range) of Mode with
+      Size => 32,
+      Pack;
+
+   function Proof_Modes return Pin_Modes with
+      Ghost,
+      Global => (Input => Shadow_GPIO_Configuration);
+
    procedure Configure (P : Pin; M : Mode) with
+      Post   => Pin_Mode (P) = M
+                and then (for all Pn in Pin =>
+                   (if Pn /= P then Proof_Modes (Pn) = Proof_Modes'Old (Pn))),
       Global => (In_Out => Shadow_GPIO_Configuration,
                  Output => GPIO_Configuration);
 
    function Pin_Mode (P : Pin) return Mode with
+      Post   => Pin_Mode'Result = Proof_Modes (P),
       Global => (Input => Shadow_GPIO_Configuration),
       Ghost;
 
@@ -43,10 +57,6 @@ private
       Size => 1;
 
    type Pin_Values is array (Pin'Range) of Pin_Value with
-      Size => 32,
-      Pack;
-
-   type Pin_Modes is array (Pin'Range) of Mode with
       Size => 32,
       Pack;
 
