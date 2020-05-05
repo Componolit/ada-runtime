@@ -1,6 +1,7 @@
 
 package Componolit.Runtime.Drivers.GPIO with
    SPARK_Mode,
+   Elaborate_Body,
    Abstract_State => ((Configuration_State with External =>
                         (Async_Readers,
                          Effective_Writes)),
@@ -12,6 +13,8 @@ package Componolit.Runtime.Drivers.GPIO with
                       GPIO_State,
                       Shadow_Configuration_State)
 is
+
+   pragma Unevaluated_Use_Of_Old (Allow);
 
    type Pin is (PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7,
                 PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
@@ -26,38 +29,65 @@ is
 
    type Mode is (Port_In, Port_Out) with
       Size => 2;
+
+   for Mode use (Port_In => 0, Port_Out => 1);
+
    type Value is (Low, High);
+
    for Value use (Low => 0, High => 1);
+
+   type Proof_Pin_Mode is array (Pin'Range) of Mode with Ghost;
+
+   function Pin_Modes return Proof_Pin_Mode with
+      Ghost,
+      Global => (Input => Shadow_Configuration_State);
+
+   function Valid (P : Pin) return Boolean with
+      Ghost,
+      Global => (Input => Shadow_Configuration_State);
+
+   procedure Initialize with
+      Ghost,
+      Post   => (for all P in Pin => Valid (P)),
+      Global => (In_Out => Shadow_Configuration_State);
 
    procedure Configure (P : Pin;
                         M : Mode;
                         D : Value := Low) with
-      Post   => Pin_Mode (P) = M,
+      Pre    => (for all Pn in Pin => Valid (Pn)),
+      Post   => Pin_Mode (P) = M
+                and then (for all Pn in Pin =>
+                             (if Pn /= P then Pin_Modes (Pn) =
+                                    Pin_Modes'Old (Pn)))
+                and then (for all Pn in Pin => Valid (Pn)),
       Global => (In_Out => Shadow_Configuration_State,
                  Output => Configuration_State);
 
    function Pin_Mode (P : Pin) return Mode with
+      Pre    => Valid (P),
+      Post   => Pin_Modes (P) = Pin_Mode'Result,
       Global => (Input => Shadow_Configuration_State),
       Ghost;
 
    procedure Write (P : Pin;
                     V : Value) with
-      Pre    => Pin_Mode (P) = Port_Out,
+      Pre    => Valid (P) and then Pin_Mode (P) = Port_Out,
       Global => (In_Out   => GPIO_State,
                  Proof_In => Shadow_Configuration_State);
 
    procedure Read (P :     Pin;
                    V : out Value) with
-      Global => (Input => GPIO_State);
+      Pre    => Valid (P) and then Pin_Mode (P) in Port_In | Port_Out,
+      Global => (Input    => GPIO_State,
+                 Proof_In => Shadow_Configuration_State);
 
 private
 
    type Bank_Id is (A, B, C, D, E, F);
 
-   for Mode use (Port_In => 0, Port_Out => 1);
-
    type Pull is (Pull_None, Up, Down, Pull_Reserved) with
       Size => 2;
+
    for Pull use (Pull_None => 0, Up => 1, Down => 2, Pull_Reserved => 3);
 
    type Bit is range 0 .. 1 with
