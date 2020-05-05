@@ -86,4 +86,6 @@ is
       end case;
    end Read;
 
+   function Proof_Modes return Pin_Modes is (Shadow_DIR_Reg);
+
 end Componolit.Runtime.Drivers.GPIO;
