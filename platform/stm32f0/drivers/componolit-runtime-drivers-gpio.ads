@@ -1,3 +1,4 @@
+with Componolit.Runtime.Drivers.RCC;
 
 package Componolit.Runtime.Drivers.GPIO with
    SPARK_Mode,
@@ -47,9 +48,10 @@ is
       Global => (Input => Shadow_Configuration_State);
 
    procedure Initialize with
-      Ghost,
       Post   => (for all P in Pin => Valid (P)),
-      Global => (In_Out => Shadow_Configuration_State);
+      Global => (Input  => Configuration_State,
+                 In_Out => (Shadow_Configuration_State,
+                            RCC.RCC_State));
 
    procedure Configure (P : Pin;
                         M : Mode;
@@ -60,8 +62,8 @@ is
                              (if Pn /= P then Pin_Modes (Pn) =
                                     Pin_Modes'Old (Pn)))
                 and then (for all Pn in Pin => Valid (Pn)),
-      Global => (In_Out => Shadow_Configuration_State,
-                 Output => Configuration_State);
+      Global => (In_Out => (Shadow_Configuration_State,
+                            Configuration_State));
 
    function Pin_Mode (P : Pin) return Mode with
       Pre    => Valid (P),
@@ -159,6 +161,8 @@ private
    type Configuration is array (Bank_Id'Range) of Bank_Config with
       Size => 6 * 1024 * 8,
       Pack;
+
+   type Pull_Config is array (Bank_Id'Range) of Mode_Register;
 
    type Input_Output is array (Bank_Id'Range) of Bank_IO with
       Size => 6 * 1024 * 8,

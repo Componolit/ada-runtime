@@ -1,4 +1,3 @@
-
 package body Componolit.Runtime.Drivers.GPIO with
    SPARK_Mode,
    Refined_State => (Configuration_State        => Config_Registers,
@@ -42,7 +41,7 @@ is
       Async_Writers,
       Effective_Writes;
 
-   Shadow_Config : Configuration := Config_Registers;
+   Shadow_Config : Pull_Config := (others => (others => Port_In));
 
    Modes : Proof_Pin_Mode := (others => Port_In) with Ghost;
 
@@ -51,7 +50,7 @@ is
       Pre  => (for all Pn in Pin => Valid (Pn)),
       Post => (for all Pn in Pin => Modes (Pn) =
                      Shadow_Config (Bank_Select
-                  (Pn)).Port_Mode (Pin_Offset (Pn)));
+                  (Pn)) (Pin_Offset (Pn)));
 
    procedure Unfold_Valid
    is
@@ -59,20 +58,32 @@ is
       for P in Pin loop
          pragma Assert (Valid (P));
          pragma Loop_Invariant (for all Q in Pin'First .. P => Modes (Q) =
-                                   Shadow_Config (Bank_Select (Q)).
-                                      Port_Mode (Pin_Offset (Q)));
+                                   Shadow_Config (Bank_Select (Q))
+                                (Pin_Offset (Q)));
       end loop;
    end Unfold_Valid;
 
    procedure Initialize
    is
    begin
+      for C in RCC.Clock loop
+         RCC.Set (C, True);
+      end loop;
+      Shadow_Config := (A => Config_Registers (A).Port_Mode,
+                        B => Config_Registers (B).Port_Mode,
+                        C => Config_Registers (C).Port_Mode,
+                        D => Config_Registers (D).Port_Mode,
+                        E => (others => Port_In),
+                        --  Port E is available on STM32F07x
+                        --  and STM32F09x devices only.
+                        F => Config_Registers (F).Port_Mode);
+      Modes := (others => Port_In);
       for P in Pin'Range loop
          Modes (P) :=
-            Shadow_Config (Bank_Select (P)).Port_Mode (Pin_Offset (P));
+            Shadow_Config (Bank_Select (P)) (Pin_Offset (P));
          pragma Loop_Invariant (for all Q in Pin'First .. P => Modes (Q) =
-                                   Shadow_Config (Bank_Select (Q)).
-                                      Port_Mode (Pin_Offset (Q)));
+                                   Shadow_Config (Bank_Select (Q))
+                                (Pin_Offset (Q)));
       end loop;
    end Initialize;
 
@@ -82,21 +93,22 @@ is
    is
    begin
       Unfold_Valid;
-      Shadow_Config (Bank_Select (P)).Port_Mode (Pin_Offset (P)) := M;
+      Shadow_Config (Bank_Select (P)) (Pin_Offset (P)) := M;
       case M is
          when Port_In =>
-            Shadow_Config (Bank_Select (P)).Pull_Mode (Pin_Offset (P))
+            Config_Registers (Bank_Select (P)).Pull_Mode (Pin_Offset (P))
                := (if D = Low then Down else Up);
          when Port_Out =>
-            Shadow_Config (Bank_Select (P)).Pull_Mode (Pin_Offset (P))
+            Config_Registers (Bank_Select (P)).Pull_Mode (Pin_Offset (P))
                := Pull_None;
       end case;
-      Config_Registers := Shadow_Config;
-      Modes (P) := Shadow_Config (Bank_Select (P)).Port_Mode (Pin_Offset (P));
+      Config_Registers (Bank_Select (P)).Port_Mode :=
+         Shadow_Config (Bank_Select (P));
+      Modes (P) := Shadow_Config (Bank_Select (P)) (Pin_Offset (P));
    end Configure;
 
    function Pin_Mode (P : Pin) return Mode is
-      (Shadow_Config (Bank_Select (P)).Port_Mode (Pin_Offset (P)));
+      (Shadow_Config (Bank_Select (P)) (Pin_Offset (P)));
 
    procedure Write (P : Pin;
                     V : Value)
@@ -139,7 +151,7 @@ is
    function Pin_Modes return Proof_Pin_Mode is (Modes);
 
    function Valid (P : Pin) return Boolean is
-      (Shadow_Config (Bank_Select (P)).Port_Mode
+      (Shadow_Config (Bank_Select (P))
        (Pin_Offset (P)) = Modes (P));
 
 end Componolit.Runtime.Drivers.GPIO;
