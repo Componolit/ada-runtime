@@ -16,12 +16,7 @@ jobs:
         steps:
             - uses: actions/checkout@v1
             - name: GNAT Community 2019
-              run: docker run -v $PWD:/app componolit/ci:gnat-community-2019 /bin/sh -c "/app/tests/posix.sh"
-    gnat_community_2019_arm:
-        name: gnat-community-2019-arm
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v1
+              run: docker run -v $PWD:/app componolit/ci:gnat-community-2019-arm /bin/sh -c "/app/tests/posix.sh"
             - name: GNAT Community 2019 ARM
               run: docker run -v $PWD:/app componolit/ci:gnat-community-2019-arm /bin/sh -c "/app/tests/arm.sh"
     genode:
