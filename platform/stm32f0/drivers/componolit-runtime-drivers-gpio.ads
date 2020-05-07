@@ -39,6 +39,8 @@ is
 
    type Proof_Pin_Mode is array (Pin'Range) of Mode with Ghost;
 
+   type Configured_Pins is array (Pin'Range) of Boolean;
+
    function Pin_Modes return Proof_Pin_Mode with
       Ghost,
       Global => (Input => Shadow_Configuration_State);
@@ -48,38 +50,57 @@ is
       Global => (Input => Shadow_Configuration_State);
 
    procedure Initialize with
-      Post   => (for all P in Pin => Valid (P)),
+      Post   => (for all P in Pin => Valid (P) and not Configured (P)),
       Global => (Input  => Configuration_State,
                  In_Out => (Shadow_Configuration_State,
                             RCC.RCC_State));
+
+   function Configured (P : Pin) return Boolean with
+      Ghost,
+      Post   => Pins_Configured (P) = Configured'Result,
+      Global => (Input => Shadow_Configuration_State);
+
+   function Pins_Configured return Configured_Pins with
+      Ghost,
+      Global => (Input => Shadow_Configuration_State);
 
    procedure Configure (P : Pin;
                         M : Mode;
                         D : Value := Low) with
       Pre    => (for all Pn in Pin => Valid (Pn)),
-      Post   => Pin_Mode (P) = M
+      Post   => Configured (P)
+                and then Pin_Mode (P) = M
                 and then (for all Pn in Pin =>
-                             (if Pn /= P then Pin_Modes (Pn) =
-                                    Pin_Modes'Old (Pn)))
+                            (if Pn /= P then
+                                Pins_Configured (Pn) =
+                                Pins_Configured'Old (Pn)))
+                and then (for all Pn in Pin =>
+                             (if Pn /= P then
+                                    Pin_Modes (Pn) = Pin_Modes'Old (Pn)))
                 and then (for all Pn in Pin => Valid (Pn)),
       Global => (In_Out => (Shadow_Configuration_State,
                             Configuration_State));
 
    function Pin_Mode (P : Pin) return Mode with
-      Pre    => Valid (P),
+      Pre    => Valid (P)
+                and then Configured (P),
       Post   => Pin_Modes (P) = Pin_Mode'Result,
       Global => (Input => Shadow_Configuration_State),
       Ghost;
 
    procedure Write (P : Pin;
                     V : Value) with
-      Pre    => Valid (P) and then Pin_Mode (P) = Port_Out,
+      Pre    => Valid (P)
+                and then Configured (P)
+                and then Pin_Mode (P) = Port_Out,
       Global => (In_Out   => GPIO_State,
                  Proof_In => Shadow_Configuration_State);
 
    procedure Read (P :     Pin;
                    V : out Value) with
-      Pre    => Valid (P) and then Pin_Mode (P) in Port_In | Port_Out,
+      Pre    => Valid (P)
+                and then Configured (P)
+                and then Pin_Mode (P) in Port_In | Port_Out,
       Global => (Input    => GPIO_State,
                  Proof_In => Shadow_Configuration_State);
 
