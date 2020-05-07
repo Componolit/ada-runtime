@@ -1,7 +1,7 @@
 
 package body Componolit.Runtime.Drivers.GPIO with
    SPARK_Mode,
-   Refined_State => (Shadow_GPIO_Configuration => Shadow_DIR_Reg,
+   Refined_State => (Shadow_GPIO_Configuration => (Shadow_DIR_Reg, Pins),
                      GPIO_Configuration        => DIR_Reg,
                      GPIO_State                => (OUTSET_Reg,
                                                    OUTCLR_Reg,
@@ -45,6 +45,12 @@ is
 
    Shadow_DIR_Reg : Pin_Modes := DIR_Reg;
 
+   Pins : Configured_Pins := (others => False);
+
+   function Pins_Configured return Configured_Pins is (Pins);
+
+   function Configured (P : Pin) return Boolean is (Pins (P));
+
    function Convert (P : Pin_Value) return Value is
       (case P is
          when 0 => Low,
@@ -55,6 +61,7 @@ is
    begin
       Shadow_DIR_Reg (P) := M;
       DIR_Reg            := Shadow_DIR_Reg;
+      Pins (P)           := True;
    end Configure;
 
    function Pin_Mode (P : Pin) return Mode is

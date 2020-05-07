@@ -3,7 +3,7 @@ package body Componolit.Runtime.Drivers.GPIO with
    Refined_State => (Configuration_State        => Config_Registers,
                      GPIO_State                 => IO_Registers,
                      Shadow_Configuration_State => (Shadow_Config,
-                                                    Modes))
+                                                    Modes, Pins))
 is
 
    use type SSE.Integer_Address;
@@ -45,6 +45,8 @@ is
 
    Modes : Proof_Pin_Mode := (others => Port_In) with Ghost;
 
+   Pins : Configured_Pins := (others => False) with Ghost;
+
    procedure Unfold_Valid with
       Ghost,
       Pre  => (for all Pn in Pin => Valid (Pn)),
@@ -85,6 +87,7 @@ is
                                    Shadow_Config (Bank_Select (Q))
                                 (Pin_Offset (Q)));
       end loop;
+      Pins := (others => False);
    end Initialize;
 
    procedure Configure (P : Pin;
@@ -105,6 +108,7 @@ is
       Config_Registers (Bank_Select (P)).Port_Mode :=
          Shadow_Config (Bank_Select (P));
       Modes (P) := Shadow_Config (Bank_Select (P)) (Pin_Offset (P));
+      Pins (P)  := True;
    end Configure;
 
    function Pin_Mode (P : Pin) return Mode is
@@ -153,5 +157,9 @@ is
    function Valid (P : Pin) return Boolean is
       (Shadow_Config (Bank_Select (P))
        (Pin_Offset (P)) = Modes (P));
+
+   function Pins_Configured return Configured_Pins is (Pins);
+
+   function Configured (P : Pin) return Boolean is (Pins (P));
 
 end Componolit.Runtime.Drivers.GPIO;
