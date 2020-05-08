@@ -3,7 +3,8 @@ package body Componolit.Runtime.Drivers.GPIO with
    Refined_State => (Configuration_State        => Config_Registers,
                      GPIO_State                 => IO_Registers,
                      Shadow_Configuration_State => (Shadow_Config,
-                                                    Modes, Pins))
+                                                    Modes,
+                                                    Pins))
 is
 
    use type SSE.Integer_Address;
@@ -47,23 +48,26 @@ is
 
    Pins : Configured_Pins := (others => False) with Ghost;
 
-   procedure Unfold_Valid with
+   --  Proof procedure to help gnatprove unrolling the loop
+   --  over all pins.
+   procedure Prf_Unfold_Valid with
       Ghost,
       Pre  => (for all Pn in Pin => Valid (Pn)),
-      Post => (for all Pn in Pin => Modes (Pn) =
-                     Shadow_Config (Bank_Select
-                  (Pn)) (Pin_Offset (Pn)));
+      Post => (for all Pn in Pin =>
+                  Modes (Pn) =
+                     Shadow_Config (Bank_Select (Pn)) (Pin_Offset (Pn)));
 
-   procedure Unfold_Valid
+   procedure Prf_Unfold_Valid
    is
    begin
       for P in Pin loop
          pragma Assert (Valid (P));
-         pragma Loop_Invariant (for all Q in Pin'First .. P => Modes (Q) =
-                                   Shadow_Config (Bank_Select (Q))
-                                (Pin_Offset (Q)));
+         pragma Loop_Invariant (for all Q in Pin'First .. P =>
+                                   Modes (Q) =
+                                      Shadow_Config
+                                         (Bank_Select (Q)) (Pin_Offset (Q)));
       end loop;
-   end Unfold_Valid;
+   end Prf_Unfold_Valid;
 
    procedure Initialize
    is
@@ -83,9 +87,10 @@ is
       for P in Pin'Range loop
          Modes (P) :=
             Shadow_Config (Bank_Select (P)) (Pin_Offset (P));
-         pragma Loop_Invariant (for all Q in Pin'First .. P => Modes (Q) =
-                                   Shadow_Config (Bank_Select (Q))
-                                (Pin_Offset (Q)));
+         pragma Loop_Invariant (for all Q in Pin'First .. P =>
+                                   Modes (Q) =
+                                      Shadow_Config
+                                         (Bank_Select (Q)) (Pin_Offset (Q)));
       end loop;
       Pins := (others => False);
    end Initialize;
@@ -95,7 +100,7 @@ is
                         D : Value := Low)
    is
    begin
-      Unfold_Valid;
+      Prf_Unfold_Valid;
       Shadow_Config (Bank_Select (P)) (Pin_Offset (P)) := M;
       case M is
          when Port_In =>
@@ -155,8 +160,7 @@ is
    function Pin_Modes return Proof_Pin_Mode is (Modes);
 
    function Valid (P : Pin) return Boolean is
-      (Shadow_Config (Bank_Select (P))
-       (Pin_Offset (P)) = Modes (P));
+      (Shadow_Config (Bank_Select (P)) (Pin_Offset (P)) = Modes (P));
 
    function Pins_Configured return Configured_Pins is (Pins);
 
