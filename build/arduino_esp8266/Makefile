@@ -14,6 +14,9 @@ runtime: src/esp8266/ada_runtime.a
 $(OBJ_DIR)/adalib/libgnat.a: $(addprefix $(OBJ_DIR)/adainclude/,$(SRC))
 	$(VERBOSE)gprbuild --RTS=$(OBJ_DIR) -P$(COMPONENT) -XOBJECT_DIR=$(OBJ_DIR) -XTARGET=esp8266 -p
 
+$(OBJ_DIR)/adainclude/a-tags.ads: ../../src/minimal/a-tags-gnat_llvm_10.ads
+	$(VERBOSE)cp -a $< $@
+
 $(OBJ_DIR)/adainclude/%: ../../src/minimal/%
 	$(VERBOSE)cp -a $< $@
 
