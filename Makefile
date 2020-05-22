@@ -19,6 +19,7 @@ SRC_COMMON = a-except.adb \
 	     componolit-runtime-platform.adb \
 	     componolit-runtime-exceptions.ads \
 	     componolit-runtime-conversions.adb \
+	     componolit-runtime-compiler.ads \
 	     s-exctab.adb \
 	     s-init.adb \
 	     s-parame.adb \

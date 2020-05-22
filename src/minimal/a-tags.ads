@@ -9,6 +9,7 @@
 
 private with System;
 private with System.Storage_Elements;
+private with Componolit.Runtime.Compiler;
 
 package Ada.Tags with
    Preelaborate,
@@ -55,7 +56,8 @@ private
       Prims_Ptr     : Address_Array (1 .. Procedure_Count);
    end record;
 
-   Max_Predef_Prims : constant Positive := 9;
+   Max_Predef_Prims : constant Positive :=
+      Componolit.Runtime.Compiler.Max_Predef_Prims;
    subtype Predef_Prims_Table is Address_Array (1 .. Max_Predef_Prims);
    type Predef_Prims_Table_Ptr is access Predef_Prims_Table;
    pragma No_Strict_Aliasing (Predef_Prims_Table_Ptr);
