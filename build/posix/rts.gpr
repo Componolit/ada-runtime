@@ -1,4 +1,4 @@
-library project rts is
+project rts is
 
    OBJ := external ("OBJECT_DIR", "obj");
 
@@ -20,7 +20,4 @@ library project rts is
       for Body_Suffix ("Asm") use ".S";
    end Naming;
 
-   for Library_Kind use "static";
-   for Library_Name use "gnat";
-   for Library_Dir use OBJ & "/adalib";
 end rts;

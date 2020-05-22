@@ -14,3 +14,4 @@ int   __gl_detect_blocking               = 0;
 int   __gl_default_stack_size            = -1;
 int   __gl_leap_seconds_support          = 0;
 int   __gl_exception_tracebacks          = 0;
+unsigned const   componolit_runtime_max_predefs_prims = 10;
