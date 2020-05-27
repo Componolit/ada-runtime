@@ -32,7 +32,10 @@ is
       Address => SSE.To_Address (16#4800_0000#),
       Volatile,
       Async_Readers,
-      Effective_Writes;
+      Effective_Writes,
+      Annotate => (GNATprove, False_Positive,
+                   "object with constraints on bit representation is *",
+                   "accessed regions are distinct");
 
    IO_Registers : Input_Output with
       Import,
@@ -40,7 +43,10 @@ is
       Volatile,
       Async_Readers,
       Async_Writers,
-      Effective_Writes;
+      Effective_Writes,
+      Annotate => (GNATprove, False_Positive,
+                   "object with constraints on bit representation is",
+                   "accessed regions are distinct");
 
    Shadow_Config : Pull_Config := (others => (others => Port_In));
 
