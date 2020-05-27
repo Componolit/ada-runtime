@@ -6,7 +6,7 @@ is
 
    use type SSE.Integer_Address;
 
-   Reg : Systemoff with
+   Reg : Systemoff_Register with
       Import,
       Address => SSE.To_Address (APB_Base + Systemoff_Reg),
       Volatile,
@@ -16,7 +16,8 @@ is
    procedure Off
    is
    begin
-      Reg := Systemoff'(1);
+      Reg := (S => Systemoff'(1),
+              P => 0);
    end Off;
 
 end Componolit.Runtime.Drivers.Power;
