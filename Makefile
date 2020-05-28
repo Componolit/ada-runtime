@@ -9,6 +9,9 @@ SRC_COMMON = a-except.adb \
 	     ada.ads \
 	     a-tags.ads \
 	     a-tags.adb \
+	     a-numeri.ads \
+	     a-nubinu.ads \
+	     a-nbnbin.ads \
 	     i-c.adb \
 	     i-cexten.ads \
 	     interfac.ads \
