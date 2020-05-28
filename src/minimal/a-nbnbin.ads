@@ -1,7 +1,7 @@
 
 package Ada.Numerics.Big_Numbers.Big_Integers with
    Preelaborate,
-   Ghost
+   Elaborate_Body
 is
 
    type Big_Integer is private with
@@ -9,48 +9,59 @@ is
 
    function Is_Valid (Arg : Big_Integer) return Boolean with
       Ghost,
-      Import;
+      Import,
+      Global => null;
 
    function "=" (L, R : Big_Integer) return Boolean with
       Ghost,
-      Import;
+      Import,
+      Global => null;
 
    function "<" (L, R : Big_Integer) return Boolean with
       Ghost,
-      Import;
+      Import,
+      Global => null;
 
    function "<=" (L, R : Big_Integer) return Boolean with
       Ghost,
-      Import;
+      Import,
+      Global => null;
 
    function ">" (L, R : Big_Integer) return Boolean with
       Ghost,
-      Import;
+      Import,
+      Global => null;
 
    function ">=" (L, R : Big_Integer) return Boolean with
       Ghost,
-      Import;
+      Import,
+      Global => null;
 
    function To_Big_Integer (Arg : Integer) return Big_Integer with
       Ghost,
-      Import;
+      Import,
+      Global => null;
 
    subtype Big_Positive is Big_Integer with
+      Ghost,
       Dynamic_Predicate => (if Is_Valid (Big_Positive)
                             then Big_Positive > To_Big_Integer (0));
 
    subtype Big_Natural is Big_Integer with
+      Ghost,
       Dynamic_Predicate => (if Is_Valid (Big_Natural)
                             then Big_Natural >= To_Big_Integer (0));
 
    function In_Range (Arg, Low, High : Big_Integer) return Boolean is
       ((Low <= Arg) and then (Arg <= High)) with
-      Ghost;
+      Ghost,
+      Global => null;
 
    function To_Integer (Arg : Big_Integer) return Integer with
-      Pre => In_Range (Arg,
-                       To_Big_Integer (Integer'First),
-                       To_Big_Integer (Integer'Last)),
+      Pre    => In_Range (Arg,
+                          To_Big_Integer (Integer'First),
+                          To_Big_Integer (Integer'Last)),
+      Global => null,
       Ghost,
       Import;
 
@@ -67,12 +78,14 @@ is
 
       function To_Big_Integer (Arg : Int) return Big_Integer with
          Ghost,
-         Import;
+         Import,
+         Global => null;
 
       function From_Big_Integer (Arg : Big_Integer) return Int with
-         Pre => In_Range (Arg,
-                          To_Big_Integer (Int'First),
-                          To_Big_Integer (Int'Last)),
+         Pre    => In_Range (Arg,
+                             To_Big_Integer (Int'First),
+                             To_Big_Integer (Int'Last)),
+         Global => null,
          Ghost,
          Import;
 
@@ -91,12 +104,14 @@ is
 
       function To_Big_Integer (Arg : Int) return Big_Integer with
          Ghost,
-         Import;
+         Import,
+         Global => null;
 
       function From_Big_Integer (Arg : Big_Integer) return Int with
-         Pre => In_Range (Arg,
-                          To_Big_Integer (Int'First),
-                          To_Big_Integer (Int'Last)),
+         Pre    => In_Range (Arg,
+                             To_Big_Integer (Int'First),
+                             To_Big_Integer (Int'Last)),
+         Global => null,
          Ghost,
          Import;
 
@@ -104,56 +119,69 @@ is
 
    function "+" (L : Big_Integer) return Big_Integer with
       Ghost,
-      Import;
+      Import,
+      Global => null;
 
    function "-" (L : Big_Integer) return Big_Integer with
       Ghost,
-      Import;
+      Import,
+      Global => null;
 
    function "abs" (L : Big_Integer) return Big_Integer with
       Ghost,
-      Import;
+      Import,
+      Global => null;
 
    function "+" (L, R : Big_Integer) return Big_Integer with
       Ghost,
-      Import;
+      Import,
+      Global => null;
 
    function "-" (L, R : Big_Integer) return Big_Integer with
       Ghost,
-      Import;
+      Import,
+      Global => null;
 
    function "*" (L, R : Big_Integer) return Big_Integer with
       Ghost,
-      Import;
+      Import,
+      Global => null;
 
    function "/" (L, R : Big_Integer) return Big_Integer with
       Ghost,
-      Import;
+      Import,
+      Global => null;
 
    function "mod" (L, R : Big_Integer) return Big_Integer with
       Ghost,
-      Import;
+      Import,
+      Global => null;
 
    function "rem" (L, R : Big_Integer) return Big_Integer with
       Ghost,
-      Import;
+      Import,
+      Global => null;
 
    function "**" (L : Big_Integer;
                   R : Natural) return Big_Integer with
       Ghost,
-      Import;
+      Import,
+      Global => null;
 
    function Min (L, R : Big_Integer) return Big_Integer with
       Ghost,
-      Import;
+      Import,
+      Global => null;
 
    function Max (L, R : Big_Integer) return Big_Integer with
       Ghost,
-      Import;
+      Import,
+      Global => null;
 
    function Greates_Common_Divisor (L, R : Big_Integer)
       return Big_Positive with
-      Pre => (L /= To_Big_Integer (0) and then R /= To_Big_Integer (0)),
+      Pre    => (L /= To_Big_Integer (0) and then R /= To_Big_Integer (0)),
+      Global => null,
       Ghost,
       Import;
 
