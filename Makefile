@@ -11,7 +11,7 @@ SRC_COMMON = a-except.adb \
 	     a-tags.adb \
 	     a-numeri.ads \
 	     a-nubinu.ads \
-	     a-nbnbin.ads \
+	     a-nbnbin.adb \
 	     i-c.adb \
 	     i-cexten.ads \
 	     interfac.ads \
