@@ -1,4 +1,3 @@
-
 package body Ada.Numerics.Big_Numbers.Big_Integers
 is
    --  We enforce a body in the spec, as the orignial version in the runtime
