@@ -91,4 +91,59 @@ package body Componolit_Runtime is
 
    procedure Breakpoint is null;
 
+   procedure Unwind_Resume with
+      Export,
+      Convention => C,
+      External_Name => "_Unwind_Resume";
+
+   procedure Unwind_Resume
+   is
+   begin
+      Componolit.Runtime.Board.Halt_On_Error;
+   end Unwind_Resume;
+
+   procedure Aeabi_Unwind_Cpp_Pr0 with
+      Export,
+      Convention => C,
+      External_Name => "__aeabi_unwind_cpp_pr0";
+
+   procedure Aeabi_Unwind_Cpp_Pr0
+   is
+   begin
+      Componolit.Runtime.Board.Halt_On_Error;
+   end Aeabi_Unwind_Cpp_Pr0;
+
+   procedure Aeabi_Unwind_Cpp_Pr1 with
+      Export,
+      Convention => C,
+      External_Name => "__aeabi_unwind_cpp_pr1";
+
+   procedure Aeabi_Unwind_Cpp_Pr1
+   is
+   begin
+      Componolit.Runtime.Board.Halt_On_Error;
+   end Aeabi_Unwind_Cpp_Pr1;
+
+   function Aeabi_Idiv0 (N : Integer) return Integer with
+      Export,
+      Convention => C,
+      External_Name => "__aeabi_idiv0";
+
+   function Aeabi_Idiv0 (N : Integer) return Integer
+   is
+   begin
+      return N;
+   end Aeabi_Idiv0;
+
+   function Aeabi_Ldiv0 (N : Long_Integer) return Long_Integer with
+      Export,
+      Convention => C,
+      External_Name => "__aeabi_ldiv0";
+
+   function Aeabi_Ldiv0 (N : Long_Integer) return Long_Integer
+   is
+   begin
+      return N;
+   end Aeabi_Ldiv0;
+
 end Componolit_Runtime;

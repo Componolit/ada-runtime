@@ -24,7 +24,11 @@ SRC = $(SRC_COMMON) \
       s-memmov.ads \
       s-memmov.adb \
       s-memset.ads \
-      s-memset.adb
+      s-memset.adb \
+      ldivmod.S \
+      idivmod.S \
+      idiv.S \
+      lmul.S
 
 SRC := $(sort $(SRC) $(patsubst %.adb, %.ads, $(filter %.adb, $(SRC))))
 
@@ -60,6 +64,9 @@ $(OBJ_DIR)/adainclude/%: ../../platform/nrf52/drivers/%
 	$(VERBOSE)cp -a $< $@
 
 $(OBJ_DIR)/adainclude/%: ../../platform/nrf52/$(BOARD)/%
+	$(VERBOSE)cp -a $< $@
+
+$(OBJ_DIR)/adainclude/%: ../../contrib/libaeabi-cortexm0/%
 	$(VERBOSE)cp -a $< $@
 
 $(OBJ_DIR)/runtime.xml: runtime.xml
