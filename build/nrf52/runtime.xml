@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+
+<gprconfig>
+  <configuration>
+    <config><![CDATA[
+   type Loaders is ("ROM", "USER");
+   Loader : Loaders := external("LOADER", "ROM");
+
+   package Compiler is
+      Common_Required_Switches := ("-mlittle-endian", "-mthumb", "-msoft-float", "-mcpu=cortex-m0");
+
+      for Leading_Required_Switches ("Ada") use
+         Compiler'Leading_Required_Switches ("Ada") &
+         Common_Required_Switches;
+      for Leading_Required_Switches ("C") use
+         Compiler'Leading_Required_Switches ("C") &
+         Common_Required_Switches;
+      for Leading_Required_Switches ("Asm") use
+         Compiler'Leading_Required_Switches ("Asm") &
+         Common_Required_Switches;
+      for Leading_Required_Switches ("Asm2") use
+         Compiler'Leading_Required_Switches ("Asm2") &
+         Common_Required_Switches;
+      for Leading_Required_Switches ("Asm_Cpp") use
+         Compiler'Leading_Required_Switches ("Asm_Cpp") &
+         Common_Required_Switches;
+   end Compiler;
+
+   package Linker is
+      for Required_Switches use Linker'Required_Switches &
+        ("-Wl,-L${RUNTIME_DIR(ada)}/adalib",
+         "-nostartfiles", "-nolibc",
+         "-L${RUNTIME_DIR(ada)}/ld") &
+         Compiler.Common_Required_Switches;
+   end Linker;
+]]>
+   </config>
+  </configuration>
+</gprconfig>

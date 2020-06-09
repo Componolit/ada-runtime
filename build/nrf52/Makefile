@@ -15,13 +15,22 @@ SRC = $(SRC_COMMON) \
       componolit-runtime-drivers-gpio.ads \
       componolit-runtime-drivers-gpio.adb \
       componolit-runtime-drivers-power.ads \
-      componolit-runtime-drivers-power.adb
+      componolit-runtime-drivers-power.adb \
+      s-memtyp.ads \
+      s-memcom.ads \
+      s-memcom.adb \
+      s-memcop.ads \
+      s-memcop.adb \
+      s-memmov.ads \
+      s-memmov.adb \
+      s-memset.ads \
+      s-memset.adb
 
 SRC := $(sort $(SRC) $(patsubst %.adb, %.ads, $(filter %.adb, $(SRC))))
 
 dummy := $(shell mkdir -p $(OBJ_DIR)/adainclude $(OBJ_DIR)/adalib $(OBJ_DIR)/lib)
 
-runtime: $(OBJ_DIR)/adalib/libgnat.a
+runtime: $(OBJ_DIR)/adalib/libgnat.a $(OBJ_DIR)/runtime.xml
 
 $(OBJ_DIR)/adalib/libgnat.a: $(addprefix $(OBJ_DIR)/adainclude/,$(SRC))
 	$(VERBOSE)gprbuild --RTS=$(OBJ_DIR) -P$(COMPONENT) -XOBJECT_DIR=$(OBJ_DIR) -p
@@ -38,6 +47,9 @@ $(OBJ_DIR)/adainclude/%: ../../src/lib/%
 $(OBJ_DIR)/adainclude/%: ../../contrib/gcc-8.3.0/%
 	$(VERBOSE)cp -a $< $@
 
+$(OBJ_DIR)/adainclude/%: ../../contrib/gcc-9.3.1/%
+	$(VERBOSE)cp -a $< $@
+
 $(OBJ_DIR)/adainclude/%: ../../platform/%
 	$(VERBOSE)cp -a $< $@
 
@@ -48,6 +60,9 @@ $(OBJ_DIR)/adainclude/%: ../../platform/nrf52/drivers/%
 	$(VERBOSE)cp -a $< $@
 
 $(OBJ_DIR)/adainclude/%: ../../platform/nrf52/$(BOARD)/%
+	$(VERBOSE)cp -a $< $@
+
+$(OBJ_DIR)/runtime.xml: runtime.xml
 	$(VERBOSE)cp -a $< $@
 
 clean:
