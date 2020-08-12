@@ -16,6 +16,10 @@ SRC = $(SRC_COMMON) \
       componolit-runtime-drivers-gpio.adb \
       componolit-runtime-drivers-power.ads \
       componolit-runtime-drivers-power.adb \
+      componolit-runtime-drivers-serial.ads \
+      componolit-runtime-drivers-serial.adb \
+      componolit-runtime-drivers-slicer.ads \
+      componolit-runtime-drivers-slicer.adb \
       s-memtyp.ads \
       s-memcom.ads \
       s-memcom.adb \
