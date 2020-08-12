@@ -15,7 +15,7 @@ package body Componolit.Runtime.Board is
    procedure Log (S : String)
    is
    begin
-      Serial.Print (S);
+      Serial.Print (S & ASCII.CR & ASCII.LF);
    end Log;
 
    procedure Halt_On_Error
