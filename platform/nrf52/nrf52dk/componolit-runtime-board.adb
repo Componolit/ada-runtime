@@ -9,7 +9,7 @@ package body Componolit.Runtime.Board is
    procedure Initialize
    is
    begin
-      Serial.Initialize;
+      Serial.Initialize (6);
    end Initialize;
 
    procedure Log (S : String)

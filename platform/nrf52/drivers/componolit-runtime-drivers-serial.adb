@@ -74,12 +74,12 @@ is
    -- Initialize --
    ----------------
 
-   procedure Initialize is
+   procedure Initialize (Pin : GPIO.Pin) is
    begin
       ENABLE   := (ENABLE => Disabled);
-      GPIO.Configure (6, GPIO.Port_Out);
-      GPIO.Write (6, GPIO.High);
-      PSEL_TXD := (CONNECT => Connected, PIN => 6);
+      GPIO.Configure (Pin, GPIO.Port_Out);
+      GPIO.Write (Pin, GPIO.High);
+      PSEL_TXD := (CONNECT => Connected, PIN => Pin);
       CONFIG   := (HWFC => False, PARITY => Excluded);
       BAUDRATE := (BAUDRATE => Baud115200);
       ENABLE   := (ENABLE => Enabled_UARTE);

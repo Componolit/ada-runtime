@@ -6,7 +6,7 @@ package Componolit.Runtime.Drivers.Serial with
 is
 
    package GPIO renames Componolit.Runtime.Drivers.GPIO;
-   procedure Initialize;
+   procedure Initialize (Pin : GPIO.Pin);
    procedure Print (Str : String);
    procedure Send;
 
