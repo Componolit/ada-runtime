@@ -1,14 +1,14 @@
 with System.Storage_Elements;
 with Componolit.Runtime.Drivers.Slicer;
 package body Componolit.Runtime.Drivers.Serial with
-SPARK_Mode,
-  Refined_State => (Start_End_State => (TASKS_STARTTX, EVENT_ENDTX,
-                                        TASKS_STOPTX, EVENT_TXSTOPPED,
-                                        EVENT_TXSTARTED, EVENT_TXDRDY),
-                    Register_State => (ENABLE, PSEL_TXD, PSELTXD,
-                                       TXD_MAXCNT, TXD_AMOUNT, CONFIG,
-                                       BAUDRATE, TXD_PTR, TXD),
-                    Buffer_State => Buffer)
+   SPARK_Mode,
+   Refined_State => (Start_End_State => (TASKS_STARTTX, EVENT_ENDTX,
+                                         TASKS_STOPTX, EVENT_TXSTOPPED,
+                                         EVENT_TXSTARTED, EVENT_TXDRDY),
+                     Register_State  => (ENABLE, PSEL_TXD, PSELTXD,
+                                         TXD_MAXCNT, TXD_AMOUNT, CONFIG,
+                                         BAUDRATE, TXD_PTR, TXD),
+                     Buffer_State    => Buffer)
 is
 
    package SSE renames System.Storage_Elements;
@@ -156,9 +156,9 @@ is
    -----------
 
    procedure Print (Str : String) is
-      StrI : Positive;
+      StrI  : Positive;
       Slice : Slicer.Context;
-      R : Slicer.Slice;
+      R     : Slicer.Slice;
    begin
       if Str'Length <= 1 then
          return;
@@ -168,7 +168,7 @@ is
          pragma Loop_Invariant (Slicer.Get_Range (Slice).First = Str'First);
          pragma Loop_Invariant (Slicer.Get_Range (Slice).Last = Str'Last);
          pragma Loop_Invariant (Slicer.Get_Length (Slice) <= 255);
-         R := Slicer.Get_Slice (Slice);
+         R    := Slicer.Get_Slice (Slice);
          StrI := Buffer'First;
          pragma Assert (R.Last - R.First + 1 <= 255);
          TXD_MAXCNT := (MAXCNT => Count (R.Last - R.First + 1));
