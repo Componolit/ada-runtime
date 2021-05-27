@@ -22,6 +22,14 @@ void __gnat_unhandled_terminate() {
     exit(1);
 }
 
+void *__gnat_malloc(size_t size) {
+    return malloc(size);
+}
+
+void __gnat_free(void *ptr) {
+    free(ptr);
+}
+
 void componolit_runtime_raise_ada_exception(exception_t exception, char *name, char *message) {
     printf("Exception raised (%d): %s: %s\n", (int)exception, name, message);
     exit(1);

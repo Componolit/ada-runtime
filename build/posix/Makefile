@@ -3,7 +3,7 @@ VERBOSE ?= @
 COMPONENT = rts
 OBJ_DIR = obj
 
-SRC = $(SRC_COMMON) posix_common.c posix_minimal.c
+SRC = $(SRC_COMMON) a-uncdea.ads posix_common.c posix_minimal.c
 
 SRC := $(sort $(SRC) $(patsubst %.adb, %.ads, $(filter %.adb, $(SRC))))
 
@@ -29,6 +29,9 @@ $(OBJ_DIR)/adainclude/%: ../../src/lib/%
 	$(VERBOSE)cp -a $< $@
 
 $(OBJ_DIR)/adainclude/%: ../../contrib/gcc-8.3.0/%
+	$(VERBOSE)cp -a $< $@
+
+$(OBJ_DIR)/adainclude/%: ../../contrib/gcc-9.3.1/%
 	$(VERBOSE)cp -a $< $@
 
 $(OBJ_DIR)/adainclude/%: ../../platform/%
