@@ -15,19 +15,58 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v1
+            - uses: ada-actions/toolchain@ce2021
+              with:
+                distrib: community
+                community_year: 2019
+                target: native
+            - uses: ada-actions/toolchain@ce2021
+              with:
+                distrib: community
+                community_year: 2019
+                target: arm-elf
             - name: GNAT Community 2019
-              run: docker run -v $PWD:/app componolit/ci:gnat-community-2019-arm /bin/sh -c "/app/tests/posix.sh"
+              run: make test && make REPORT=all proof
             - name: GNAT Community 2019 ARM
-              run: docker run -v $PWD:/app componolit/ci:gnat-community-2019-arm /bin/sh -c "/app/tests/arm.sh"
+              run: $PWD/tests/arm.sh
     gnat_community_2020:
         name: gnat-community-2020
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v1
+            - uses: ada-actions/toolchain@ce2021
+              with:
+                distrib: community
+                community_year: 2020
+                target: native
+            - uses: ada-actions/toolchain@ce2021
+              with:
+                distrib: community
+                community_year: 2020
+                target: arm-elf
             - name: GNAT Community 2020
-              run: docker run -v $PWD:/app componolit/ci:gnat-community-2020-arm /bin/sh -c "/app/tests/posix.sh"
+              run: make test && make REPORT=all proof
             - name: GNAT Community 2020 ARM
-              run: docker run -v $PWD:/app componolit/ci:gnat-community-2020-arm /bin/sh -c "/app/tests/arm.sh"
+              run: $PWD/tests/arm.sh
+    gnat_community_2021:
+        name: gnat-community-2021
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - uses: ada-actions/toolchain@ce2021
+              with:
+                distrib: community
+                community_year: 2021
+                target: native
+            - uses: ada-actions/toolchain@ce2021
+              with:
+                distrib: community
+                community_year: 2021
+                target: arm-elf
+            - name: GNAT Community 2021
+              run: make test && make REPORT=all proof
+            - name: GNAT Community 2021 ARM
+              run: $PWD/tests/arm.sh
     genode:
         name: Genode
         runs-on: ubuntu-latest
