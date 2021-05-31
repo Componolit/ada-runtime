@@ -136,6 +136,7 @@ is
             pragma Assert (X - Y = -Y - (-X));
             pragma Assert (X - Y = -Y + X);
             pragma Assert (X - Y = To_Int (To_Uns (-Y) + To_Uns (X)));
+            pragma Assert (-To_Uns (Y) = To_Uns (-Y));
             pragma Assert (X - Y = To_Int (To_Uns (X) - To_Uns (Y)));
          end if;
       elsif X >= 0 and Y < 0 then

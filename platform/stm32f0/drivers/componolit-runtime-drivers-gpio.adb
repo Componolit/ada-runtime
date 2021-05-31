@@ -34,7 +34,10 @@ is
       Async_Readers,
       Effective_Writes,
       Annotate => (GNATprove, False_Positive,
-                   "object with constraints on bit representation is *",
+                   "object is unsuitable for aliasing via address clause",
+                   "accessed regions are distinct"),
+      Annotate => (GNATprove, False_Positive,
+                   "unsuitable for aliasing via address clause",
                    "accessed regions are distinct");
 
    IO_Registers : Input_Output with
@@ -45,7 +48,10 @@ is
       Async_Writers,
       Effective_Writes,
       Annotate => (GNATprove, False_Positive,
-                   "object with constraints on bit representation is",
+                   "object is unsuitable for aliasing via address clause",
+                   "accessed regions are distinct"),
+      Annotate => (GNATprove, False_Positive,
+                   "unsuitable for aliasing via address clause",
                    "accessed regions are distinct");
 
    Shadow_Config : Pull_Config := (others => (others => Port_In));
