@@ -80,6 +80,19 @@ proof: stm32f0 nrf52
 	$(VERBOSE)gnatprove --level=3 --checks-as-errors -j0 -Ptests/platform/stm32f0/test.gpr -XOBJECT_DIR=$(OBJ_DIR) --info --report=$(REPORT)
 	$(VERBOSE)gnatprove --level=3 --checks-as-errors -j0 -Ptests/platform/nrf52/test.gpr -XOBJECT_DIR=$(OBJ_DIR) --info --report=$(REPORT)
 
+install_gnat_11:
+	alr toolchain --install gnat_native=11.2.1 && \
+	mkdir -p build && \
+	cd build && \
+	alr init --lib -n gnat_11 && \
+	cd gnat_11 && \
+	alr with -n aunit
+
+printenv_gnat_11:
+	@test -d build/gnat_11 && \
+	cd build/gnat_11 && \
+	alr printenv
+
 clean: clean_test
 	make -C build/posix clean
 	make -C build/arduino_esp8266 clean
