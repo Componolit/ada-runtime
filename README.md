@@ -23,7 +23,6 @@ It furthermore adds a small selection of more complex features:
 
 - Posix/Linux
 - [Genode](https://genode.org/)
-- [Muen](https://muen.sk/)
 - nRF52832
 - STM32F051
 - ESP8266 on Arduino

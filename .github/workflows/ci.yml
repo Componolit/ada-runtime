@@ -102,13 +102,6 @@ jobs:
             - uses: actions/checkout@v1
             - name: Genode
               run: docker run -v $PWD:/app componolit/ci:genode /bin/sh -c "/app/tests/genode.sh"
-    muen:
-        name: Muen
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v1
-            - name: Muen
-              run: docker run -v $PWD:/app componolit/ci:muen /bin/sh -c "/app/tests/muen.sh"
     esp8266:
         name: ESP8266
         runs-on: ubuntu-latest
