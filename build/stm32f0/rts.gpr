@@ -14,7 +14,7 @@ library project rts is
    end Builder;
 
    package Compiler is
-      for Default_Switches ("Ada") use ("-gnatg", "-g", "-mthumb", "-ffunction-sections", "-fdata-sections");
+      for Default_Switches ("Ada") use ("-gnatg", "-gnatwG", "-g", "-mthumb", "-ffunction-sections", "-fdata-sections");
       for Default_Switches ("C") use ("-g", "-mthumb", "-ffunction-sections", "-fdata-sections");
       for Default_Switches ("Asm_CPP") use ("-g", "-mthumb", "-ffunction-sections", "-fdata-sections");
    end Compiler;

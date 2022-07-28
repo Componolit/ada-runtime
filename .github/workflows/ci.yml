@@ -19,10 +19,24 @@ jobs:
               uses: alire-project/setup-alire@v1
             - name: Install FSF GNAT
               run: |
-                make install_gnat_11
+                make GNAT_VERSION=11.2.1 install_gnat
             - name: GNAT 11.2 on Posix
               run: |
-                eval `make printenv_gnat_11`
+                eval `make GNAT_VERSION=11.2.1 printenv_gnat`
+                make && make test
+    gnat_12_1:
+        name: gnat-12.1
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - name: Install Alire
+              uses: alire-project/setup-alire@v1
+            - name: Install FSF GNAT
+              run: |
+                make GNAT_VERSION=12.1.2 install_gnat
+            - name: GNAT 12.1 on Posix
+              run: |
+                eval `make GNAT_VERSION=12.1.2 printenv_gnat`
                 make && make test
     gnat_community_2019:
         name: gnat-community-2019
