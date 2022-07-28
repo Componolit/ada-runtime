@@ -82,11 +82,12 @@ proof: stm32f0 nrf52
 
 install_gnat_11:
 	alr toolchain --install gnat_native=11.2.1 && \
+	alr toolchain --select gnat_native=11.2.1 && \
 	mkdir -p build && \
 	cd build && \
-	alr init --lib -n gnat_11 && \
+	alr -n init --lib gnat_11 && \
 	cd gnat_11 && \
-	alr with -n aunit
+	alr -n with aunit
 
 printenv_gnat_11:
 	@test -d build/gnat_11 && \
