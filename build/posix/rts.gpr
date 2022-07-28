@@ -12,7 +12,7 @@ library project rts is
    end Builder;
 
    package Compiler is
-      for Default_Switches ("Ada") use ("-gnatg", "-fPIC");
+      for Default_Switches ("Ada") use ("-gnatg", "-gnatwG", "-fPIC");
       for Default_Switches ("C") use ("-fPIC");
    end Compiler;
 

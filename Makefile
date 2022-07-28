@@ -1,5 +1,7 @@
 VERBOSE ?= @
 BOARD ?= default
+GNAT_VERSION ?= 12.1.2
+GNAT_ESCAPED_VERSION := $(subst .,_,$(GNAT_VERSION))
 
 TEST_DIR = tests/system
 UNIT_DIR = tests/unit
@@ -80,18 +82,18 @@ proof: stm32f0 nrf52
 	$(VERBOSE)gnatprove --level=3 --checks-as-errors -j0 -Ptests/platform/stm32f0/test.gpr -XOBJECT_DIR=$(OBJ_DIR) --info --report=$(REPORT)
 	$(VERBOSE)gnatprove --level=3 --checks-as-errors -j0 -Ptests/platform/nrf52/test.gpr -XOBJECT_DIR=$(OBJ_DIR) --info --report=$(REPORT)
 
-install_gnat_11:
-	alr toolchain --install gnat_native=11.2.1 && \
-	alr toolchain --select gnat_native=11.2.1 && \
+install_gnat:
+	alr toolchain --install gnat_native=$(GNAT_VERSION) && \
+	alr toolchain --select gnat_native=$(GNAT_VERSION) && \
 	mkdir -p build && \
 	cd build && \
-	alr -n init --lib gnat_11 && \
-	cd gnat_11 && \
+	alr -n init --lib gnat_$(GNAT_ESCAPED_VERSION) && \
+	cd gnat_$(GNAT_ESCAPED_VERSION) && \
 	alr -n with aunit
 
-printenv_gnat_11:
-	@test -d build/gnat_11 && \
-	cd build/gnat_11 && \
+printenv_gnat:
+	@test -d build/gnat_$(GNAT_ESCAPED_VERSION) && \
+	cd build/gnat_$(GNAT_ESCAPED_VERSION) && \
 	alr printenv
 
 clean: clean_test
